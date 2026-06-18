@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成为签约厨师 - 厨得快</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-container subpage-header-container">
+            <div class="logo-area subpage-logo-area">
+                <a href="index.html">
+                    <img src="assets/logo/厨得快1.png" alt="Logo" class="logo-img">
+                </a>
+                <a href="index.html" class="back-home-link">返回首页</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="live-top-banner">
+        <img src="assets/banner_chef.png" alt="签约厨师">
+    </div>
+
+    <main class="main-content container">
+        <div class="content-box chef-content-box">
+            <h1>加入我们，成为“厨得快”签约美食家</h1>
+            <p style="margin-top: 15px; margin-bottom: 15px;">如果你热爱分享、精通烹饪、有一技之长，欢迎提交资料。签约后可获得百万级曝光流和丰厚稿酬分成！</p>
+            <hr style="border:0; border-top:1px solid #eee; margin: 20px 0;">
+            <h3>快捷申请通道</h3>
+            <p style="margin-top:10px; color:#555;">请发送您的个人简介、代表菜谱及作品图至：<b>join@chudekuai.com</b></p>
+            <button class="chef-submit-btn" onclick="location.href='contact.html'">立即发送申请邮件</button>
+        </div>
+    </main>
+
+    <script>
+    // 只在第一次进入“加入我们”页面时自动下载 PDF
+        window.addEventListener('DOMContentLoaded', () => {
+            const hasDownloadedChefPDF = localStorage.getItem('chef_pdf_downloaded') === 'true';
+
+            if (hasDownloadedChefPDF) return;
+
+            const downloadLink = document.createElement('a');
+            downloadLink.href = 'assets/pdf/加入厨得快.pdf';
+            downloadLink.download = '加入厨得快.pdf';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+            localStorage.setItem('chef_pdf_downloaded', 'true');
+        });
+    </script>
+
+    <footer class="simple-site-footer">
+        Copyright &copy; 2026 厨得快平台管理中心. All Rights Reserved.
+    </footer>
+
+    <script src="global.js"></script>
+</body>
+</html>

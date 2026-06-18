@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>直播预约中心 - 厨得快</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-container subpage-header-container">
+            <div class="logo-area subpage-logo-area">
+                <a href="index.html">
+                    <img src="assets/logo/厨得快1.png" alt="Logo" class="logo-img">
+                </a>
+                <a href="index.html" class="back-home-link">返回首页</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="live-top-banner">
+        <img src="assets/banner_live.png" alt="预约直播横幅" onerror="this.src='https://via.placeholder.com/1160x320?text=厨得快·名厨在线直播盛宴'">
+    </div>
+
+    <main class="main-content container">
+        <div class="content-box live-content-box">
+            <h1>“厨得快”签约名厨面对面私房菜教学</h1>
+            <p style="margin-top: 8px; color: #777;">预约成功后，系统将在开播时自动弹出通知窗口。</p>
+            
+            <div class="live-time-box-wrapper">
+                <p style="color: #555; font-size: 15px; font-weight: bold;">直播开始时间</p>
+                <span id="live-time-display" class="live-time-badge">正在同步排程...</span>
+                <p style="color: #999; font-size: 12px;">直播预约通道持续开放中</p>
+            </div>
+            
+            <br>
+            <button id="real-reserve-btn" class="live-reserve-btn">立即一键预约直播</button>
+
+            <div class="chef-intro-section">
+                <div class="chef-image-container">
+                    <img src="assets/livechefpic.png" alt="特邀主厨" onerror="this.src='https://via.placeholder.com/220x390?text=主厨肖像照'">
+                </div>
+                <div class="chef-text-container">
+                    <div class="chef-name">张伟剑</div>
+                    <div class="chef-identity">国家高级中式烹调师/厨得快签约明星主厨</div>
+                    <div class="chef-description">
+                        张伟剑总厨拥有超过25年的高端私房菜研发及国宴筹办经验。在本次线上专场教学中，张老师将专注于用家庭厨房常见的工具与调料，对复杂的高级私房菜进行科学的流程拆解，帮助学员掌握高效、扎实的烹饪核心要领。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="simple-site-footer">
+        Copyright &copy; 2026 厨得快平台管理中心. All Rights Reserved.
+    </footer>
+
+    <script src="global.js"></script>
+    <script>
+        const reserveBtn = document.getElementById('real-reserve-btn');
+
+        const firstTime = localStorage.getItem('first_visit_time') || Date.now();
+        const targetTimeObj = new Date(parseInt(firstTime) - 1200000);
+        
+        const formattedTime = targetTimeObj.getFullYear() + '-' + 
+            String(targetTimeObj.getMonth() + 1).padStart(2, '0') + '-' + 
+            String(targetTimeObj.getDate()).padStart(2, '0') + ' ' + 
+            String(targetTimeObj.getHours()).padStart(2, '0') + ':' + 
+            String(targetTimeObj.getMinutes()).padStart(2, '0');
+        
+        document.getElementById('live-time-display').textContent = formattedTime;
+
+        if (localStorage.getItem('live_reserved') === 'true') {
+            setBtnToReserved();
+        }
+
+        reserveBtn.addEventListener('click', () => {
+            localStorage.setItem('live_reserved', 'true');
+            localStorage.removeItem('live_popup_shown');
+            setBtnToReserved();
+            alert('预约成功，请等待直播通知！');
+        });
+
+        function setBtnToReserved() {
+            reserveBtn.textContent = '已成功预约';
+            reserveBtn.disabled = true;
+        }
+    </script>
+</body>
+</html>

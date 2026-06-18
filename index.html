@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>厨得快 - 快速·简单·美味菜谱</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <img src="assets/logo/厨得快1.png" alt="厨得快Logo" class="logo-img">
+            </div>
+            
+            <nav class="category-nav">
+                <a href="#" class="nav-item active" data-category="all">推荐菜谱</a>
+                <a href="#" class="nav-item" data-category="家常菜">家常菜</a>
+                <a href="#" class="nav-item" data-category="肉食狂欢">肉食狂欢</a>
+                <a href="#" class="nav-item" data-category="海鲜河鲜">海鲜河鲜</a>
+                <a href="#" class="nav-item" data-category="甜品点心">甜品点心</a>
+            </nav>
+            
+            <div class="search-area">
+                <input type="text" id="search-input" placeholder="搜索您想吃的菜谱...">
+            </div>
+        </div>
+    </header>
+
+    <div class="carousel-section">
+        <div class="carousel-container">
+            <div class="carousel-slide active">
+                <a href="live.html">
+                    <img src="assets/banner_live.png" alt="预约直播" onerror="this.src='https://via.placeholder.com/1200x350?text=预约直播+点击进入'">
+                </a>
+            </div>
+            <div class="carousel-slide">
+                <a href="fruit.html">
+                    <img src="assets/banner_fruit.png" alt="时令水果测评" onerror="this.src='https://via.placeholder.com/1200x350?text=时令水果测评+点击进入'">
+                </a>
+            </div>
+            <div class="carousel-slide">
+                <a href="chef.html">
+                    <img src="assets/banner_chef.png" alt="成为签约厨师" onerror="this.src='https://via.placeholder.com/1200x350?text=成为签约厨师+点击进入'">
+                </a>
+            </div>
+
+            <button class="carousel-btn prev-btn">&lt;</button>
+            <button class="carousel-btn next-btn">&gt;</button>
+
+            <div class="carousel-dots">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="container">
+            <h2 id="section-title">今日推荐菜谱</h2>
+            <div id="recipe-grid" class="recipe-grid"></div>
+        </div>
+    </main>
+
+    <div id="details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+
+    <footer class="official-site-footer">
+        <div class="container">
+            <div class="footer-links-block">
+                <div class="links-row">
+                    <span class="links-row-label">相关链接:</span>
+                    <a href="javascript:void(0);">国家饮食健康促进会</a> <span class="links-separator">|</span>
+                    <a href="javascript:void(0);">中国烹饪协会指导部</a> <span class="links-separator">|</span>
+                    <a href="javascript:void(0);">餐饮标准化研究中心</a> <span class="links-separator">|</span>
+                    <a href="javascript:void(0);">职业技能鉴定归口单位</a>
+                </div>
+                <div class="links-row">
+                    <span class="links-row-label">内部参考:</span>
+                    <a href="javascript:void(0);">地方餐饮培训基地</a> <span class="links-separator">|</span>
+                    <a href="javascript:void(0);">膳食营养数据库</a> <span class="links-separator">|</span>
+                    <a href="javascript:void(0);">教学设备直属机构</a>
+                </div>
+            </div>
+
+            <div class="footer-compliance-block">
+                <div class="compliance-text-info">
+                    <p>主办单位：厨得快平台管理中心 &nbsp;&nbsp;&nbsp;&nbsp; 运行维护单位：厨得快网络技术运行中心</p>
+                    <p><span class="highlight-meta">版权所有：厨得快技术部</span> &nbsp;&nbsp;&nbsp;&nbsp; 中文域名：厨得快.政务</p>
+                </div>
+                
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script src="global.js"></script>
+</body>
+</html>

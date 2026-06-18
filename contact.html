@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>邮箱</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="mail-page-body">
+
+    <div id="mail-login-page" class="mail-login-page">
+        <div class="mail-login-card">
+            <div class="mail-login-logo"></div>
+            <h1>邮箱登录</h1>
+            <p class="mail-login-subtitle">请输入系统为本机创建的邮箱账户</p>
+
+            <div class="mail-login-field">
+                <label>用户名</label>
+                <input type="text" id="login-username" autocomplete="off">
+            </div>
+
+            <div class="mail-login-field">
+                <label>密码</label>
+                <input type="password" id="login-password" autocomplete="off">
+            </div>
+
+            <button id="login-btn" class="mail-login-btn">登录</button>
+            <p id="login-error" class="mail-login-error"></p>
+
+            <div class="mail-login-hint">
+                <p>系统提示：邮箱账户已绑定当前设备。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mail-app-shell" id="mail-app-shell" style="display:none;">
+        <!-- 顶部栏 -->
+        <header class="mail-topbar">
+            <div class="mail-left-brand">
+                <a href="chef.html" class="mail-back-link">←</a>
+                <div class="mail-logo-dot"></div>
+                <span class="mail-brand-text">邮箱</span>
+            </div>
+
+            <div class="mail-search-mock">
+                <span>搜索邮件</span>
+            </div>
+
+            <div class="mail-user-area">
+                <span class="mail-help-icon">?</span>
+                <span class="mail-user-avatar">我</span>
+            </div>
+        </header>
+
+        <div class="mail-main-layout">
+            <!-- 左侧栏 -->
+            <aside class="mail-sidebar">
+                <button class="mail-compose-main-btn">撰写</button>
+
+                <div class="mail-folder active">
+                    <span>收件箱</span>
+                    <b id="inbox-count">0</b>
+                </div>
+                <div class="mail-folder">
+                    <span>已加星标</span>
+                </div>
+                <div class="mail-folder">
+                    <span>已发送</span>
+                    <b id="sent-count">0</b>
+                </div>
+                <div class="mail-folder">
+                    <span>草稿</span>
+                </div>
+                <div class="mail-folder">
+                    <span>更多</span>
+                </div>
+
+                <div class="mail-sidebar-divider"></div>
+
+                <div class="mail-small-note">
+                    当前邮箱服务由平台管理中心提供。部分邮件可能经过安全审核。
+                </div>
+            </aside>
+
+            <!-- 中间邮件区域 -->
+            <main class="mail-content">
+                <div class="mail-list-header">
+                    <div>
+                        <strong>主邮件箱</strong>
+                        <span> / 收件箱</span>
+                    </div>
+                    <div class="mail-sync-status" id="sync-status">已同步</div>
+                </div>
+
+                <div id="mail-thread" class="mail-thread-empty">
+                    <div class="empty-mail-icon">✉</div>
+                    <p>暂无往来邮件</p>
+                    <span>发送申请后，系统将在此显示自动回复。</span>
+                </div>
+            </main>
+        </div>
+
+        <!-- 写邮件窗口 -->
+        <section id="compose-window" class="compose-window">
+            <div class="compose-header">
+                <span>新邮件</span>
+                <div>
+                    <button class="compose-mini-btn" id="minimize-btn">—</button>
+                    <button class="compose-mini-btn" id="close-compose-btn">×</button>
+                </div>
+            </div>
+
+            <div class="compose-row">
+                <label>收件人</label>
+                <input type="text" id="mail-to" value="join@chudekuai.com" readonly>
+            </div>
+
+            <div class="compose-row">
+                <label>主题</label>
+                <input type="text" id="mail-subject" placeholder="请输入邮件主题">
+            </div>
+
+            <textarea id="mail-body" class="compose-textarea" placeholder="请输入申请内容，例如：个人简介、代表菜谱、过往履历、作品链接等。"></textarea>
+
+            <div class="compose-footer">
+                <button id="send-mail-btn" class="fake-send-btn">发送</button>
+                <span class="compose-footer-tip">草稿已自动保存</span>
+                <button id="discard-btn" class="discard-btn">丢弃草稿</button>
+            </div>
+        </section>
+
+        <!-- 最小化后的写信条 -->
+        <div id="compose-minimized" class="compose-minimized">
+            <span>新邮件</span>
+            <button id="restore-compose-btn">打开</button>
+        </div>
+    </div>
+
+    <script>
+
+        const loginPage = document.getElementById('mail-login-page');
+        const mailAppShell = document.getElementById('mail-app-shell');
+        const loginUsername = document.getElementById('login-username');
+        const loginPassword = document.getElementById('login-password');
+        const loginBtn = document.getElementById('login-btn');
+        const loginError = document.getElementById('login-error');
+
+        const savedUsername = localStorage.getItem('mail_username');
+        const savedPassword = localStorage.getItem('mail_password') || 'chudekuai123';
+        const isMailCreated = localStorage.getItem('mail_created') === 'true';
+
+        function showLoginPage() {
+            loginPage.style.display = 'flex';
+            mailAppShell.style.display = 'none';
+
+            if (savedUsername) {
+                loginUsername.placeholder = savedUsername;
+            }
+        }
+
+        function showMailApp() {
+            loginPage.style.display = 'none';
+            mailAppShell.style.display = 'flex';
+        }
+
+        function handleLogin() {
+            const usernameInput = loginUsername.value.trim();
+            const passwordInput = loginPassword.value.trim();
+
+            if (!isMailCreated) {
+                loginError.textContent = '未检测到已创建的邮箱账户。';
+                return;
+            }
+
+            if (usernameInput === savedUsername && passwordInput === savedPassword) {
+                localStorage.setItem('mail_logged_in', 'true');
+                showMailApp();
+            } else {
+                loginError.textContent = '用户名或密码错误。';
+            }
+        }
+
+        loginBtn.addEventListener('click', handleLogin);
+
+        loginPassword.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
+
+        loginUsername.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
+
+        // 每次进入 contact.html 都需要登录，不自动保持登录
+        localStorage.removeItem('mail_logged_in');
+        showLoginPage();
+        const sendBtn = document.getElementById('send-mail-btn');
+        const mailTo = document.getElementById('mail-to');
+        const mailSubject = document.getElementById('mail-subject');
+        const mailBody = document.getElementById('mail-body');
+        const mailThread = document.getElementById('mail-thread');
+        const inboxCount = document.getElementById('inbox-count');
+        const sentCount = document.getElementById('sent-count');
+        const syncStatus = document.getElementById('sync-status');
+
+        const composeWindow = document.getElementById('compose-window');
+        const composeMinimized = document.getElementById('compose-minimized');
+        const minimizeBtn = document.getElementById('minimize-btn');
+        const restoreBtn = document.getElementById('restore-compose-btn');
+        const closeComposeBtn = document.getElementById('close-compose-btn');
+        const discardBtn = document.getElementById('discard-btn');
+
+        let sentNumber = 0;
+        let inboxNumber = 0;
+
+        function getNowText() {
+            const now = new Date();
+            return now.getFullYear() + '-' +
+                String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                String(now.getDate()).padStart(2, '0') + ' ' +
+                String(now.getHours()).padStart(2, '0') + ':' +
+                String(now.getMinutes()).padStart(2, '0');
+        }
+
+        function escapeHTML(str) {
+            return str
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;');
+        }
+
+        function renderSentMail(subject, body) {
+            const safeSubject = escapeHTML(subject || '无主题申请');
+            const safeBody = escapeHTML(body || '（无正文）').replace(/\n/g, '<br>');
+
+            const sentMailHTML = `
+                <div class="mail-message-card sent-mail-card">
+                    <div class="mail-message-top">
+                        <div>
+                            <strong>我</strong>
+                            <span>&lt;applicant@local.mail&gt;</span>
+                        </div>
+                        <time>${getNowText()}</time>
+                    </div>
+                    <div class="mail-message-meta">
+                        发送至：${mailTo.value}
+                    </div>
+                    <h3>${safeSubject}</h3>
+                    <div class="mail-message-body">${safeBody}</div>
+                </div>
+            `;
+
+            // 第一次发送邮件时，清除“暂无往来邮件”的空状态内容
+            if (mailThread.classList.contains('mail-thread-empty')) {
+                mailThread.innerHTML = '';
+            }
+
+            mailThread.className = 'mail-thread';
+            mailThread.insertAdjacentHTML('beforeend', sentMailHTML);
+            mailThread.scrollTop = mailThread.scrollHeight;
+        }
+
+        function renderAutoReply() {
+            inboxNumber++;
+            inboxCount.textContent = inboxNumber;
+
+            const autoReplyHTML = `
+                <div class="mail-message-card reply-mail-card auto-reply-pending">
+                    <div class="mail-message-top">
+                        <div>
+                            <strong>厨得快签约审核中心</strong>
+                            <span>&lt;join@chudekuai.com&gt;</span>
+                        </div>
+                        <time>${getNowText()}</time>
+                    </div>
+                    <div class="mail-message-meta">
+                        回复至：我
+                    </div>
+
+                    <!-- 
+                        这里是自动回复正文区域。
+                        你之后可以直接改下面这个 div 里的内容。
+                    -->
+                    <div class="mail-message-body auto-reply-body">
+                        <p>您好，感谢您的申请！由于申请人数众多，我们将会在1-2个工作日内尽快审核并回复您。</p>
+                        <p>感谢您的理解与支持，期待您加入我们！</p>
+                        <p>更多内容请详见<a href="../baobei/baobei.html" class="auto-reply-link">官网</a>。</p>
+                    </div>
+                </div>
+            `;
+
+            mailThread.insertAdjacentHTML('beforeend', autoReplyHTML);
+            mailThread.scrollTop = mailThread.scrollHeight;
+        }
+
+        function fakeSendMail() {
+            const subject = mailSubject.value.trim();
+            const body = mailBody.value.trim();
+
+            sentNumber++;
+            sentCount.textContent = sentNumber;
+
+            syncStatus.textContent = '正在发送...';
+            sendBtn.disabled = true;
+            sendBtn.textContent = '发送中';
+
+            setTimeout(() => {
+                renderSentMail(subject, body);
+
+                mailSubject.value = '';
+                mailBody.value = '';
+
+                syncStatus.textContent = '邮件已发送';
+                sendBtn.textContent = '发送';
+                sendBtn.disabled = false;
+
+                setTimeout(() => {
+                    syncStatus.textContent = '正在接收新邮件...';
+
+                    setTimeout(() => {
+                        renderAutoReply();
+                        syncStatus.textContent = '已同步';
+                    }, 900);
+
+                }, 1000);
+
+            }, 900);
+        }
+
+        sendBtn.addEventListener('click', fakeSendMail);
+
+        minimizeBtn.addEventListener('click', () => {
+            composeWindow.style.display = 'none';
+            composeMinimized.style.display = 'flex';
+        });
+
+        restoreBtn.addEventListener('click', () => {
+            composeWindow.style.display = 'flex';
+            composeMinimized.style.display = 'none';
+        });
+
+        closeComposeBtn.addEventListener('click', () => {
+            composeWindow.style.display = 'none';
+            composeMinimized.style.display = 'flex';
+        });
+
+        discardBtn.addEventListener('click', () => {
+            const confirmDiscard = confirm('确定要丢弃当前草稿吗？');
+            if (confirmDiscard) {
+                mailSubject.value = '';
+                mailBody.value = '';
+                syncStatus.textContent = '草稿已丢弃';
+                setTimeout(() => {
+                    syncStatus.textContent = '已同步';
+                }, 1000);
+            }
+        });
+
+        // 模拟自动保存草稿
+        let draftTimer = null;
+        [mailSubject, mailBody].forEach(input => {
+            input.addEventListener('input', () => {
+                syncStatus.textContent = '正在保存草稿...';
+                clearTimeout(draftTimer);
+                draftTimer = setTimeout(() => {
+                    syncStatus.textContent = '草稿已保存';
+                    setTimeout(() => {
+                        syncStatus.textContent = '已同步';
+                    }, 1000);
+                }, 700);
+            });
+        });
+    </script>
+
+</body>
+</html>

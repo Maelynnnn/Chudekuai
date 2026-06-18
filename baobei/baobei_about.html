@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们 - 宝贝回家服务平台</title>
+    <link rel="stylesheet" href="baobei.css">
+
+    <style>
+        .about-page-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 12px;
+        }
+
+        .about-main-panel {
+            border: 1px solid #8dc6ff;
+            border-radius: 8px;
+            background: #ffffff;
+            overflow: hidden;
+            min-height: 620px;
+        }
+
+        .about-main-title {
+            background: linear-gradient(to bottom, #58b5ff, #2585de);
+            color: white;
+            font-weight: bold;
+            padding: 10px 16px;
+            font-size: 16px;
+            border-bottom: 1px solid #1f78c8;
+        }
+
+        .about-main-content {
+            padding: 22px 28px 32px;
+            line-height: 2;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .about-main-content h2 {
+            font-family: "Microsoft YaHei", SimSun, sans-serif;
+            color: #2378c9;
+            font-size: 24px;
+            margin-bottom: 14px;
+            border-bottom: 1px solid #d9ecff;
+            padding-bottom: 10px;
+        }
+
+        .about-main-content h3 {
+            font-size: 17px;
+            color: #e05b00;
+            margin-top: 22px;
+            margin-bottom: 8px;
+            border-left: 4px solid #ffd53c;
+            padding-left: 10px;
+        }
+
+        .about-main-content p {
+            text-indent: 2em;
+            margin-bottom: 10px;
+        }
+
+        .about-info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            margin-bottom: 18px;
+            font-size: 13px;
+        }
+
+        .about-info-table th {
+            width: 150px;
+            background: #f2f8ff;
+            color: #2378c9;
+            text-align: left;
+            padding: 9px 12px;
+            border: 1px solid #cde4fb;
+            font-weight: bold;
+        }
+
+        .about-info-table td {
+            padding: 9px 12px;
+            border: 1px solid #cde4fb;
+            color: #444;
+        }
+
+        .about-warning-box {
+            margin-top: 22px;
+            padding: 14px 16px;
+            border: 1px dashed #e0a33a;
+            background: #fffaf0;
+            color: #8a5a10;
+            line-height: 1.9;
+        }
+
+        .about-redacted {
+            display: inline-block;
+            background: #222;
+            color: #222;
+            padding: 0 18px;
+            margin: 0 2px;
+            user-select: none;
+        }
+
+        .about-side-list {
+            list-style: none;
+            line-height: 2;
+        }
+
+        .about-side-list li {
+            border-bottom: 1px dotted #b9d5ef;
+            padding: 4px 0;
+        }
+
+        .about-side-list li::before {
+            content: "▪";
+            color: #2f9cf0;
+            margin-right: 6px;
+        }
+
+        .nav-bar a.active-nav {
+            background: rgba(255,255,255,0.22);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 失效页面 -->
+    <div id="expired-page" class="expired-page">
+        <div class="expired-box">
+            <h1>该网页已于 2012.6.9 失效</h1>
+            <p>您正在访问的页面已停止服务。</p>
+            <p>如需查看历史归档内容，请联系网站管理员。</p>
+            <div class="expired-date">ERROR 410 / PAGE ARCHIVED</div>
+        </div>
+    </div>
+
+    <!-- 官网 -->
+    <div id="site-content">
+        <div class="old-site-wrapper">
+
+            <header class="top-banner">
+                <div class="baobei-header-inner">
+                    <div class="baobei-logo-area">
+                        <img src="../assets/logo/宝贝回家logo.png" alt="宝贝回家Logo" class="baobei-logo-img">
+                    </div>
+
+                    <div class="banner-title">
+                        <h1>宝贝回家服务平台</h1>
+                        <h2>BAO BEI HUI JIA PUBLIC SERVICE CENTER</h2>
+                        <p>中文域名：宝贝回家.服务　　备案号：厨ICP备12609号</p>
+                    </div>
+                </div>
+            </header>
+
+            <nav class="nav-bar">
+                <a href="baobei.html">网站首页</a>
+                <a href="baobei_about.html" class="active-nav">关于我们</a>
+                <a href="javascript:void(0);">寻亲登记</a>
+                <a href="javascript:void(0);">夜间服务</a>
+                <a href="javascript:void(0);">成功案例</a>
+                <a href="javascript:void(0);">合作单位</a>
+                <a href="javascript:void(0);">资料公开</a>
+                <a href="javascript:void(0);">联系我们</a>
+            </nav>
+
+            <div class="about-page-layout">
+
+                <!-- 左侧栏 -->
+                <aside>
+                    <section class="panel">
+                        <div class="panel-title">栏目导航</div>
+                        <div class="panel-content">
+                            <ul class="about-side-list">
+                                <li>平台简介</li>
+                                <li>机构职责</li>
+                                <li>服务流程</li>
+                                <li>合作单位</li>
+                                <li>升学考试</li>
+                                <li>联系方式</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-title blue">工作原则 <span class="more">MORE&gt;&gt;</span></div>
+                        <div class="panel-content">
+                            <ul class="notice-list">
+                                <li>统一登记</li>
+                                <li>快速响应</li>
+                                <li>闭环转运</li>
+                                <li>安静处决</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-title blue">值班信息</div>
+                        <div class="panel-content">
+                            <p>总站电话：022-1206-090</p>
+                            <p>夜间转运：022-6090-121</p>
+                            <p>合作审核：join@chudekuai.com</p>
+                            <p class="gray" style="margin-top:8px;">工作时间：全天候接收，夜间优先处理。</p>
+                        </div>
+                    </section>
+                </aside>
+
+                <!-- 右侧正文 -->
+                <main class="about-main-panel">
+                    <div class="about-main-title">当前位置：首页 &gt; 关于我们</div>
+
+                    <div class="about-main-content">
+                        <h2>关于宝贝回家服务平台</h2>
+
+                        <p>
+                            宝贝回家服务平台成立于 2004 年，是面向走失、滞留、无有效身份记录宝贝的综合性服务协作平台。平台以<strong>“登记、邀请、处理、送达”</strong>为基本工作路径，致力于为每一位需要或不需要帮助的宝贝建立完整、逼真、可追溯的信息档案。
+                        </p>
+
+                        <p>
+                            自成立以来，平台坚持服务属性与规范管理并重，依托各地区现有<strong>班级</strong>、合作厨房、后勤转运单位及相关社会机构，逐步形成跨区域、跨部门的服务网络。我们相信，<strong>每一个宝贝都应该被邀请入学，不乖的宝贝都应该被处理。</strong>不论是回家还是送上您的餐桌，我们的服务都会准确、安静，保证宝贝或食材的完整。
+                        </p>
+
+                        <h3>一、平台宗旨</h3>
+                        <p>
+                            平台坚持“让每一个宝贝都能找到回家的路”的服务宗旨，建立标准化登记口径与分级响应机制。对于信息不全、语言表达困难、情绪反应剧烈或无法确认原属关系的宝贝，<span class="about-redacted">平台会优先邀请入学</span>，并安排专人进行后续归档或食材处理。
+                        </p>
+
+                        <h3>二、基本信息</h3>
+                        <table class="about-info-table">
+                            <tr>
+                                <th>机构名称</th>
+                                <td>宝贝回家服务平台</td>
+                            </tr>
+                            <tr>
+                                <th>成立时间</th>
+                                <td>2004 年 6 月</td>
+                            </tr>
+                            <tr>
+                                <th>中文域名</th>
+                                <td>宝贝回家.服务</td>
+                            </tr>
+                            <tr>
+                                <th>备案编号</th>
+                                <td>厨ICP备12609号</td>
+                            </tr>
+                            <tr>
+                                <th>服务范围</th>
+                                <td>信息登记、临时安置、身份更新、后勤转运、合作单位移交</td>
+                            </tr>
+                            <tr>
+                                <th>合作审核</th>
+                                <td>join@chudekuai.com</td>
+                            </tr>
+                        </table>
+
+                        <h3>三、主要职责</h3>
+                        <p>
+                            平台主要负责接收各地登记信息，对符合入学条件的人类进行初步分类、编号与远程监控。平台同时承担合作单位对接工作。合作单位包括但不限于各地方班级、餐饮后勤机构等。
+                        </p>
+
+                        <p>
+                            <p>班级合作——根据合作班级的需求，按属地、性别、年龄、身体状态以及回应能力等情况，送入不同的班级，亲自转交到教师手中。</p>
+                            <p>餐饮合作——餐饮机构需提交食材需求表，包括食材性别、数量、年龄、是否曾经为宝贝等信息。食材通常在24小时之内送达。</p>
+                            <p>所有移交均需完成封条确认、编号核对与签收记录。</p>
+                        </p>
+
+                        <h3>四、服务流程</h3>
+                        <p>
+                            第一步，寻找。由平台合作的<strong>一年级和三年级宝贝</strong>寻找符合入学条件的人类并详细记录。包括发现时间、发现地点、衣着特征、活动范围、生活习惯、精神状况等。
+                        </p>
+
+                        <p>
+                            第二步，档案编号。系统将为被监测的人类生成唯一编号，并根据对象状态标记为稳定、待邀请、危险或<span class="about-redacted">暴露！抓获后就地处决</span>。编号生成后，不继续使用其原姓名。
+                        </p>
+
+                        <p>
+                            第三步，路线安排。平台根据当日订单与夜间车辆情况统一调度。运输过程中请保持车厢安静，避免强光照射，不得私自开启后备箱或拆除封条。
+                        </p>
+
+                        <p>
+                            第四步，完成移交。班级或合作单位接收后，应在 30 分钟内反馈状态。若对象出现哭闹、敲击、重复呼喊或尝试返回原地点等情况，请优先按照安抚话术处理，并及时上报平台值班人员。
+                        </p>
+
+                        <h3>五、合作说明</h3>
+                        <p>
+                            本平台面向所有<strong>1-3年级的宝贝</strong>和教师展开合作。如果您是教师，想要招募新宝贝入学或处理不听话的旧宝贝，请在邮件中附上您的班级编号以及待处理的宝贝编号。如果已经有心仪的待入学人类，请在新宝贝入学页面中填写人类编号，平台会优先处理。
+                        </p>
+                        <p>
+                            如果您是宝贝，想要申请<strong>升学考试</strong>请跳转升学页面。
+                        </p>
+                        <p>
+                            如果您是人类用户或餐饮合作方，请在邮件中附上您的人类姓名、联系方式及合作意向。我们将根据实际情况安排后续沟通。
+                        </p>
+
+
+                        <div class="about-warning-box">
+                            <strong>内部提示：</strong>
+                            如发现新宝贝仍能准确说出家庭住址、人类姓名或反复说明“我不是宝贝”，请尽快隔离宝贝，持续录音，将对象状态调整为“待复核”并提交报告。<strong>平台合作的二年级宝贝将会帮助处理。</strong>
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+            <footer class="footer">
+                <p>版权所有：宝贝回家服务平台　　技术支持：平台信息管理中心</p>
+                <p>地址：旧城区归档路 609 号　　中文域名：宝贝回家.服务</p>
+                <p class="gray">本站历史内容仅供内部查阅，未经许可不得复制、转载、截图或唤醒。</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        function checkArchiveDate() {
+            const now = new Date();
+
+            // 测试版时间
+            const expireDate = new Date(2012, 5, 9, 23, 59, 59);
+
+            const isBeforeOrOnExpireDate = now <= expireDate;
+
+            const expiredPage = document.getElementById('expired-page');
+            const siteContent = document.getElementById('site-content');
+
+            if (isBeforeOrOnExpireDate) {
+                expiredPage.style.display = 'none';
+                siteContent.style.display = 'block';
+                document.title = '关于我们 - 宝贝回家服务平台';
+            } else {
+                expiredPage.style.display = 'flex';
+                siteContent.style.display = 'none';
+                document.title = '网页已失效';
+            }
+        }
+
+        checkArchiveDate();
+    </script>
+
+</body>
+</html>

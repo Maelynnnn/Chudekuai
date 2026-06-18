@@ -1,0 +1,1362 @@
+/* ================= 厨得快 · 全站严谨规范化样式表 ================= */
+
+/* 全局基础重置 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft YaHei", sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header 导航栏样式 */
+.site-header {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+.logo-img {
+    height: 100px;
+    display: block;
+}
+.category-nav {
+    display: flex;
+    gap: 20px;
+}
+.nav-item {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 4px; /* 去卡通大圆角，改为微圆角 */
+    transition: all 0.3s;
+}
+.nav-item:hover, .nav-item.active {
+    background-color: #f4b057; /* 温暖经典橙黄色 */
+    color: #fff;
+}
+.search-area input {
+    padding: 8px 16px;
+    width: 250px;
+    border: 2px solid #ddd;
+    border-radius: 4px; /* 改为微圆角 */
+    outline: none;
+    transition: border-color 0.3s;
+}
+.search-area input:focus {
+    border-color: #f4b057;
+}
+
+/* 主内容区域样式 */
+.main-content {
+    padding: 40px 0;
+}
+#section-title {
+    margin-bottom: 30px;
+    font-size: 24px;
+    color: #222;
+    border-left: 5px solid #f4b057;
+    padding-left: 10px;
+}
+
+/* 轮播图区域样式 */
+.carousel-section {
+    background-color: #f8f9fa;
+    padding: 20px 0 0 0;
+}
+.carousel-container {
+    max-width: 1160px;
+    margin: 0 auto;
+    position: relative;
+    height: 350px;
+    overflow: hidden;
+    border-radius: 6px; /* 统一微圆角 */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+.carousel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+    z-index: 1;
+}
+.carousel-slide.active {
+    opacity: 1;
+    z-index: 2;
+}
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 轮播图左右方向切换按钮 */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(25, 25, 25, 0.3);
+    backdrop-filter: blur(4px);
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.carousel-btn:hover {
+    background: #f4b057;
+}
+.prev-btn { left: 20px; }
+.next-btn { right: 20px; }
+
+/* 轮播图底部小圆点指示器 */
+.carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.dot.active, .dot:hover {
+    background-color: #f4b057;
+    width: 24px;
+    border-radius: 3px;
+}
+
+/* 菜谱网格与卡片 */
+.recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 30px;
+}
+.recipe-card {
+    background: #fff;
+    border-radius: 6px; /* 统一微圆角 */
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.recipe-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+.card-image-wrapper {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    background-color: #eaeaea;
+}
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.card-info {
+    padding: 15px;
+}
+.card-title {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #111;
+}
+.card-meta {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    font-size: 13px;
+}
+.stars {
+    color: #ffbe1a;
+}
+
+/* 详情弹窗样式 */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 200; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0,0,0,0.6);
+    backdrop-filter: blur(3px);
+    align-items: center;
+    justify-content: center;
+}
+.modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 6px; /* 统一微圆角 */
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+}
+@keyframes fadeIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #aaa;
+}
+.close-btn:hover {
+    color: #000;
+}
+
+/* 详情弹窗内部排版 */
+.modal-body h2 {
+    margin-bottom: 15px;
+    color: #f4b057;
+}
+.modal-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+.modal-section {
+    margin-top: 15px;
+}
+.modal-section h3 {
+    font-size: 16px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+    margin-bottom: 8px;
+}
+.modal-section ul, .modal-section ol {
+    padding-left: 20px;
+}
+.modal-section li {
+    margin-bottom: 5px;
+}
+
+/* 全局右下角通知弹窗动效样式 */
+.global-notification {
+    position: fixed;
+    bottom: 20px;
+    right: -400px;
+    width: 320px;
+    background: #ffffff;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+    border-radius: 4px; /* 统一微圆角 */
+    border-left: 5px solid #f4b057;
+    padding: 15px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 99999;
+    cursor: pointer;
+    animation: slideInFromRight 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+@keyframes slideInFromRight {
+    to { right: 20px; }
+}
+.notice-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.notice-text {
+    display: flex;
+    flex-direction: column;
+}
+.notice-title {
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+.notice-body {
+    color: #666;
+    font-size: 12px;
+    margin-top: 2px;
+}
+.notice-close {
+    font-size: 20px;
+    color: #ccc;
+    cursor: pointer;
+    align-self: flex-start;
+    margin-top: -5px;
+    margin-right: -5px;
+    transition: color 0.2s;
+}
+.notice-close:hover {
+    color: #666;
+}
+
+/* ================= 💎 各子页面公共通用容器样式 ================= */
+.content-box {
+    background: white;
+    padding: 40px;
+    border-radius: 6px;
+    margin-top: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #e8e8e8;
+}
+
+/* ================= 📺 直播预约页特定样式 ================= */
+.live-content-box {
+    text-align: center;
+}
+.live-top-banner {
+    max-width: 1160px;
+    margin: 20px auto 0;
+    height: 350px;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+.live-top-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.live-time-box-wrapper {
+    margin: 30px 0;
+    background: #fffaf4;
+    padding: 25px 50px;
+    border-radius: 6px;
+    display: inline-block;
+    border: 1px solid #f4b057;
+}
+.live-time-badge {
+    font-size: 26px;
+    color: #f4b057;
+    font-weight: bold;
+    margin: 10px 0;
+    display: block;
+    letter-spacing: 1px;
+}
+.live-reserve-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 45px;
+    background: #f4b057;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.live-reserve-btn:hover:not(:disabled) {
+    background: #e09e47;
+}
+.live-reserve-btn:disabled {
+    background: #cccccc;
+    cursor: default;
+}
+
+/* 主厨介绍部分排版 */
+.chef-intro-section {
+    display: flex;
+    gap: 40px;
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid #eeeeee;
+    text-align: left;
+    align-items: center;
+}
+.chef-image-container {
+    flex: 0 0 220px;
+    height: 390px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #dddddd;
+    background-color: #f5f5f5;
+}
+.chef-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.chef-text-container {
+    flex: 1;
+}
+.chef-name {
+    font-size: 30px;
+    color: #222222;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.chef-identity {
+    font-size: 20px;
+    color: #f4b057;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+.chef-description {
+    font-size: 20px;
+    color: #555555;
+    line-height: 1.7;
+}
+
+/* ================= 👨‍🍳 签约厨师页特定样式 ================= */
+.chef-submit-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #f4b057;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* ================= 🍓 水果测评页特定样式 ================= */
+.fruit-rating-tag {
+    background: #fff5e6;
+    color: #f4b057;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* ================= 📹 高仿真直播间页面样式 ================= */
+.live-room-layout {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    height: 580px;
+}
+.video-box-area {
+    flex: 3;
+    background: #18181c;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    border: 1px solid #2d2d35;
+}
+.video-player-placeholder {
+    text-align: center;
+    color: #666;
+}
+.play-btn-mock {
+    font-size: 65px;
+    color: #f4b057;
+    margin-bottom: 15px;
+    cursor: pointer;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+.live-chat-panel {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+.chat-panel-header {
+    background: #fff5e6;
+    color: #f4b057;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 15px;
+    border-bottom: 1px solid #ffe8cc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.chat-messages-flow {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scroll-behavior: smooth;
+}
+.single-chat-line {
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.5;
+    animation: chatFadeIn 0.3s ease;
+}
+@keyframes chatFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.user-name-tag {
+    color: #f4b057;
+    font-weight: bold;
+    margin-right: 6px;
+}
+.live-status-tag {
+    background: #ff4d4f;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: normal;
+}
+.chat-input-row {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+    background: #fff;
+}
+.chat-text-input {
+    flex: 1;
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+    font-size: 13px;
+}
+.chat-text-input:focus {
+    border-color: #f4b057;
+}
+.send-chat-btn {
+    background: #f4b057;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* ================= 🏛️ 仿政府政企标准化全功能页脚 (用于主页) ================= */
+.official-site-footer {
+    background-color: #fafafa;
+    border-top: 1px solid #dcdcdc;
+    padding: 35px 0 40px 0;
+    margin-top: 60px;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    color: #333333;
+    font-size: 14px;
+}
+.footer-links-block {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 20px;
+}
+.links-row {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.links-row-label {
+    font-weight: bold;
+    color: #555555;
+    margin-right: 10px;
+}
+.links-row a {
+    color: #333333;
+    text-decoration: none;
+    margin: 0 12px;
+}
+.links-row a:hover {
+    text-decoration: underline;
+    color: #f4b057;
+}
+.links-separator {
+    color: #cccccc;
+}
+.footer-compliance-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.compliance-text-info p {
+    margin-bottom: 6px;
+    line-height: 1.6;
+    color: #444444;
+}
+.compliance-text-info .highlight-meta {
+    background-color: #e8e8e8;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 13px;
+}
+.compliance-badges {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+.official-badge-box {
+    border: 1px solid #d3d3d3;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background: #ffffff;
+    font-size: 12px;
+    color: #888888;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.badge-icon-rect {
+    width: 24px;
+    height: 30px;
+    background: #b22222;
+    color: white;
+    font-size: 10px;
+    text-align: center;
+    line-height: 14px;
+    font-weight: bold;
+    border-radius: 2px;
+}
+.badge-icon-accessible {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #0088cc;
+    color: #0088cc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+}
+.qr-placeholder {
+    width: 50px;
+    height: 50px;
+    background: #e0e0e0;
+    border: 1px solid #cccccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #666666;
+    text-align: center;
+}
+
+/* ================= 📄 副网页极简版权页脚 ================= */
+.simple-site-footer {
+    text-align: center;
+    padding: 25px 0;
+    color: #888888;
+    font-size: 13px;
+    border-top: 1px solid #eeeeee;
+    margin-top: 50px;
+}
+
+/* ================= 直播间突发反色故障效果 ================= */
+/* 触发全网页反色 */
+body.glitch-invert-active {
+    filter: invert(1);
+}
+
+/* 核心技巧：当全网页反色时，对直播图片进行二次反色，负负得正保持原色 */
+body.glitch-invert-active .video-box-area img {
+    filter: invert(1);
+}
+
+
+/* ================= 仿邮箱页面：签约申请邮件系统 ================= */
+
+.mail-page-body {
+    background: #f6f8fc;
+    height: 100vh;
+    overflow: hidden;
+    font-family: Arial, "Microsoft YaHei", sans-serif;
+}
+
+.mail-app-shell {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: #202124;
+}
+
+/* 顶部栏 */
+.mail-topbar {
+    height: 64px;
+    background: #f6f8fc;
+    display: flex;
+    align-items: center;
+    padding: 8px 20px;
+    gap: 24px;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.mail-left-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 230px;
+}
+
+.mail-back-link {
+    text-decoration: none;
+    color: #5f6368;
+    font-size: 24px;
+    line-height: 1;
+}
+
+.mail-logo-dot {
+    width: 30px;
+    height: 22px;
+    border-radius: 5px;
+    background: linear-gradient(135deg, #f4b057 0%, #f4b057 45%, #ffffff 46%, #ffffff 54%, #d93025 55%, #d93025 100%);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.mail-brand-text {
+    font-size: 20px;
+    color: #444746;
+    font-weight: 500;
+}
+
+.mail-search-mock {
+    flex: 1;
+    max-width: 720px;
+    height: 46px;
+    background: #eaf1fb;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    padding: 0 22px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.mail-user-area {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.mail-help-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid #c7c7c7;
+    color: #5f6368;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.mail-user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #f4b057;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 主布局 */
+.mail-main-layout {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+}
+
+/* 左侧导航 */
+.mail-sidebar {
+    width: 250px;
+    background: #f6f8fc;
+    padding: 14px 12px;
+    flex-shrink: 0;
+}
+
+.mail-compose-main-btn {
+    width: 140px;
+    height: 54px;
+    border: none;
+    border-radius: 16px;
+    background: #c2e7ff;
+    color: #001d35;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: default;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+.mail-folder {
+    height: 34px;
+    border-radius: 0 18px 18px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #444746;
+    padding: 0 16px;
+    font-size: 14px;
+    margin-bottom: 3px;
+}
+
+.mail-folder.active {
+    background: #d3e3fd;
+    font-weight: 700;
+}
+
+.mail-folder b {
+    font-size: 12px;
+}
+
+.mail-sidebar-divider {
+    height: 1px;
+    background: #e0e4ea;
+    margin: 18px 8px;
+}
+
+.mail-small-note {
+    font-size: 12px;
+    color: #7a7f86;
+    line-height: 1.6;
+    padding: 0 10px;
+}
+
+/* 邮件内容区 */
+.mail-content {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 18px 0 0 0;
+    margin-right: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.mail-list-header {
+    height: 52px;
+    border-bottom: 1px solid #eef0f2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px;
+    color: #444746;
+    font-size: 14px;
+}
+
+.mail-list-header span {
+    color: #888;
+}
+
+.mail-sync-status {
+    color: #7a7f86;
+    font-size: 12px;
+}
+
+.mail-thread-empty {
+    flex: 1;
+    height: calc(100vh - 116px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #8a8f98;
+}
+
+.empty-mail-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+    opacity: 0.45;
+}
+
+.mail-thread-empty p {
+    font-size: 18px;
+    color: #5f6368;
+    margin-bottom: 4px;
+}
+
+.mail-thread {
+    flex: 1;
+    height: calc(100vh - 116px);
+    overflow-y: auto;
+    padding: 22px 30px 160px;
+    background: #ffffff;
+}
+
+/* 邮件卡片 */
+.mail-message-card {
+    max-width: 860px;
+    background: white;
+    border: 1px solid #e3e6ea;
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 4px rgba(60,64,67,0.12);
+}
+
+.sent-mail-card {
+    border-left: 4px solid #9aa0a6;
+}
+
+.reply-mail-card {
+    border-left: 4px solid #f4b057;
+}
+
+.mail-message-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    color: #202124;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.mail-message-top span {
+    color: #777;
+    font-size: 13px;
+    margin-left: 6px;
+}
+
+.mail-message-top time {
+    color: #777;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.mail-message-meta {
+    color: #777;
+    font-size: 12px;
+    margin-bottom: 14px;
+}
+
+.mail-message-card h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #202124;
+}
+
+.mail-message-body {
+    color: #333;
+    font-size: 14px;
+    line-height: 1.75;
+    white-space: normal;
+}
+
+.auto-reply-body {
+    background: #fff8ef;
+    border: 1px dashed #f4b057;
+    padding: 14px;
+    border-radius: 6px;
+    color: #9a5b12;
+}
+
+/* 写邮件窗口 */
+.compose-window {
+    position: fixed;
+    right: 36px;
+    bottom: 0;
+    width: 560px;
+    height: 560px;
+    background: white;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    z-index: 2000;
+    overflow: hidden;
+}
+
+.compose-header {
+    height: 42px;
+    background: #f2f6fc;
+    color: #202124;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.compose-mini-btn {
+    background: transparent;
+    border: none;
+    color: #5f6368;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 2px 7px;
+}
+
+.compose-mini-btn:hover {
+    background: #e0e4ea;
+    border-radius: 4px;
+}
+
+.compose-row {
+    height: 42px;
+    border-bottom: 1px solid #eeeeee;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+}
+
+.compose-row label {
+    color: #777;
+    width: 56px;
+    font-size: 13px;
+}
+
+.compose-row input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: #202124;
+    background: transparent;
+}
+
+.compose-textarea {
+    flex: 1;
+    border: none;
+    outline: none;
+    resize: none;
+    padding: 14px;
+    font-size: 14px;
+    line-height: 1.7;
+    font-family: Arial, "Microsoft YaHei", sans-serif;
+}
+
+.compose-footer {
+    height: 58px;
+    border-top: 1px solid #eeeeee;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 14px;
+}
+
+.fake-send-btn {
+    background: #0b57d0;
+    color: white;
+    border: none;
+    border-radius: 18px;
+    padding: 9px 24px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.fake-send-btn:disabled {
+    background: #9bb7e5;
+    cursor: default;
+}
+
+.compose-footer-tip {
+    color: #777;
+    font-size: 12px;
+}
+
+.discard-btn {
+    margin-left: auto;
+    border: none;
+    background: transparent;
+    color: #777;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.discard-btn:hover {
+    color: #d93025;
+}
+
+.compose-minimized {
+    position: fixed;
+    right: 36px;
+    bottom: 0;
+    width: 280px;
+    height: 44px;
+    background: #f2f6fc;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.22);
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    z-index: 1999;
+}
+
+.compose-minimized button {
+    border: none;
+    background: transparent;
+    color: #0b57d0;
+    cursor: pointer;
+}
+
+
+/* ================= 子页面返回首页按钮位置修正 ================= */
+
+.subpage-header-container {
+    justify-content: flex-start;
+}
+
+.subpage-logo-area {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.back-home-link {
+    display: inline-flex;
+    align-items: center;
+    height: 34px;
+    padding: 0 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    color: #555;
+    background: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+}
+
+.back-home-link::before {
+    content: "←";
+    margin-right: 6px;
+    font-size: 15px;
+}
+
+.back-home-link:hover {
+    border-color: #f4b057;
+    color: #f4b057;
+    background: #fff8ef;
+}
+
+.auto-reply-link {
+    color: #0b57d0;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.auto-reply-link:hover {
+    color: #063f9e;
+}
+
+/* ================= 邮箱登录页面 ================= */
+
+.mail-login-page {
+    width: 100vw;
+    height: 100vh;
+    background: #f6f8fc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mail-login-card {
+    width: 420px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 8px 28px rgba(60,64,67,0.18);
+    padding: 38px 42px 34px;
+    border: 1px solid #e3e6ea;
+}
+
+.mail-login-logo {
+    width: 48px;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f4b057 0%, #f4b057 45%, #ffffff 46%, #ffffff 54%, #d93025 55%, #d93025 100%);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.16);
+    margin-bottom: 22px;
+}
+
+.mail-login-card h1 {
+    font-size: 26px;
+    font-weight: 500;
+    color: #202124;
+    margin-bottom: 8px;
+}
+
+.mail-login-subtitle {
+    color: #5f6368;
+    font-size: 14px;
+    margin-bottom: 28px;
+}
+
+.mail-login-field {
+    margin-bottom: 18px;
+}
+
+.mail-login-field label {
+    display: block;
+    color: #5f6368;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.mail-login-field input {
+    width: 100%;
+    height: 44px;
+    border: 1px solid #dadce0;
+    border-radius: 6px;
+    padding: 0 12px;
+    font-size: 15px;
+    outline: none;
+    background: #fff;
+}
+
+.mail-login-field input:focus {
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 1px #1a73e8;
+}
+
+.mail-login-btn {
+    width: 100%;
+    height: 42px;
+    border: none;
+    border-radius: 21px;
+    background: #0b57d0;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 6px;
+}
+
+.mail-login-btn:hover {
+    background: #0842a0;
+}
+
+.mail-login-error {
+    min-height: 22px;
+    color: #d93025;
+    font-size: 13px;
+    margin-top: 12px;
+}
+
+.mail-login-hint {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid #eeeeee;
+    color: #777;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* ================= 直播通知最小化圆形浮窗 ================= */
+
+.global-live-bubble {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid #f4b057;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+    z-index: 99998;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    animation: bubblePopIn 0.35s ease-out, bubblePulse 1.8s infinite ease-in-out;
+}
+
+@keyframes bubblePopIn {
+    from {
+        transform: scale(0.4);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes bubblePulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(244,176,87,0.45), 0 6px 24px rgba(0,0,0,0.2);
+    }
+    70% {
+        box-shadow: 0 0 0 12px rgba(244,176,87,0), 0 6px 24px rgba(0,0,0,0.2);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(244,176,87,0), 0 6px 24px rgba(0,0,0,0.2);
+    }
+}
+
+.bubble-live-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #ff4d5054;
+    margin-bottom: 4px;
+}
+
+.bubble-live-text {
+    font-size: 10px;
+    font-weight: bold;
+    color: #f4b057;
+    letter-spacing: 0.5px;
+}
