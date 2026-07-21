@@ -151,13 +151,32 @@
             'assets/live/ss16.jpg',
             'assets/live/ss17.jpg',
             'assets/live/ss18.jpg',
+            'assets/live/load.jpg',
         ];
 
         let frameIndex = 0;
         let secondaryIndex = 0; // 第二阶段数组指针
+        let finalLoopIndex = 0; // 最终循环数组指针
         let isKicked = false;
         let meatPlayed = false; // meat绝对锁
-        let inSecondaryPhase = false; //
+        let inSecondaryPhase = false;
+        let inFinalLoopPhase = false;
+
+        // 所有画面播完后，循环播放 ss17、ss18、load
+        const finalLoopFrames = [
+            {
+                src: 'assets/live/ss17.jpg',
+                duration: 1200
+            },
+            {
+                src: 'assets/live/ss18.jpg',
+                duration: 1200
+            },
+            {
+                src: 'assets/live/load.jpg',
+                duration: 2400 // load 停留时间是 ss17 / ss18 的两倍
+            }
+        ];
 
         const meatAudio = new Audio('assets/live/meat.mp3');
 
@@ -204,28 +223,36 @@
         function runVideoLoop() {
             if (isKicked) return;
 
-            // 分支 A: 如果现在正处于 meat 之后的第二惊悚阶段 (ss8 到 ss15)
             if (inSecondaryPhase) {
+                // 第二阶段 ss9-ss18 全部播完后，进入最终循环阶段
                 if (secondaryIndex >= secondaryFrames.length) {
-                    // ss15.jpg 已经渲染完毕并安全渡过停留时间，此时检测用户发送状态
-                    setTimeout(() => {
-                        if (isKicked) return;
-                        if (!hasUserSentMessage) {
-                            // 2秒内若用户依然保持沉默、没有发过弹幕，立刻强制执行踢出
-                            executeKickProcedure();
-                        }
-                    }, 2000); // 预留播完后2秒的时间红线检测
-                    return; // 彻底截止在此，不循环播放
+                    inSecondaryPhase = false;
+                    inFinalLoopPhase = true;
+                    finalLoopIndex = 0;
+                    runVideoLoop();
+                    return;
                 }
 
-                // 播放 ss8 - ss15 的故障画面
+                // 播放第二阶段故障画面
                 videoImg.src = secondaryFrames[secondaryIndex];
                 videoImg.style.display = 'block';
                 secondaryIndex++;
 
-                // 保持原有的动态随机卡顿频率 (0.5s - 2.0s 延迟范围)
                 let randomDuration = 1000 + Math.random() * 1500;
                 setTimeout(runVideoLoop, randomDuration);
+                return;
+            }
+
+            // 最终循环阶段：ss17 → ss18 → load.png，不断循环
+            if (inFinalLoopPhase) {
+                const currentFrame = finalLoopFrames[finalLoopIndex];
+
+                videoImg.src = currentFrame.src;
+                videoImg.style.display = 'block';
+
+                finalLoopIndex = (finalLoopIndex + 1) % finalLoopFrames.length;
+
+                setTimeout(runVideoLoop, currentFrame.duration);
                 return;
             }
 

@@ -83,7 +83,7 @@ function handleLiveAccess() {
     let accessKey = prompt("[安全验证] 该直播间为加密内测专场，请输入正确的入场密钥(全拼)：");
 
     if (accessKey) {
-        if (accessKey.trim().toLowerCase() === 'baobeihuijia') {
+        if (accessKey.trim().toLowerCase() === 'xinshijie') {
             localStorage.setItem('live_popup_shown', 'true');
             localStorage.setItem('live_notice_minimized', 'false');
 

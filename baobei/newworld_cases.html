@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成功案例 - 新世界服务平台</title>
+    <link rel="stylesheet" href="baobei.css">
+
+    <style>
+        .case-page-shell {
+            border: 1px solid #8dc6ff;
+            border-radius: 8px;
+            background: #ffffff;
+            overflow: hidden;
+            min-height: 650px;
+        }
+
+        .case-page-title {
+            background: linear-gradient(to bottom, #58b5ff, #2585de);
+            color: white;
+            font-weight: bold;
+            padding: 10px 16px;
+            font-size: 16px;
+            border-bottom: 1px solid #1f78c8;
+        }
+
+        .case-intro {
+            padding: 18px 24px;
+            border-bottom: 1px solid #d9ecff;
+            color: #555;
+            line-height: 1.9;
+            font-size: 14px;
+            background: #f7fbff;
+        }
+
+        .case-intro strong {
+            color: #b40000;
+        }
+
+        .horizontal-case-track {
+            height: 100%;
+            display: flex;
+            gap: 28px;
+            padding: 32px 34px 42px;
+            width: max-content;
+        }
+
+        .horizontal-case-area {
+            width: 100%;
+            height: 900px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-behavior: smooth;
+            background: #ffffff;
+        }
+
+        .case-card {
+            width: 360px;
+            height: 835px;
+            flex: 0 0 auto;
+            border: 1px solid #8dc6ff;
+            border-radius: 8px;
+            background: #fff;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .case-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border: 6px solid rgba(35,120,201,0.04);
+            pointer-events: none;
+        }
+
+        .case-photo-wrap {
+            width: 100%;
+            height: 450px;
+            background: #edf6ff;
+            border-bottom: 1px solid #cde4fb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .case-photo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .case-status {
+            display: inline-block;
+            background: linear-gradient(to bottom, #ffe66a, #ffd53c);
+            color: #e05b00;
+            border: 1px solid #e3bd24;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 3px 9px;
+            margin-bottom: 12px;
+        }
+
+       .case-info {
+            padding: 12px 16px 16px;
+        }
+
+        .case-name {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .case-table {
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .case-table th {
+            padding: 5px 7px;
+        }
+
+        .case-table td {
+            padding: 5px 7px;
+        }
+
+        .case-note {
+            color: #c80101;
+            margin-top: 16px;
+            margin-bottom: 10px;
+            padding: 8px 10px;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .case-red {
+            color: #b40000;
+            font-weight: bold;
+        }
+
+        .case-side-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 12px;
+        }
+
+        .case-side-list {
+            list-style: none;
+            line-height: 2;
+        }
+
+        .case-side-list li {
+            border-bottom: 1px dotted #b9d5ef;
+            padding: 4px 0;
+        }
+
+        .case-side-list li::before {
+            content: "▪";
+            color: #2f9cf0;
+            margin-right: 6px;
+        }
+
+        .horizontal-hint {
+            color: #777;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .nav-bar a.active-nav {
+            background: rgba(255,255,255,0.22);
+            font-weight: bold;
+        }
+
+        .horizontal-case-area::-webkit-scrollbar {
+            height: 12px;
+        }
+
+        .horizontal-case-area::-webkit-scrollbar-track {
+            background: #eaf5ff;
+            border-radius: 10px;
+        }
+
+        .horizontal-case-area::-webkit-scrollbar-thumb {
+            background: #8dc6ff;
+            border-radius: 10px;
+        }
+
+        .horizontal-case-area::-webkit-scrollbar-thumb:hover {
+            background: #58a8f0;
+        }
+
+        .case-redacted {
+            display: inline-block;
+            min-width: 110px;
+            height: 18px;
+            background: #111;
+            color: transparent;
+            vertical-align: middle;
+            user-select: none;
+        }
+
+        .unarchived-link {
+            display: block;
+            margin-top: 10px;
+            padding: 8px 10px;
+            background: #f7fbff;
+            border: 1px solid #b9d5ef;
+            color: #2378c9;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .unarchived-link:hover {
+            background: #eaf5ff;
+            color: #b40000;
+        }
+            </style>
+</head>
+<body>
+
+    <!-- 失效页面 -->
+    <div id="expired-page" class="expired-page">
+        <div class="expired-box">
+            <h1>该网页已于 2012.6.9 失效</h1>
+            <p>您正在访问的页面已停止服务。</p>
+            <p>如需查看历史归档内容，请联系网站管理员。</p>
+            <div class="expired-date">ERROR 410 / PAGE ARCHIVED</div>
+        </div>
+    </div>
+
+    <!-- 官网 -->
+    <div id="site-content">
+        <div class="old-site-wrapper">
+
+            <header class="top-banner">
+                <div class="baobei-header-inner">
+                    <div class="baobei-logo-area">
+                        <img src="../assets/logo/新世界logo.png" alt="新世界Logo" class="baobei-logo-img">
+                    </div>
+
+                    <div class="banner-title">
+                        <h1>新世界服务平台</h1>
+                        <h2>NEW WORLD PUBLIC SERVICE CENTER</h2>
+                        <p>中文域名：新世界.服务　　备案号：厨ICP备12609号</p>
+                    </div>
+                </div>
+            </header>
+
+            <nav class="nav-bar">
+                <a href="newworld.html">网站首页</a>
+                <a href="newworld_about.html">关于我们</a>
+                <a href="newworld_register.html">居民登记</a>
+                <a href="javascript:void(0);">夜间服务</a>
+                <a href="newworld_cases.html" class="active-nav">成功案例</a>
+                <a href="javascript:void(0);">合作单位</a>
+                <a href="javascript:void(0);">资料公开</a>
+                <a href="javascript:void(0);">联系我们</a>
+            </nav>
+
+            <div class="case-side-layout">
+
+                <!-- 左侧栏 -->
+                <aside>
+                    <section class="panel">
+                        <div class="panel-title">案例分类</div>
+                        <div class="panel-content">
+                            <ul class="case-side-list">
+                                <li>A级居民</li>
+                                <li>B级居民</li>
+                                <li>C级居民</li>
+                                <li>高适应居民</li>
+                                <li>优秀协助者</li>
+                                <li>已完成样本</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-title blue">归档说明 <span class="more">MORE&gt;&gt;</span></div>
+                        <div class="panel-content">
+                            <p class="gray">
+                                本页展示部分已完成身份更新并稳定进入场域生活的居民案例。
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-title blue">统计信息</div>
+                        <div class="panel-content">
+                            <p>公开案例：5</p>
+                            <p>隐藏案例：609</p>
+                            <p>待复核：12</p>
+                            <p>已清理原姓名：全部</p>
+                            <p class="case-red" style="margin-top:8px;">异常记忆：持续下降</p>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-title">未归档新居民 <span class="more">MORE&gt;&gt;</span></div>
+                        <div class="panel-content">
+                            <p class="gray">
+                                以下居民暂未完成公开归档，请由授权管理员进入临时表格查看。
+                            </p>
+
+                            <a href="newworld_unarchived.html" class="unarchived-link">
+                                打开未归档名单
+                            </a>
+                        </div>
+                    </section>
+                </aside>
+
+                <!-- 右侧横向滚动主体 -->
+                <main class="case-page-shell">
+                    <div class="case-page-title">当前位置：首页 &gt; 成功案例 &gt; 居民归档展示</div>
+
+                    <div class="case-intro">
+                        在各场域管理员的共同努力下，数以万计样本已顺利完成登记、编号、安抚、身份更新与场域适应流程。
+                        平台现将部分优秀居民资料予以公开展示，以下照片均为居民真实证件照。他们已经顺利成为新世界的正式一员。
+                        <strong>新世界终将到来！</strong>
+                    </div>
+
+                    <div class="horizontal-case-area" id="horizontal-case-area">
+                        <div class="horizontal-case-track">
+
+                            <article class="case-card">
+                                <div class="case-photo-wrap">
+                                    <img src="../assets/case/1.png" alt="居民案例 1">
+                                </div>
+                                <div class="case-info">
+                                    <div class="case-status">已去世</div>
+                                    <div class="case-name">优秀居民档案 01</div>
+
+                                    <table class="case-table">
+                                         <tr>
+                                            <th>居民姓名</th>
+                                            <td>李玉峰</td>
+                                        </tr>
+                                        <tr>
+                                            <th>居民编号</th>
+                                            <td>NWC07Mlyf19740417</td>
+                                        </tr>
+                                        <tr>
+                                            <th>入世日期</th>
+                                            <td>1974-04-17</td>
+                                        </tr>
+                                        <tr>
+                                            <th>居民等级</th>
+                                            <td>C级居民</td>
+                                        </tr>
+                                        <tr>
+                                            <th>管理员</th>
+                                            <td>管理员编号 NW-AD-C07</td>
+                                        </tr>
+                                        <tr>
+                                            <th>当前场域</th>
+                                            <td>C-07</td>
+                                        </tr>
+                                    </table>
+
+                                    <div class="case-note">
+                                        新世界永远记得你！
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="case-card">
+                                <div class="case-photo-wrap">
+                                    <img src="../assets/case/2.png" alt="居民案例 2">
+                                </div>
+                                <div class="case-info">
+                                    <div class="case-status">已去世</div>
+                                    <div class="case-name">优秀居民档案 02</div>
+
+                                    <table class="case-table">
+                                         <tr>
+                                            <th>居民姓名</th>
+                                            <td>张顺芳</td>
+                                        </tr>
+                                        <tr>
+                                            <th>居民编号</th>
+                                            <td>NWC13Fzsf19760512</td>
+                                        </tr>
+                                        <tr>
+                                            <th>入世日期</th>
+                                            <td>1976-05-12</td>
+                                        </tr>
+                                        <tr>
+                                            <th>居民等级</th>
+                                            <td>C级居民</td>
+                                        </tr>
+                                        <tr>
+                                            <th>管理员</th>
+                                            <td>管理员编号 NW-AD-C13</td>
+                                        </tr>
+                                        <tr>
+                                            <th>当前场域</th>
+                                            <td>C-13</td>
+                                        </tr>
+                                    </table>
+
+                                    <div class="case-note">
+                                        新世界永远记得你！
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="case-card">
+                                <div class="case-photo-wrap">
+                                    <img src="../assets/case/3.png" alt="居民案例 3">
+                                </div>
+                                <div class="case-info">
+                                    <div class="case-status">已入世</div>
+                                    <div class="case-name">优秀居民档案 03</div>
+
+                                    <table class="case-table">
+                                         <tr>
+                                            <th>居民姓名</th>
+                                            <td>郑宇光</td>
+                                        </tr>
+                                        <tr>
+                                            <th>居民编号</th>
+                                            <td>NWC27Mzyg20020609</td>
+                                        </tr>
+                                        <tr>
+                                            <th>加入日期</th>
+                                            <td>2002-06-09</td>
+                                        </tr>
+                                        <tr>
+                                            <th>居民等级</th>
+                                            <td>C级居民</td>
+                                        </tr>
+                                        <tr>
+                                            <th>管理员</th>
+                                            <td>管理员编号 NW-AD-C27</td>
+                                        </tr>
+                                        <tr>
+                                            <th>当前场域</th>
+                                            <td>C-27</td>
+                                        </tr>
+                                    </table>
+
+                                    <div class="case-note">
+                                        新世界欢迎你！
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="case-card">
+                                <div class="case-photo-wrap">
+                                    <img src="../assets/case/4.png" alt="居民案例 4">
+                                </div>
+                                <div class="case-info">
+                                    <div class="case-status">已入世</div>
+                                    <div class="case-name">优秀居民档案 04</div>
+
+                                    <table class="case-table">
+                                        <tr>
+                                            <th>居民姓名</th>
+                                            <td>风起云涌0023</td>
+                                        </tr>
+                                        <tr>
+                                            <th>居民编号</th>
+                                            <td>NWB43002320080328</td>
+                                        </tr>
+                                        <tr>
+                                            <th>加入日期</th>
+                                            <td>2008-03-28</td>
+                                        </tr>
+                                        <tr>
+                                            <th>居民等级</th>
+                                            <td>B级居民</td>
+                                        </tr>
+                                        <tr>
+                                            <th>管理员</th>
+                                            <td>管理员编号 NW-AD-B43</td>
+                                        </tr>
+                                        <tr>
+                                            <th>当前场域</th>
+                                            <td>B-43</td>
+                                        </tr>
+                                    </table>
+
+                                    <div class="case-note">
+                                        新世界欢迎你！
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="case-card">
+                                <div class="case-photo-wrap">
+                                    <img src="../assets/case/5.png" alt="居民案例 5">
+                                </div>
+                                <div class="case-info">
+                                    <div class="case-status">已入世</div>
+                                    <div class="case-name">优秀居民档案 05</div>
+
+                                    <table class="case-table">
+                                        <tr>
+                                            <th>居民姓名</th>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th>居民编号</th>
+                                            <td><span class="case-redacted">000000</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th>加入日期</th>
+                                            <td>2012-02-06</td>
+                                        </tr>
+                                        <tr>
+                                            <th>居民等级</th>
+                                            <td>A级居民</td>
+                                        </tr>
+                                        <tr>
+                                            <th>管理员</th>
+                                            <td>管理员 NW-AD-A09</td>
+                                        </tr>
+                                        <tr>
+                                            <th>当前场域</th>
+                                            <td>A-09</td>
+                                        </tr>
+                                    </table>
+
+                                    <div class="case-note">
+                                        新世界欢迎你！
+                                    </div>
+                                </div>
+                            </article>
+
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+            <footer class="footer">
+                <p>版权所有：新世界服务平台　　技术支持：平台信息管理中心</p>
+                <p>地址：旧城区归档路 609 号　　中文域名：新世界.服务</p>
+                <p class="gray">本站历史内容仅供内部查阅，未经许可不得复制、转载、截图或唤醒。</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        function checkArchiveDate() {
+            const now = new Date();
+
+            // 测试版时间；最终版本可改回 2012
+            const expireDate = new Date(2032, 5, 9, 23, 59, 59);
+
+            const isBeforeOrOnExpireDate = now <= expireDate;
+
+            const expiredPage = document.getElementById('expired-page');
+            const siteContent = document.getElementById('site-content');
+
+            if (isBeforeOrOnExpireDate) {
+                expiredPage.style.display = 'none';
+                siteContent.style.display = 'block';
+                document.title = '成功案例 - 新世界服务平台';
+            } else {
+                expiredPage.style.display = 'flex';
+                siteContent.style.display = 'none';
+                document.title = '网页已失效';
+            }
+        }
+
+        checkArchiveDate();
+
+        const horizontalArea = document.getElementById('horizontal-case-area');
+
+        horizontalArea.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            horizontalArea.scrollLeft += e.deltaY;
+        }, { passive: false });
+    </script>
+
+</body>
+</html>

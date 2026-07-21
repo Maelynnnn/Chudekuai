@@ -8,10 +8,11 @@ body {
     font-family: "黑体", SimSun, Arial, sans-serif;
     background: #ffffff;
     color: #333;
-     font-size: 16px;
+    font-size: 16px;
 }
 
-        /* 失效页面 */
+/* ================= 失效页面 ================= */
+
 .expired-page {
     width: 100vw;
     height: 100vh;
@@ -23,9 +24,9 @@ body {
 }
 
 .expired-box {
-     width: 520px;
-     background: white;
-     border: 1px solid #d8d8d8;
+    width: 520px;
+    background: white;
+    border: 1px solid #d8d8d8;
     box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     padding: 45px 50px;
     text-align: center;
@@ -50,16 +51,19 @@ body {
     margin-top: 22px;
 }
 
-        /* 官网主体 */
+/* ================= 官网主体 ================= */
+
 #site-content {
-     display: none;
+    display: none;
 }
 
 .old-site-wrapper {
     width: 1100px;
-     margin: 0 auto;
+    margin: 0 auto;
     background: #fff;
 }
+
+/* ================= 顶部 Header ================= */
 
 .top-banner {
     height: 170px;
@@ -85,243 +89,356 @@ body {
 }
 
 .baobei-logo-img {
-    width: 445px;
+    width: 145px;
     height: 145px;
+    margin-left: 20px;
     object-fit: contain;
     display: block;
+    transform: scale(1.8);
+    transform-origin: center center;
 }
 
 .banner-title {
     position: static;
+    margin-left: 80px;
 }
 
-        .banner-title h1 {
-            font-family: "Microsoft YaHei", SimSun, sans-serif;
-            font-size: 38px;
-            color: #2378c9;
-            letter-spacing: 5px;
-            text-shadow: 1px 1px 0 #fff;
-            margin-bottom: 6px;
-        }
+.banner-title h1 {
+    font-family: "Microsoft YaHei", SimSun, sans-serif;
+    font-size: 38px;
+    color: #2378c9;
+    letter-spacing: 5px;
+    text-shadow: 1px 1px 0 #fff;
+    margin-bottom: 6px;
+}
 
-        .banner-title h2 {
-            font-size: 16px;
-            color: #2378c9;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
+.banner-title h2 {
+    font-size: 16px;
+    color: #2378c9;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
 
-        .banner-title p {
-            margin-top: 10px;
-            color: #4d8fc9;
-            font-size: 13px;
-        }
+.banner-title p {
+    margin-top: 10px;
+    color: #4d8fc9;
+    font-size: 13px;
+}
 
-        .nav-bar {
-            height: 38px;
-            background: linear-gradient(to bottom, #58a8f0, #1f7ed7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 4px;
-            margin: 0 0 12px;
-            color: white;
-        }
+/* ================= 导航栏 ================= */
 
-        .nav-bar a {
-            color: white;
-            text-decoration: none;
-            padding: 0 18px;
-            border-right: 1px solid rgba(255,255,255,0.65);
-            font-size: 14px;
-            line-height: 14px;
-        }
+.nav-bar {
+    height: 38px;
+    background: linear-gradient(to bottom, #58a8f0, #1f7ed7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    margin: 0 0 12px;
+    color: white;
+}
 
-        .nav-bar a:last-child {
-            border-right: none;
-        }
+.nav-bar a {
+    color: white;
+    text-decoration: none;
+    padding: 0 18px;
+    border-right: 1px solid rgba(255,255,255,0.65);
+    font-size: 14px;
+    line-height: 14px;
+}
 
-        .nav-bar a:hover {
-            text-decoration: underline;
-        }
+.nav-bar a:last-child {
+    border-right: none;
+}
 
-        .main-grid {
-            display: grid;
-            grid-template-columns: 260px 1fr 300px;
-            gap: 12px;
-        }
+.nav-bar a:hover {
+    text-decoration: underline;
+}
 
-        .panel {
-            border: 1px solid #8dc6ff;
-            border-radius: 8px;
-            background: #fff;
-            margin-bottom: 12px;
-            overflow: hidden;
-        }
+/* 关于我们页当前导航高亮 */
+.nav-bar a.active-nav {
+    background: rgba(255,255,255,0.22);
+    font-weight: bold;
+}
 
-        .panel-title {
-            background: linear-gradient(to bottom, #ffe66a, #ffd53c);
-            color: #e05b00;
-            font-weight: bold;
-            padding: 8px 14px;
-            font-size: 15px;
-            border-bottom: 1px solid #e3bd24;
-            position: relative;
-        }
+/* ================= 首页主体布局 ================= */
 
-        .panel-title.blue {
-            background: linear-gradient(to bottom, #58b5ff, #2585de);
-            color: white;
-            border-bottom: 1px solid #1f78c8;
-        }
+.main-grid {
+    display: grid;
+    grid-template-columns: 260px 1fr 300px;
+    gap: 12px;
+}
 
-        .panel-title span.more {
-            float: right;
-            font-size: 10px;
-            color: rgba(255,255,255,0.9);
-            letter-spacing: 1px;
-        }
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
 
-        .panel-content {
-            padding: 12px 14px;
-            line-height: 1.9;
-        }
+/* ================= 通用栏目 Panel ================= */
 
-        .news-list {
-            list-style: none;
-        }
+.panel {
+    border: 1px solid #8dc6ff;
+    border-radius: 8px;
+    background: #fff;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
 
-        .news-list li {
-            border-bottom: 1px dotted #b9d5ef;
-            padding: 4px 0;
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
+.panel-title {
+    background: linear-gradient(to bottom, #ffe66a, #ffd53c);
+    color: #e05b00;
+    font-weight: bold;
+    padding: 8px 14px;
+    font-size: 15px;
+    border-bottom: 1px solid #e3bd24;
+    position: relative;
+}
 
-        .news-list li a {
-            color: #111;
-            text-decoration: none;
-            flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+.panel-title.blue {
+    background: linear-gradient(to bottom, #58b5ff, #2585de);
+    color: white;
+    border-bottom: 1px solid #1f78c8;
+}
 
-        .news-list li a:hover {
-            color: #0b72c7;
-            text-decoration: underline;
-        }
+.panel-title span.more {
+    float: right;
+    font-size: 10px;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 1px;
+}
 
-        .news-list li::before {
-            content: "▪";
-            color: #2f9cf0;
-            margin-right: 4px;
-        }
+.panel-content {
+    padding: 12px 14px;
+    line-height: 1.9;
+}
 
-        .news-date {
-            color: #333;
-            font-size: 12px;
-            flex-shrink: 0;
-        }
+.small-panel {
+    min-height: 210px;
+}
 
-        .notice-list {
-            padding-left: 16px;
-            line-height: 2;
-        }
+/* ================= 列表样式 ================= */
 
-        .notice-list li {
-            padding-left: 2px;
-        }
+.news-list {
+    list-style: none;
+}
 
-        .hero-image {
-            height: 260px;
-            background: linear-gradient(135deg, #e8342f 0%, #b90c11 55%, #ffbd4a 100%);
-            border: 1px solid #da7c2a;
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 12px;
-        }
+.news-list li {
+    border-bottom: 1px dotted #b9d5ef;
+    padding: 4px 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
 
-        .hero-image::before {
-            content: "";
-            position: absolute;
-            left: -80px;
-            bottom: -95px;
-            width: 560px;
-            height: 210px;
-            background: rgba(255,255,255,0.12);
-            border-radius: 50%;
-            transform: rotate(-8deg);
-        }
+.news-list li a {
+    color: #111;
+    text-decoration: none;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-        .hero-image h2 {
-            position: absolute;
-            left: 52px;
-            top: 70px;
-            color: #fff9d2;
-            font-family: "Microsoft YaHei", SimSun, sans-serif;
-            font-size: 30px;
-            line-height: 1.6;
-            text-shadow: 2px 2px 3px rgba(0,0,0,0.28);
-        }
+.news-list li a:hover {
+    color: #0b72c7;
+    text-decoration: underline;
+}
 
-        .hero-image p {
-            position: absolute;
-            left: 55px;
-            bottom: 42px;
-            color: white;
-            font-size: 16px;
-            letter-spacing: 2px;
-        }
+.news-list li::before {
+    content: "▪";
+    color: #2f9cf0;
+    margin-right: 4px;
+}
 
-        .long-banner {
-            height: 92px;
-            background: linear-gradient(to right, #fff1d1, #ff4040, #fff1d1);
-            border: 1px solid #ffc37e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-        }
+.news-date {
+    color: #333;
+    font-size: 12px;
+    flex-shrink: 0;
+}
 
-        .long-banner h2 {
-            font-family: "Microsoft YaHei", SimSun, sans-serif;
-            color: #de211a;
-            font-size: 33px;
-            text-shadow: 1px 1px 0 white;
-            letter-spacing: 2px;
-        }
+.notice-list {
+    padding-left: 16px;
+    line-height: 2;
+}
 
-        .two-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
+.notice-list li {
+    padding-left: 2px;
+}
 
-        .small-panel {
-            min-height: 210px;
-        }
+/* ================= Hero 左右滚动轮播 ================= */
 
-        .footer {
-            margin-top: 16px;
-            border-top: 1px solid #b6d7f5;
-            text-align: center;
-            color: #777;
-            font-size: 12px;
-            padding: 18px 0 30px;
-            line-height: 1.8;
-        }
+.hero-image {
+    height: 260px;
+    border: 1px solid #da7c2a;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 12px;
+    background: #000;
+}
 
-        .gray {
-            color: #888;
-        }
+/* 轮播轨道：两页横向排列 */
+.hero-carousel-track {
+    display: flex;
+    width: 200%;
+    height: 100%;
+    animation: heroSlideLoop 8s infinite ease-in-out;
+}
 
-        .red {
-            color: #c40000;
-        }
+/* 每一页占容器一半，也就是实际显示区域的 100% */
+.hero-slide {
+    width: 50%;
+    height: 100%;
+    flex-shrink: 0;
+    position: relative;
+}
 
-        .hidden-warning {
-            color: #b40000;
-            font-weight: bold;
-        }
+/* 第一页：文字页 */
+.hero-slide-text {
+    background: linear-gradient(135deg, #e8342f 0%, #b90c11 55%, #ffbd4a 100%);
+}
+
+.hero-slide-text::before {
+    content: "";
+    position: absolute;
+    left: -80px;
+    bottom: -95px;
+    width: 560px;
+    height: 210px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 50%;
+    transform: rotate(-8deg);
+}
+
+.hero-slide h2 {
+    position: absolute;
+    left: 52px;
+    top: 70px;
+    color: #fff9d2;
+    font-family: "Microsoft YaHei", SimSun, sans-serif;
+    font-size: 30px;
+    line-height: 1.6;
+    text-shadow: 2px 2px 3px rgba(0,0,0,0.28);
+    z-index: 2;
+}
+
+.hero-slide p {
+    position: absolute;
+    left: 55px;
+    bottom: 42px;
+    color: white;
+    font-size: 16px;
+    letter-spacing: 2px;
+    z-index: 2;
+}
+
+/* 第二页：图片页 */
+.hero-slide-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 左右滑动循环 */
+@keyframes heroSlideLoop {
+    0% {
+        transform: translateX(0);
+    }
+
+    40% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(-50%);
+    }
+
+    90% {
+        transform: translateX(-50%);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* ================= 长横幅 ================= */
+
+.long-banner {
+    height: 92px;
+    background: linear-gradient(to right, #fff1d1, #ff4040, #fff1d1);
+    border: 1px solid #ffc37e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.long-banner h2 {
+    font-family: "Microsoft YaHei", SimSun, sans-serif;
+    color: #de211a;
+    font-size: 25px;
+    text-shadow: 1px 1px 0 white;
+    letter-spacing: 2px;
+}
+
+/* ================= 页脚与辅助文字 ================= */
+
+.footer {
+    margin-top: 16px;
+    border-top: 1px solid #b6d7f5;
+    text-align: center;
+    color: #777;
+    font-size: 12px;
+    padding: 18px 0 30px;
+    line-height: 1.8;
+}
+
+.gray {
+    color: #888;
+}
+
+.red {
+    color: #c40000;
+}
+
+.hidden-warning {
+    color: #b40000;
+    font-weight: bold;
+}
+
+/* ================= Hero 第二张图 Hover 标题 ================= */
+
+.hero-slide-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.hero-hover-title {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 62px;
+    background: rgba(0, 0, 0, 0.62);
+    color: #ffffff;
+    font-family: "Microsoft YaHei", SimSun, sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.hero-slide-link:hover .hero-hover-title {
+    opacity: 1;
+    transform: translateY(0);
+}

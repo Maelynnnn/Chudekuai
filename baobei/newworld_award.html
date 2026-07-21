@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新世界表彰大会 - 新世界服务平台</title>
+    <link rel="stylesheet" href="baobei.css">
+
+    <style>
+        .award-page-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 12px;
+        }
+
+        .award-main-panel {
+            border: 1px solid #8dc6ff;
+            border-radius: 8px;
+            background: #ffffff;
+            overflow: hidden;
+            min-height: 680px;
+        }
+
+        .award-main-title {
+            background: linear-gradient(to bottom, #58b5ff, #2585de);
+            color: white;
+            font-weight: bold;
+            padding: 10px 16px;
+            font-size: 16px;
+            border-bottom: 1px solid #1f78c8;
+        }
+
+        .award-main-content {
+            padding: 26px 34px 38px;
+            line-height: 2;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .award-main-content h2 {
+            font-family: "Microsoft YaHei", SimSun, sans-serif;
+            color: #2378c9;
+            font-size: 26px;
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .award-subtitle {
+            text-align: center;
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #d9ecff;
+            padding-bottom: 18px;
+        }
+
+        .award-main-content p {
+            text-indent: 2em;
+            margin-bottom: 12px;
+        }
+
+        .award-highlight {
+            font-weight: bold;
+            color: #b40000;
+        }
+
+        .award-data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 22px 0;
+            font-size: 14px;
+        }
+
+        .award-data-table th {
+            background: #f2f8ff;
+            color: #2378c9;
+            border: 1px solid #cde4fb;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .award-data-table td {
+            border: 1px solid #cde4fb;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .award-data-table .level-a {
+            color: #b40000;
+            font-weight: bold;
+        }
+
+        .award-data-table .level-b {
+            color: #e05b00;
+            font-weight: bold;
+        }
+
+        .award-data-table .level-c {
+            color: #2378c9;
+            font-weight: bold;
+        }
+
+        .award-notice-box {
+            margin-top: 24px;
+            padding: 16px 18px;
+            border: 1px dashed #e0a33a;
+            background: #fffaf0;
+            color: #8a5a10;
+            line-height: 1.9;
+        }
+
+        .award-black-line {
+            display: inline-block;
+            background: #222;
+            color: #222;
+            padding: 0 26px;
+            margin: 0 3px;
+            user-select: none;
+        }
+
+        .award-side-list {
+            list-style: none;
+            line-height: 2;
+        }
+
+        .award-side-list li {
+            border-bottom: 1px dotted #b9d5ef;
+            padding: 4px 0;
+        }
+
+        .award-side-list li::before {
+            content: "▪";
+            color: #2f9cf0;
+            margin-right: 6px;
+        }
+
+        .award-stamp {
+            margin-top: 28px;
+            text-align: right;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .award-stamp strong {
+            color: #b40000;
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+
+        .glitch-text {
+            letter-spacing: 1px;
+        }
+
+        .nav-bar a.active-nav {
+            background: rgba(255,255,255,0.22);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 失效页面 -->
+    <div id="expired-page" class="expired-page">
+        <div class="expired-box">
+            <h1>该网页已于 2012.6.9 失效</h1>
+            <p>您正在访问的页面已停止服务。</p>
+            <p>如需查看历史归档内容，请联系网站管理员。</p>
+            <div class="expired-date">ERROR 410 / PAGE ARCHIVED</div>
+        </div>
+    </div>
+
+    <!-- 官网 -->
+    <div id="site-content">
+        <div class="old-site-wrapper">
+
+            <header class="top-banner">
+                <div class="baobei-header-inner">
+                    <div class="baobei-logo-area">
+                        <img src="../assets/logo/新世界logo.png" alt="新世界Logo" class="baobei-logo-img">
+                    </div>
+
+                    <div class="banner-title">
+                        <h1>新世界服务平台</h1>
+                        <h2>NEW WORLD PUBLIC SERVICE CENTER</h2>
+                        <p>中文域名：新世界.服务　　备案号：厨ICP备12609号</p>
+                    </div>
+                </div>
+            </header>
+
+            <nav class="nav-bar">
+                <a href="newworld.html">网站首页</a>
+                <a href="newworld_about.html">关于我们</a>
+                <a href="newworld_register.html">居民登记</a>
+                <a href="javascript:void(0);">夜间服务</a>
+                <a href="newworld_cases.html">成功案例</a>
+                <a href="javascript:void(0);">合作单位</a>
+                <a href="javascript:void(0);">资料公开</a>
+                <a href="javascript:void(0);">联系我们</a>
+            </nav>
+
+            <div class="award-page-layout">
+
+                <!-- 左侧栏 -->
+                <aside>
+                    <section class="panel">
+                        <div class="panel-title">大会栏目</div>
+                        <div class="panel-content">
+                            <ul class="award-side-list">
+                                <li>大会概况</li>
+                                <li>建设成果</li>
+                                <li>先进场域</li>
+                                <li>优秀教师</li>
+                                <li>新人类代表</li>
+                                <li>后续安排</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-title blue">建设进度 <span class="more">MORE&gt;&gt;</span></div>
+                        <div class="panel-content">
+                            <ul class="notice-list">
+                                <li>A级场域：超过 50 处</li>
+                                <li>B级场域：超过 150 处</li>
+                                <li>C级场域：覆盖 300 处</li>
+                                <li>待清理样本区域：持续减少</li>
+                                <li>居民适应率：平稳上升</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-title blue">值班信息</div>
+                        <div class="panel-content">
+                            <p>大会办公室：022-1206-090</p>
+                            <p>夜间转运：022-6090-121</p>
+                            <p>合作审核：join@newworld.com</p>
+                            <p class="gray" style="margin-top:8px;">如发现居民未按要求鼓掌，请及时记录座位编号。</p>
+                        </div>
+                    </section>
+                </aside>
+
+                <!-- 正文 -->
+                <main class="award-main-panel">
+                    <div class="award-main-title">当前位置：首页 &gt; 表彰大会 &gt; 新世界阶段性成果通报</div>
+
+                    <div class="award-main-content">
+                        <h2>新世界表彰大会圆满召开</h2>
+                        <div class="award-subtitle">
+                            发布时间：2012-06-09　来源：新世界服务平台综合管理办公室　阅读次数：60912
+                        </div>
+
+                        <p class="glitch-text">
+                            在各级合作单位、各场域管理员、优秀居民代表以及仍在配合观察的样本群体共同努力下，新世界建设工作正在有序进行中。大会对过去一阶段的场域建设、居民登记、情绪稳定、夜间转运与身份更新工作进行了系统总结，并对表现突出的单位和个体予以表彰。
+                        </p>
+
+                        <p>
+                            会议指出，新世界不是突然到来的，新世界是在每一次登记、每一次确认、每一次沉默中逐步完成的。各单位应继续坚持“准确识别、快速邀请、安静处理、闭环送达”的基本原则，确保居民成长环境稳定，确保样本残留习惯得到温和、彻底、不可逆的纠正。
+                        </p>
+
+                        <table class="award-data-table">
+                            <tr>
+                                <th>场域等级</th>
+                                <th>建设数量</th>
+                                <th>主要功能</th>
+                                <th>当前状态</th>
+                            </tr>
+                            <tr>
+                                <td class="level-a">A级场域</td>
+                                <td>超过 50 处</td>
+                                <td>核心管理、超脱一切物质、无限制监控</td>
+                                <td>稳定运行</td>
+                            </tr>
+                            <tr>
+                                <td class="level-b">B级场域</td>
+                                <td>超过 150 处</td>
+                                <td>依托网络、超脱实体物质、篡改档案</td>
+                                <td>持续扩建</td>
+                            </tr>
+                            <tr>
+                                <td class="level-c">C级场域</td>
+                                <td>覆盖 300 处</td>
+                                <td>保留实体、线下监控、实行指令、服从管理</td>
+                                <td>全面覆盖</td>
+                            </tr>
+                        </table>
+
+                        <p>
+                            大会强调，A级场域是新世界秩序的核心节点，应继续承担示范、监控、纠偏及考核职责。B级场域应进一步提升线上修改广度，致力于模糊样本及人类的记忆。C级场域作为最基础的覆盖单元，应确保执行来自A，B场域的指令，为居民扩招，新世界的扩展做出贡献。
+                        </p>
+
+                        <p>
+                            目前，各地居民反馈整体良好。多数居民已经能够熟练使用新姓名、新住址、新餐桌礼仪，并在听到原姓名时保持安静。少数居民仍出现梦中哭泣、重复背诵家庭住址、拒绝进入场域等情况，相关场域已按照二级应急流程进行后续安抚。
+                        </p>
+
+                        <p>
+                            样本配合度整体呈上升趋势，这说明前期宣传教育取得了阶段性成果。会议认为，样本数量的减少，不是消失，而是完成了更适宜的位置调整。对于仍坚持自我称谓、仍保留逃离倾向、仍试图寻找家属的对象，各单位应当保持耐心，不要当场争辩，不要在白天处理，不要让其他新居民观看。
+                        </p>
+
+                        <p>
+                            其中，<strong>C72区管理员兼档案信息部主管</strong>因及时发现并控制不安分居民，成功阻止了可能的群体性事件，获得大会表彰。C72区的居民代表也因在夜间转运中表现出高度配合而获得表扬。
+                        </p>
+
+                        <div class="award-notice-box">
+                            <strong>大会提示：</strong>
+                            如现场发现居民代表突然停顿、流泪、询问“我原来是谁”，请立即暂停发言，并由邻座管理员协助带离。掌声不得中断。摄像机不得转向。主持人应继续宣读下一位优秀代表名单。
+                        </div>
+
+                        <p>
+                            本次大会还对 12 个先进场域、34 名优秀管理员、109 名高适应居民及若干<span class="award-black-line">已完成处理</span>的样本进行了通报表扬。有关名单将根据权限逐级下发，不再公开展示。
+                        </p>
+
+                        <p>
+                            下一阶段，平台将继续推进场域密度提升工作，重点完成偏远地区 C 级场域补点、B 级网络链路加固以及 A 级核心场域扩容。各单位要充分认识到，新世界建设不是临时任务，而是长期的、必要的、值得微笑的事业。
+                        </p>
+
+                        <p>
+                            请各合作单位继续保持高度一致，继续保持口径统一，继续保持夜间灯光关闭。新世界正在有序进行中。新世界已经开始。新世界感谢所有仍然坐在座位上的人。
+                        </p>
+
+                        <div class="award-stamp">
+                            <p><strong>新世界服务平台综合管理办公室</strong></p>
+                            <p>2012 年 6 月 9 日</p>
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+            <footer class="footer">
+                <p>版权所有：新世界服务平台　　技术支持：平台信息管理中心</p>
+                <p>地址：旧城区归档路 609 号　　中文域名：新世界.服务</p>
+                <p class="gray">本站历史内容仅供内部查阅，未经许可不得复制、转载、截图或唤醒。</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        function checkArchiveDate() {
+            const now = new Date();
+
+            // 测试版时间；最终版本可改回 2012
+            const expireDate = new Date(2032, 5, 9, 23, 59, 59);
+
+            const isBeforeOrOnExpireDate = now <= expireDate;
+
+            const expiredPage = document.getElementById('expired-page');
+            const siteContent = document.getElementById('site-content');
+
+            if (isBeforeOrOnExpireDate) {
+                expiredPage.style.display = 'none';
+                siteContent.style.display = 'block';
+                document.title = '新世界表彰大会 - 新世界服务平台';
+            } else {
+                expiredPage.style.display = 'flex';
+                siteContent.style.display = 'none';
+                document.title = '网页已失效';
+            }
+        }
+
+        checkArchiveDate();
+    </script>
+
+</body>
+</html>

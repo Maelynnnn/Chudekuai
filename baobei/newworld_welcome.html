@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>欢迎来到新世界</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            font-family: "黑体", SimSun, monospace;
+        }
+
+        .welcome-grid {
+            width: 100vw;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            background: #000;
+        }
+
+        .welcome-column {
+            height: 100vh;
+            overflow: hidden;
+            padding: 0 10px;
+            color: #ff0000;
+            text-shadow: 0 0 6px #ff0000, 0 0 14px rgba(255, 0, 0, 0.75);
+            font-size: 75px;
+            line-height: 1.28;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .welcome-line {
+            white-space: nowrap;
+            animation: shakeText 0.11s infinite;
+        }
+
+        .system-flash {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: rgba(255, 0, 0, 0.045);
+            opacity: 0;
+            animation: screenPulse 0.55s infinite;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes shakeText {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(1px, -1px);
+            }
+            50% {
+                transform: translate(-1px, 1px);
+            }
+            75% {
+                transform: translate(1px, 1px);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        @keyframes screenPulse {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="welcome-grid">
+        <div class="welcome-column" id="col-1"></div>
+        <div class="welcome-column" id="col-2"></div>
+        <div class="welcome-column" id="col-3"></div>
+    </div>
+
+    <div class="system-flash"></div>
+
+    <script>
+        const columns = [
+            document.getElementById('col-1'),
+            document.getElementById('col-2'),
+            document.getElementById('col-3')
+        ];
+
+        const openingPhrases = [
+            '身份已登记',
+            '居民编号生成中',
+            '旧姓名不再使用',
+            '请保持微笑',
+            '请保持安静',
+            '请不要回头'
+        ];
+
+        let currentSpeed = 850;
+        let minimumSpeed = 18;
+        let acceleration = 0.78;
+        let lineCount = 0;
+
+        function createLine(text) {
+            const line = document.createElement('div');
+            line.className = 'welcome-line';
+            line.textContent = text;
+            return line;
+        }
+
+        function getNextText() {
+            // 前面严格按顺序出现
+            if (lineCount < openingPhrases.length) {
+                return openingPhrases[lineCount];
+            }
+
+            // 后面全部变成这一句
+            return '欢迎来到新世界';
+        }
+
+        function addOneRound() {
+            // 关键：每一轮只生成一次文字，然后同时放进三列
+            const sharedText = getNextText();
+
+            columns.forEach((column) => {
+                const line = createLine(sharedText);
+                column.appendChild(line);
+
+                while (column.children.length > 32) {
+                    column.removeChild(column.firstChild);
+                }
+            });
+
+            lineCount++;
+
+            if (currentSpeed > minimumSpeed) {
+                currentSpeed = Math.max(minimumSpeed, currentSpeed * acceleration);
+            }
+
+            setTimeout(addOneRound, currentSpeed);
+        }
+
+        setTimeout(addOneRound, 700);
+
+        const REDIRECT_TARGET = 'newworld.html';
+
+        setTimeout(() => {
+            window.location.href = REDIRECT_TARGET;
+        }, 7200);
+    </script>
+
+</body>
+</html>

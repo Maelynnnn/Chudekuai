@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>居民登记 - 新世界服务平台</title>
+    <link rel="stylesheet" href="baobei.css">
+
+    <style>
+        .register-page-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 12px;
+        }
+
+        .register-main-panel {
+            border: 1px solid #8dc6ff;
+            border-radius: 8px;
+            background: #ffffff;
+            overflow: hidden;
+            min-height: 650px;
+        }
+
+        .register-main-title {
+            background: linear-gradient(to bottom, #58b5ff, #2585de);
+            color: white;
+            font-weight: bold;
+            padding: 10px 16px;
+            font-size: 16px;
+            border-bottom: 1px solid #1f78c8;
+        }
+
+        .register-main-content {
+            padding: 24px 30px 34px;
+            line-height: 2;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .register-main-content h2 {
+            font-family: "Microsoft YaHei", SimSun, sans-serif;
+            color: #2378c9;
+            font-size: 24px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #d9ecff;
+            padding-bottom: 10px;
+        }
+
+        .register-description {
+            color: #666;
+            margin-bottom: 20px;
+            text-indent: 2em;
+        }
+
+        .identity-select-box {
+            border: 1px solid #cde4fb;
+            background: #f7fbff;
+            padding: 16px 18px;
+            margin-bottom: 20px;
+        }
+
+        .identity-select-title {
+            color: #2378c9;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .identity-options {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .identity-option {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .identity-option input {
+            cursor: pointer;
+        }
+
+        .form-section-title {
+            background: linear-gradient(to bottom, #ffe66a, #ffd53c);
+            color: #e05b00;
+            font-weight: bold;
+            padding: 7px 12px;
+            border: 1px solid #e3bd24;
+            margin-top: 18px;
+            margin-bottom: 14px;
+        }
+
+        .register-form-grid {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 10px 12px;
+            align-items: center;
+        }
+
+        .register-form-grid label {
+            text-align: right;
+            color: #444;
+            font-weight: bold;
+        }
+
+        .register-form-grid input,
+        .register-form-grid select,
+        .register-form-grid textarea {
+            width: 100%;
+            border: 1px solid #b9d5ef;
+            padding: 7px 9px;
+            font-family: SimSun, "Microsoft YaHei", sans-serif;
+            font-size: 14px;
+            outline: none;
+            background: #fff;
+        }
+
+        .register-form-grid input:focus,
+        .register-form-grid select:focus,
+        .register-form-grid textarea:focus {
+            border-color: #2585de;
+            background: #f9fdff;
+        }
+
+        .register-form-grid textarea {
+            min-height: 80px;
+            resize: vertical;
+            line-height: 1.8;
+        }
+
+        .full-row {
+            grid-column: 1 / 3;
+        }
+
+        .register-note {
+            margin-top: 18px;
+            padding: 13px 15px;
+            border: 1px dashed #e0a33a;
+            background: #fffaf0;
+            color: #8a5a10;
+            line-height: 1.9;
+        }
+
+        .register-submit-row {
+            margin-top: 22px;
+            text-align: center;
+        }
+
+        .register-submit-btn {
+            width: 180px;
+            height: 38px;
+            border: none;
+            border-radius: 3px;
+            background: linear-gradient(to bottom, #58a8f0, #1f7ed7);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            letter-spacing: 2px;
+        }
+
+        .register-submit-btn:hover {
+            background: linear-gradient(to bottom, #4a9be3, #126fc5);
+        }
+
+        .register-reset-btn {
+            width: 120px;
+            height: 38px;
+            border: 1px solid #b9d5ef;
+            border-radius: 3px;
+            background: #f7fbff;
+            color: #2378c9;
+            font-size: 14px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .register-reset-btn:hover {
+            background: #eaf5ff;
+        }
+
+        .side-small-text {
+            color: #777;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .nav-bar a.active-nav {
+            background: rgba(255,255,255,0.22);
+            font-weight: bold;
+        }
+
+        .home-option {
+            color: #b40000;
+            font-weight: bold;
+        }
+
+        .fake-select {
+            position: relative;
+            width: 100%;
+            font-family: SimSun, "Microsoft YaHei", sans-serif;
+            font-size: 14px;
+        }
+
+        .fake-select-current {
+            width: 100%;
+            border: 1px solid #b9d5ef;
+            padding: 7px 9px;
+            background: #fff;
+            color: #333;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+
+        .fake-select-current:hover {
+            border-color: #2585de;
+            background: #f9fdff;
+        }
+
+        .fake-select-options {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: calc(100% - 1px);
+            width: 100%;
+            max-height: 210px;
+            overflow-y: auto;
+            background: #ffffff;
+            border: 1px solid #2585de;
+            z-index: 9999;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.16);
+        }
+
+        .fake-select.open .fake-select-options {
+            display: block;
+        }
+
+        .fake-option {
+            padding: 7px 9px;
+            color: #333;
+            cursor: pointer;
+            line-height: 1.5;
+            background: #fff;
+        }
+
+        .fake-option:hover {
+            background: #eaf5ff;
+        }
+
+        .fake-option.home-option {
+            color: #b40000;
+            font-weight: bold;
+            background: #fff3f3;
+        }
+
+        .fake-option.home-option:hover {
+            background: #ffdede;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 失效页面 -->
+    <div id="expired-page" class="expired-page">
+        <div class="expired-box">
+            <h1>该网页已于 2012.6.9 失效</h1>
+            <p>您正在访问的页面已停止服务。</p>
+            <p>如需查看历史归档内容，请联系网站管理员。</p>
+            <div class="expired-date">ERROR 410 / PAGE ARCHIVED</div>
+        </div>
+    </div>
+
+    <!-- 官网 -->
+    <div id="site-content">
+        <div class="old-site-wrapper">
+
+            <header class="top-banner">
+                <div class="baobei-header-inner">
+                    <div class="baobei-logo-area">
+                        <img src="../assets/logo/新世界logo.png" alt="新世界Logo" class="baobei-logo-img">
+                    </div>
+
+                    <div class="banner-title">
+                        <h1>新世界服务平台</h1>
+                        <h2>NEW WORLD PUBLIC SERVICE CENTER</h2>
+                        <p>中文域名：新世界.服务　　备案号：厨ICP备12609号</p>
+                    </div>
+                </div>
+            </header>
+
+            <nav class="nav-bar">
+                <a href="newworld.html">网站首页</a>
+                <a href="newworld_about.html">关于我们</a>
+                <a href="newworld_register.html" class="active-nav">居民登记</a>
+                <a href="javascript:void(0);">夜间服务</a>
+                <a href="newworld_cases.html">成功案例</a>
+                <a href="javascript:void(0);">合作单位</a>
+                <a href="javascript:void(0);">资料公开</a>
+                <a href="javascript:void(0);">联系我们</a>
+            </nav>
+
+            <div class="register-page-layout">
+
+                <!-- 左侧栏 -->
+                <aside>
+                    <section class="panel">
+                        <div class="panel-title">登记说明</div>
+                        <div class="panel-content">
+                            <ul class="notice-list">
+                                <li>请如实填写身份类型</li>
+                                <li>样本本人可自行提交</li>
+                                <li>管理员可代为登记</li>
+                                <li>提交后不得撤回</li>
+                                <li>成为居民后不继续使用样本姓名</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-title blue">登记状态 <span class="more">MORE&gt;&gt;</span></div>
+                        <div class="panel-content side-small-text">
+                            <p>今日新增：127</p>
+                            <p>待确认：43</p>
+                            <p>待邀请：19</p>
+                            <p>已入世：88</p>
+                            <p style="margin-top:8px;color:#b40000;font-weight:bold;">异常样本：正在安抚</p>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-title blue">值班信息</div>
+                        <div class="panel-content">
+                            <p>总站电话：022-1206-090</p>
+                            <p>夜间转运：022-6090-121</p>
+                            <p>合作审核：join@newworld.com</p>
+                            <p class="gray" style="margin-top:8px;">请保持信息完整。请不要重复提交。请不要中途离开。</p>
+                        </div>
+                    </section>
+                </aside>
+
+                <!-- 右侧正文 -->
+                <main class="register-main-panel">
+                    <div class="register-main-title">当前位置：首页 &gt; 居民登记 &gt; 身份确认</div>
+
+                    <div class="register-main-content">
+                        <h2>新世界居民登记表</h2>
+
+                        <p class="register-description">
+                            本页面用于采集居民入世前必要信息。请根据实际情况选择登记身份，并填写基本资料。系统将在提交后自动完成编号、初筛、路径分配及后续欢迎程序。
+                        </p>
+
+                        <form id="register-form">
+                            <div class="identity-select-box">
+                                <div class="identity-select-title">一、请选择登记身份</div>
+
+                                <div class="identity-options">
+                                    <label class="identity-option">
+                                        <input type="radio" name="identity" value="admin" checked>
+                                        场域管理员
+                                    </label>
+
+                                    <label class="identity-option">
+                                        <input type="radio" name="identity" value="sample">
+                                        样本本人
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-section-title" id="dynamic-section-title">二、管理员信息</div>
+
+                            <div class="register-form-grid">
+                                <label id="name-label">管理员姓名：</label>
+                                <input type="text" id="name-input" placeholder="请输入登记人姓名" required>
+
+                                <label id="code-label">场域编号：</label>
+                                <input type="text" id="code-input" placeholder="例：A-0612 / B-0417 / C-0206" required>
+
+                                <label>所在区域：</label>
+                                <select id="area-select">
+                                    <option value="A">A级场域</option>
+                                    <option value="B">B级场域</option>
+                                    <option value="C">C级场域</option>
+                                    <option value="unknown">暂未确认</option>
+                                </select>
+
+                                <label id="target-label">待登记居民编号：</label>
+                                <input type="text" id="target-input" placeholder="">
+
+                                <label>当前状态：</label>
+                                <div class="fake-select" id="status-fake-select">
+                                    <input type="hidden" id="status-select" value="stable">
+
+                                    <div class="fake-select-current" id="status-current">
+                                        稳定
+                                    </div>
+
+                                    <div class="fake-select-options" id="status-options"></div>
+                                </div>
+
+                                <label>是否仍回应原姓名：</label>
+                                <select id="old-name-select">
+                                    <option value="unknown">无法确认</option>
+                                    <option value="yes">是</option>
+                                    <option value="no">否</option>
+                                    <option value="sometimes">偶尔</option>
+                                </select>
+
+                                <label>备注：</label>
+                                <textarea id="note-input" placeholder="请填写发现地点、衣着特征、同行人员、是否哭泣、是否试图离开、是否主动询问“我是谁”等信息。"></textarea>
+                            </div>
+
+                            <div class="register-note" id="register-note">
+                                <strong>提示：</strong>
+                                管理员提交信息后，系统将自动核验场域权限。请不要向样本解释登记目的。请不要在样本面前朗读编号。
+                            </div>
+
+                            <div class="register-submit-row">
+                                <button type="submit" class="register-submit-btn">提交登记</button>
+                                <button type="reset" class="register-reset-btn">重新填写</button>
+                            </div>
+                        </form>
+                    </div>
+                </main>
+            </div>
+
+            <footer class="footer">
+                <p>版权所有：新世界服务平台　　技术支持：平台信息管理中心</p>
+                <p>地址：旧城区归档路 609 号　　中文域名：新世界.服务</p>
+                <p class="gray">本站历史内容仅供内部查阅，未经许可不得复制、转载、截图或唤醒。</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        function checkArchiveDate() {
+            const now = new Date();
+
+            // 测试版时间；最终版本可改回 2012
+            const expireDate = new Date(2032, 5, 9, 23, 59, 59);
+
+            const isBeforeOrOnExpireDate = now <= expireDate;
+
+            const expiredPage = document.getElementById('expired-page');
+            const siteContent = document.getElementById('site-content');
+
+            if (isBeforeOrOnExpireDate) {
+                expiredPage.style.display = 'none';
+                siteContent.style.display = 'block';
+                document.title = '居民登记 - 新世界服务平台';
+            } else {
+                expiredPage.style.display = 'flex';
+                siteContent.style.display = 'none';
+                document.title = '网页已失效';
+            }
+        }
+
+        checkArchiveDate();
+
+        const identityRadios = document.querySelectorAll('input[name="identity"]');
+        const dynamicSectionTitle = document.getElementById('dynamic-section-title');
+        const nameLabel = document.getElementById('name-label');
+        const nameInput = document.getElementById('name-input');
+        const codeLabel = document.getElementById('code-label');
+        const codeInput = document.getElementById('code-input');
+        const targetLabel = document.getElementById('target-label');
+        const targetInput = document.getElementById('target-input');
+        const statusSelect = document.getElementById('status-select');
+        const statusFakeSelect = document.getElementById('status-fake-select');
+        const statusCurrent = document.getElementById('status-current');
+        const statusOptions = document.getElementById('status-options');
+        const registerNote = document.getElementById('register-note');
+        const registerForm = document.getElementById('register-form');
+
+        let sampleStatusOpenedTimer = null;
+
+        function setStatusOptions(options) {
+            statusOptions.innerHTML = '';
+
+            options.forEach((item, index) => {
+                const option = document.createElement('div');
+                option.className = 'fake-option';
+
+                if (item.className) {
+                    option.classList.add(item.className);
+                }
+
+                option.textContent = item.text;
+                option.dataset.value = item.value;
+
+                option.addEventListener('click', () => {
+                    statusSelect.value = item.value;
+                    statusCurrent.textContent = item.text;
+                    statusCurrent.className = 'fake-select-current';
+
+                    if (item.className) {
+                        statusCurrent.classList.add(item.className);
+                    }
+
+                    statusFakeSelect.classList.remove('open');
+                });
+
+                statusOptions.appendChild(option);
+
+                if (index === 0) {
+                    statusSelect.value = item.value;
+                    statusCurrent.textContent = item.text;
+                    statusCurrent.className = 'fake-select-current';
+
+                    if (item.className) {
+                        statusCurrent.classList.add(item.className);
+                    }
+                }
+            });
+        }
+
+
+        function updateFormByIdentity() {
+            const identity = document.querySelector('input[name="identity"]:checked').value;
+
+            clearTimeout(sampleStatusOpenedTimer);
+
+            if (identity === 'admin') {
+                dynamicSectionTitle.textContent = '二、管理员信息';
+                nameLabel.textContent = '管理员编号：';
+                nameInput.placeholder = '请输入管理员编号';
+                codeLabel.textContent = '场域编号：';
+                codeInput.placeholder = ' ';
+                targetLabel.textContent = '待登记居民编号：';
+                targetInput.placeholder = '';
+
+                setStatusOptions([
+                    { value: 'stable', text: '稳定' },
+                    { value: 'waiting', text: '待邀请' },
+                    { value: 'observing', text: '持续观察' },
+                    { value: 'danger', text: '危险' }
+                ]);
+                registerNote.innerHTML = '<strong>提示：</strong>管理员提交信息后，系统将自动核验场域权限。请不要向样本解释登记目的。请不要在样本面前朗读编号。';
+            } else {
+                dynamicSectionTitle.textContent = '二、样本本人信息';
+                nameLabel.textContent = '当前姓名：';
+                nameInput.placeholder = '请输入您现在正在使用的姓名';
+                codeLabel.textContent = '原住址或发现地点：';
+                codeInput.placeholder = '请输入您仍然记得的地址，或最后一次清醒时所在地点';
+                targetLabel.textContent = '是否希望成为居民：';
+                targetInput.placeholder = '请填写“是”。如果不是，请重新填写直到是。';
+
+                const shouldHideHomeOptionOnce = sessionStorage.getItem('home_option_removed') === 'true';
+
+                if (shouldHideHomeOptionOnce) {
+                    setStatusOptions([
+                        { value: 'waiting', text: '待邀请' },
+                        { value: 'confirmed', text: '入世已确认' }
+                    ]);
+
+                    // 调试用：只隐藏这一次。玩家手动刷新后可以重新看到。
+                    sessionStorage.removeItem('home_option_removed');
+                } else {
+                    setStatusOptions([
+                        { value: 'waiting', text: '待邀请' },
+                        { value: 'confirmed', text: '入世已确认' },
+                        {
+                            value: 'home',
+                            text: '回家别回头回家别回头回家别回头回家别回头回家别回头回家别回头回家别回头回家别回头回家别回头回家别回头回家别回头回家别回头回家别回头回家别回头回家别回头回家别回头',
+                            className: 'home-option'
+                        }
+                    ]);
+                }S
+
+                registerNote.innerHTML = '<strong>温馨提示：</strong>您正在走入新世界。请保持安静。请不要关闭页面。请不要与其他人类联系。我们已经发现您的位置。';
+            }
+        }
+
+        statusCurrent.addEventListener('click', () => {
+            statusFakeSelect.classList.toggle('open');
+
+            const identity = document.querySelector('input[name="identity"]:checked').value;
+            const hasSeenHomeOption = sessionStorage.getItem('home_option_removed') === 'true';
+
+            if (identity === 'sample' && !hasSeenHomeOption) {
+                const hasHomeOption = statusOptions.querySelector('.home-option');
+
+                if (hasHomeOption) {
+                    clearTimeout(sampleStatusOpenedTimer);
+
+                    sampleStatusOpenedTimer = setTimeout(() => {
+                        sessionStorage.setItem('home_option_removed', 'true');
+                        window.location.reload();
+                    }, 2000);
+                }
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!statusFakeSelect.contains(e.target)) {
+                statusFakeSelect.classList.remove('open');
+            }
+        });
+
+        identityRadios.forEach(radio => {
+            radio.addEventListener('change', updateFormByIdentity);
+        });
+
+        updateFormByIdentity();
+
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const identity = document.querySelector('input[name="identity"]:checked').value;
+            const savedData = {
+                identity: identity,
+                name: nameInput.value.trim(),
+                code: codeInput.value.trim(),
+                target: targetInput.value.trim(),
+                status: document.getElementById('status-select').value,
+                oldName: document.getElementById('old-name-select').value,
+                note: document.getElementById('note-input').value.trim(),
+                time: new Date().toISOString()
+            };
+
+            sessionStorage.setItem('newworld_register_data', JSON.stringify(savedData));
+            window.location.href = 'newworld_welcome.html';
+        });
+    </script>
+
+</body>
+</html>
