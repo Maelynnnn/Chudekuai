@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo End</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            color: #b40000;
+            font-family: "Microsoft YaHei", SimSun, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .end-box {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .end-title {
+            font-size: 42px;
+            font-weight: bold;
+            letter-spacing: 6px;
+            margin-bottom: 24px;
+        }
+
+        .end-text {
+            font-size: 18px;
+            line-height: 2;
+            color: #d8d8d8;
+            letter-spacing: 2px;
+        }
+
+        .end-warning {
+            margin-top: 34px;
+            font-size: 14px;
+            color: #7a0000;
+            letter-spacing: 2px;
+        }
+
+        .blink {
+            animation: blinkText 1.4s infinite;
+        }
+
+        @keyframes blinkText {
+            0%, 45% {
+                opacity: 1;
+            }
+
+            46%, 100% {
+                opacity: 0.35;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="end-box">
+        <div class="end-title blink">DEMO 到此结束</div>
+
+        <div class="end-text">
+            您已完成本次新世界服务平台演示流程。<br>
+            后续档案内容暂未开放。<br>
+            感谢您的配合。
+        </div>
+
+        <div class="end-warning">
+            请关闭页面。请不要回头。请等待下一次通知。
+        </div>
+    </div>
+
+</body>
+</html>

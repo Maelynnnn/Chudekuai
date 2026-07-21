@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>未归档新居民临时表</title>
+    <title>新增居民临时表</title>
 
     <style>
         * {
@@ -463,6 +463,15 @@
             color: #b40000;
             border-color: #b40000;
         }
+
+        .deleted-row th,
+            .deleted-row td {
+                height: 8px;
+                padding: 0;
+                background: #111;
+                border-color: #111;
+                color: transparent;
+            }
     </style>
 </head>
 <body class="locked-page">
@@ -474,7 +483,7 @@
             <div id="entry-choice-panel">
                 <div class="admin-login-title">访问方式确认</div>
                 <div class="admin-login-subtitle">
-                    未归档居民临时表不属于新世界服务平台官网公开页面。请选择访问方式。
+                    新增居民临时表受档案信息部保护。
                 </div>
 
                 <button id="admin-entry-btn" class="entry-choice-btn admin-choice-btn">
@@ -527,7 +536,7 @@
         <div class="sheet-icon"></div>
 
         <div class="sheet-title-area">
-            <div class="sheet-title">未归档新居民临时表_20120609_FINAL_不要公开</div>
+            <div class="sheet-title">新增居民临时表_20120609_FINAL_不要公开</div>
             <div class="sheet-subtitle">上次修改：2012/06/09 23:58　所有更改已自动保存至场域档案系统</div>
         </div>
 
@@ -553,7 +562,7 @@
     <div class="sheet-formula-bar">
         <div class="name-box">H9</div>
         <div>fx</div>
-        <div class="formula-input">=IF(status="回家","重新提交","欢迎来到新世界")</div>
+        <div class="formula-input"></div>
     </div>
 
     <div class="sheet-wrapper">
@@ -561,29 +570,29 @@
             <thead>
                 <tr>
                     <th class="sheet-row-number"></th>
-                    <th class="col-id">A 居民编号</th>
-                    <th class="col-name">B 当前姓名</th>
-                    <th class="col-level">C 居民等级</th>
-                    <th class="col-area">D 当前场域</th>
-                    <th class="col-admin">E 直系管理员</th>
-                    <th class="col-date">F 加入日期</th>
-                    <th class="col-status">G 归档状态</th>
-                    <th class="col-note">H 备注</th>
-                    <th>I 是否仍回应原姓名</th>
-                    <th>J 处理优先级</th>
+                    <th class="col-name">居民姓名</th>
+                    <th class="col-gender">居民性别</th>
+                    <th class="col-level">居民等级</th>
+                    <th class="col-area">当前场域</th>
+                    <th class="col-admin">管理员</th>
+                    <th class="col-date">加入日期</th>
+                    <th class="col-status">归档状态</th>
+                    <th class="col-note">备注</th>
+                    <th>是否仍回应原姓名</th>
+                    <th>处理优先级</th>
                 </tr>
             </thead>
 
             <tbody>
                 <tr>
                     <th class="sheet-row-number">1</th>
-                    <td>NWC09Mlhx20120609</td>
                     <td>林和新</td>
+                    <td>男</td>
                     <td>C级</td>
                     <td>C-09</td>
                     <td>NW-AD-C09</td>
                     <td>2012-06-09</td>
-                    <td class="status-pending">待归档</td>
+                    <td class="status-pending">未登记</td>
                     <td>可完成基础微笑，夜间仍敲击门板。</td>
                     <td>偶尔</td>
                     <td>普通</td>
@@ -591,13 +600,13 @@
 
                 <tr>
                     <th class="sheet-row-number">2</th>
-                    <td>NWC14Fqyl20120608</td>
-                    <td>秦雨澜</td>
+                    <td>秦雨</td>
+                    <td>男</td>
                     <td>C级</td>
                     <td>C-14</td>
                     <td>NW-AD-C14</td>
                     <td>2012-06-08</td>
-                    <td class="status-pending">待归档</td>
+                    <td class="status-confirmed">已登记</td>
                     <td>反复询问“我妈妈在哪里”，已建议不要回答。</td>
                     <td>是</td>
                     <td class="status-danger">高</td>
@@ -605,13 +614,13 @@
 
                 <tr>
                     <th class="sheet-row-number">3</th>
-                    <td>NWB31M004820120607</td>
                     <td>海面0048</td>
+                    <td> </td>
                     <td>B级</td>
                     <td>B-31</td>
                     <td>NW-AD-B31</td>
                     <td>2012-06-07</td>
-                    <td class="status-confirmed">等待公开</td>
+                    <td class="status-confirmed">等待上线</td>
                     <td>已不需要实体照片。旧档案正在覆盖。</td>
                     <td>否</td>
                     <td>普通</td>
@@ -619,41 +628,32 @@
 
                 <tr>
                     <th class="sheet-row-number">4</th>
-                    <td>NWC22Fzxx20120605</td>
                     <td>赵向夏</td>
+                    <td>男</td>
                     <td>C级</td>
                     <td>C-22</td>
                     <td>NW-AD-C22</td>
                     <td>2012-06-05</td>
-                    <td class="status-pending">待归档</td>
+                    <td class="status-confirmed">已登记</td>
                     <td>睡眠时重复背诵旧住址。建议转入无窗房间。</td>
                     <td>是</td>
                     <td class="status-danger">高</td>
                 </tr>
 
-                <tr>
+                <tr class="deleted-row">
                     <th class="sheet-row-number">5</th>
-                    <td>NWA09<span class="redacted">0000</span>20120206</td>
-                    <td><span class="redacted">未知</span></td>
-                    <td>A级</td>
-                    <td>A-09</td>
-                    <td>NW-AD-A09</td>
-                    <td>2012-02-06</td>
-                    <td class="status-confirmed">等待公开</td>
-                    <td class="glitch-cell selected-cell">不要打开照片。不要读取原始编号。不要让它看见自己。</td>
-                    <td>未知</td>
-                    <td class="status-danger">最高</td>
+                    <td colspan="10"></td>
                 </tr>
 
                 <tr>
                     <th class="sheet-row-number">6</th>
-                    <td>NWC03Mzhd20120604</td>
                     <td>周恒东</td>
+                    <td>男</td>
                     <td>C级</td>
                     <td>C-03</td>
                     <td>NW-AD-C03</td>
                     <td>2012-06-04</td>
-                    <td class="status-pending">待归档</td>
+                    <td class="status-confirmed">已登记</td>
                     <td>已接受新姓名。仍会在听到钟声时哭泣。</td>
                     <td>偶尔</td>
                     <td>普通</td>
@@ -661,13 +661,13 @@
 
                 <tr>
                     <th class="sheet-row-number">7</th>
-                    <td>NWB12F019920120603</td>
                     <td>透明0199</td>
+                    <td> </td>
                     <td>B级</td>
                     <td>B-12</td>
                     <td>NW-AD-B12</td>
                     <td>2012-06-03</td>
-                    <td class="status-confirmed">等待公开</td>
+                    <td class="status-confirmed">等待上线</td>
                     <td>档案已替换 73%。请勿与旧联系人核对。</td>
                     <td>否</td>
                     <td>普通</td>
@@ -675,13 +675,13 @@
 
                 <tr>
                     <th class="sheet-row-number">8</th>
-                    <td>NWC17Flsx20120602</td>
                     <td>刘松雪</td>
+                    <td>女</td>
                     <td>C级</td>
                     <td>C-17</td>
                     <td>NW-AD-C17</td>
                     <td>2012-06-02</td>
-                    <td class="status-pending">待归档</td>
+                    <td class="status-confirmed">已登记</td>
                     <td>仍试图从表格中删除自己。请锁定单元格。</td>
                     <td>是</td>
                     <td class="status-danger">高</td>
@@ -689,13 +689,13 @@
 
                 <tr>
                     <th class="sheet-row-number">9</th>
-                    <td>NWC20Mwyj20120601</td>
                     <td>吴远井</td>
+                    <td>女</td>
                     <td>C级</td>
                     <td>C-20</td>
                     <td>NW-AD-C20</td>
                     <td>2012-06-01</td>
-                    <td class="status-pending">待归档</td>
+                    <td class="status-confirmed">已登记</td>
                     <td>可以独立完成“我属于这里”朗读。</td>
                     <td>否</td>
                     <td>低</td>
@@ -703,27 +703,27 @@
 
                 <tr>
                     <th class="sheet-row-number">10</th>
-                    <td>NWB43M002420120528</td>
-                    <td>风起云涌0024</td>
+                    <td>希冀之路9024</td>
+                    <td> </td>
                     <td>B级</td>
                     <td>B-43</td>
                     <td>NW-AD-B43</td>
                     <td>2012-05-28</td>
-                    <td class="status-confirmed">等待公开</td>
-                    <td>与 0023 相邻。请不要交换编号。</td>
+                    <td class="status-confirmed">等待上线</td>
+                    <td>原C级居民，已成功献祭肉体并升级。</td>
                     <td>否</td>
                     <td>普通</td>
                 </tr>
 
                 <tr>
                     <th class="sheet-row-number">11</th>
-                    <td>NWC06Fjyq20120527</td>
                     <td>江映秋</td>
+                    <td>女</td>
                     <td>C级</td>
                     <td>C-06</td>
                     <td>NW-AD-C06</td>
                     <td>2012-05-27</td>
-                    <td class="status-pending">待归档</td>
+                    <td class="status-confirmed">已登记</td>
                     <td>入世前多次要求回家。现已稳定沉默。</td>
                     <td>否</td>
                     <td>普通</td>
@@ -731,15 +731,15 @@
 
                 <tr>
                     <th class="sheet-row-number">12</th>
-                    <td>NWC11Mgls20120526</td>
                     <td>顾临生</td>
+                    <td>男</td>
                     <td>C级</td>
                     <td>C-11</td>
                     <td>NW-AD-C11</td>
                     <td>2012-05-26</td>
-                    <td class="status-pending">待归档</td>
+                    <td class="status-confirmed">已登记</td>
                     <td>管理员报告：照片偶尔比本人先移动。</td>
-                    <td>未知</td>
+                    <td>否</td>
                     <td class="status-danger">高</td>
                 </tr>
             </tbody>
@@ -747,7 +747,7 @@
     </div>
 
     <div class="bottom-warning">
-        系统提示：该表格来自临时缓存，不属于新世界服务平台官网公开页面。请勿截图、导出、打印或尝试恢复被覆盖的姓名。
+        系统提示：该表格来自临时缓存。请勿截图、导出或打印。
     </div>
 
     <script>

@@ -11,7 +11,7 @@
     <!-- 失效页面 -->
     <div id="expired-page" class="expired-page">
         <div class="expired-box">
-            <h1>该网页已于 2012.6.9 失效</h1>
+            <h1>该网页已于 2012.12.9 失效</h1>
             <p>您正在访问的页面已停止服务。</p>
             <p>如需查看历史归档内容，请联系网站管理员。</p>
             <div class="expired-date">ERROR 410 / PAGE ARCHIVED</div>
@@ -56,9 +56,9 @@
                             <ul class="notice-list">
                                 <li>关于启用新一批居民信息采集表的通知</li>
                                 <li>请各地区志愿者统一使用 2012 版登记口径</li>
-                                <li>夜间转运车辆请勿停靠居民区正门</li>
+                                <li>夜间转运车辆请勿停靠居民区</li>
                                 <li>关于居民档案编号调整说明</li>
-                                <li>严禁私自称呼居民原姓名</li>
+                                <li>严禁私自称呼居民原样本姓名</li>
                                 <li>请尽快完成档案转移工作</li>
                             </ul>
                         </div>
@@ -227,7 +227,7 @@
             const now = new Date();
 
             // 时间
-            const expireDate = new Date(2032, 5, 9, 23, 59, 59);
+            const expireDate = new Date(2012, 11, 9, 23, 59, 59);
 
             const isBeforeOrOnExpireDate = now <= expireDate;
 
@@ -237,7 +237,7 @@
             if (isBeforeOrOnExpireDate) {
                 expiredPage.style.display = 'none';
                 siteContent.style.display = 'block';
-                document.title = '欢迎来到新世界';
+                document.title = '新世界服务平台';
             } else {
                 expiredPage.style.display = 'flex';
                 siteContent.style.display = 'none';

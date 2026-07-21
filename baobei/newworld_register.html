@@ -266,7 +266,7 @@
     <!-- 失效页面 -->
     <div id="expired-page" class="expired-page">
         <div class="expired-box">
-            <h1>该网页已于 2012.6.9 失效</h1>
+            <h1>该网页已于 2012.12.9 失效</h1>
             <p>您正在访问的页面已停止服务。</p>
             <p>如需查看历史归档内容，请联系网站管理员。</p>
             <div class="expired-date">ERROR 410 / PAGE ARCHIVED</div>
@@ -439,7 +439,7 @@
             const now = new Date();
 
             // 测试版时间；最终版本可改回 2012
-            const expireDate = new Date(2032, 5, 9, 23, 59, 59);
+            const expireDate = new Date(2012, 11, 9, 23, 59, 59);
 
             const isBeforeOrOnExpireDate = now <= expireDate;
 
@@ -475,6 +475,16 @@
         const registerForm = document.getElementById('register-form');
 
         let sampleStatusOpenedTimer = null;
+
+        const AUTHORIZED_REGISTRATIONS = [
+            {
+                identity: 'admin',
+                name: 'NW-AD-C09',
+                code: 'C-09',
+                area: 'C',
+                target: 'NWC09Mlhx20120609'
+            }
+        ];
 
         function setStatusOptions(options) {
             statusOptions.innerHTML = '';
@@ -567,9 +577,9 @@
                             className: 'home-option'
                         }
                     ]);
-                }S
+                }
 
-                registerNote.innerHTML = '<strong>温馨提示：</strong>您正在走入新世界。请保持安静。请不要关闭页面。请不要与其他人类联系。我们已经发现您的位置。';
+                registerNote.innerHTML = '<strong>温馨提示：</strong>';
             }
         }
 
@@ -609,10 +619,12 @@
             e.preventDefault();
 
             const identity = document.querySelector('input[name="identity"]:checked').value;
+
             const savedData = {
                 identity: identity,
                 name: nameInput.value.trim(),
                 code: codeInput.value.trim(),
+                area: document.getElementById('area-select').value,
                 target: targetInput.value.trim(),
                 status: document.getElementById('status-select').value,
                 oldName: document.getElementById('old-name-select').value,
@@ -620,8 +632,41 @@
                 time: new Date().toISOString()
             };
 
+            const isAuthorized = AUTHORIZED_REGISTRATIONS.some(record => {
+                return record.identity === savedData.identity &&
+                    record.name === savedData.name &&
+                    record.code === savedData.code &&
+                    record.area === savedData.area &&
+                    record.target === savedData.target;
+            });
+
+            if (!isAuthorized) {
+                registerNote.innerHTML = '<strong style="color:#b40000;">登记失败：</strong>提交信息与居民档案不匹配。请核对管理员编号、场域编号、居民编号、当前状态及原姓名响应记录。';
+
+                registerNote.style.borderColor = '#b40000';
+                registerNote.style.background = '#fff3f3';
+                registerNote.style.color = '#b40000';
+
+                document.body.style.animation = 'none';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 50);
+
+                return;
+            }
+
             sessionStorage.setItem('newworld_register_data', JSON.stringify(savedData));
             window.location.href = 'newworld_welcome.html';
+        });
+
+
+        registerForm.addEventListener('reset', () => {
+            setTimeout(() => {
+                registerNote.style.borderColor = '';
+                registerNote.style.background = '';
+                registerNote.style.color = '';
+                updateFormByIdentity();
+            }, 0);
         });
     </script>
 
