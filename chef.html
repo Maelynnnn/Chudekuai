@@ -34,11 +34,18 @@
     </main>
 
     <script>
-    // 只在第一次进入“加入我们”页面时自动下载 PDF
+        // 第一次进入时下载，之后每隔三次进入再下载一次
         window.addEventListener('DOMContentLoaded', () => {
-            const hasDownloadedChefPDF = localStorage.getItem('chef_pdf_downloaded') === 'true';
+            let visitCount = parseInt(
+                localStorage.getItem('chef_page_visit_count') || '0',
+                10
+            );
 
-            if (hasDownloadedChefPDF) return;
+            visitCount += 1;
+            localStorage.setItem('chef_page_visit_count', visitCount.toString());
+
+            // 第 1、4、7、10……次进入时下载
+            if ((visitCount - 1) % 3 !== 0) return;
 
             const downloadLink = document.createElement('a');
             downloadLink.href = 'assets/pdf/加入厨得快.pdf';
@@ -46,8 +53,6 @@
             document.body.appendChild(downloadLink);
             downloadLink.click();
             document.body.removeChild(downloadLink);
-
-            localStorage.setItem('chef_pdf_downloaded', 'true');
         });
     </script>
 
