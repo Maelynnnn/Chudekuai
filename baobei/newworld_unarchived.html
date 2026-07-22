@@ -862,7 +862,7 @@
             sessionStorage.setItem('newworld_admin_verified', 'true');
             sessionStorage.setItem('newworld_admin_id', inputId);
         } else {
-            adminLoginError.textContent = '管理员编号错误。';
+            adminLoginError.textContent = '该管理员无权限。';
             adminIdInput.value = '';
             adminIdInput.focus();
         }
