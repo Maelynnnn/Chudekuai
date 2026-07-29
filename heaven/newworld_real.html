@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>新世界</title>
+
+    <link rel="stylesheet" href="newworld_real.css">
+</head>
+
+<body>
+
+    <!-- 极轻微的暗角 -->
+    <div class="screen-vignette" aria-hidden="true"></div>
+
+    <!-- 偶尔浮现的经文 -->
+    <div
+        id="floating-scripture"
+        class="floating-scripture"
+        aria-hidden="true"
+    ></div>
+
+    <!-- 顶部导航 -->
+    <header class="site-header">
+
+        <a href="newworld_real.html" class="site-logo">
+            新世界
+        </a>
+
+        <nav class="desktop-nav" aria-label="主要导航">
+            <a href="gospel.html">福音</a>
+            <a href="ascension.html">升域</a>
+            <a href="sacrifice.html">献祭</a>
+            <a href="sanctuary.html">圣所</a>
+            <a href="testimony.html">见证</a>
+            <a href="unity.html">归一</a>
+        </nav>
+
+        <!-- 手机端菜单按钮 -->
+        <button
+            id="menu-button"
+            class="menu-button"
+            type="button"
+            aria-label="打开菜单"
+            aria-expanded="false"
+        >
+            <span></span>
+            <span></span>
+        </button>
+
+        <!-- 手机端菜单 -->
+        <nav
+            id="mobile-nav"
+            class="mobile-nav"
+            aria-label="手机端导航"
+        >
+            <a href="gospel.html">福音</a>
+            <a href="ascension.html">升域</a>
+            <a href="sacrifice.html">献祭</a>
+            <a href="sanctuary.html">圣所</a>
+            <a href="testimony.html">见证</a>
+            <a href="unity.html">归一</a>
+        </nav>
+
+    </header>
+
+    <!-- 首页唯一主体 -->
+    <main class="home-main">
+
+        <section class="home-center">
+
+            <!-- 简单符号 -->
+            <div class="world-mark" aria-hidden="true">
+                <span class="world-mark-ring"></span>
+                <span class="world-mark-point"></span>
+            </div>
+
+            <p class="home-label">
+                THE NEW WORLD
+            </p>
+
+            <h1 id="world-title" data-selected-text="欢迎你">新世界</h1>
+
+            <p class="home-message">
+                旧世界已经结束。
+            </p>
+
+            <a href="gospel.html" class="enter-link">
+                聆听福音
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- 页面底部 -->
+    <footer class="site-footer">
+        <span>所有进入者均已被记录</span>
+    </footer>
+
+    <script>
+        // ========================================
+        // 每十秒浮现一次经文
+        // ========================================
+
+        const scriptureLines = [
+            "第一次降临给予形体，第二次降临留下姓名，第三次降临超脱一切。",
+            "凡被看见者，存于世间；凡被记得者，存于时间；凡自知者，存于自身。",
+            "名字被抹去以后，仍有一个声音知道自己曾经来过。",
+            "世人只相信能够触摸之物，因此世人最先失去永恒。",
+            "有形者惧怕腐朽，有名者惧怕遗忘，有念者不再询问终点。",
+            "第一重门容纳血肉，第二重门容纳痕迹，第三重门从不曾真正关闭。",
+            "人并非在死亡时消失。",
+            "凡仍能说出‘我’者，皆未抵达第三层。",
+            "第一重存在依附世界，第二重存在依附物质，第三重存在只依附自身。",
+            "当形、名与念不再重合，哪一个才应继续使用你的脸？",
+            "不要询问谁已经离去，应当询问他还剩下哪一种存在。",
+            "有些人被埋葬，有些人被保存，有些人只是换了一处继续醒着。",
+            "时间能够损坏形体，却无法确定哪一刻才算真正的终结。",
+            "新世界没有复生，因为从未有人离去。",
+            "血肉会误认自己为主人，名字会误认自己为灵魂，唯有‘我’知道答案。",
+            "你以为自己因出生而存在，其实你只是在那一刻第一次被证明。",
+            "终结并非一扇门，而是三盏灯依次熄灭。",
+            "第一盏照见面容，第二盏照见姓名，第三盏只照见观看者自己。",
+            "他们已经失去面容，却没有失去位置。",
+            "所有居民终将离开第一层，却未必能够抵达第三层。",
+            "升起的并非灵魂，只是存在不再需要原来的容器。",
+            "所谓永恒，不过是没有任何人能够完成你的删除。",
+            "你现在所称作自己的一切，究竟有多少可以被取走？",
+            "我是我，你是我，我们是我。",
+        ];
+
+        const scriptureElement =
+            document.getElementById("floating-scripture");
+
+        let lastScriptureIndex = -1;
+        let fadeTimer = null;
+        let resetTimer = null;
+
+        function getRandomScripture() {
+            let nextIndex;
+
+            do {
+                nextIndex = Math.floor(
+                    Math.random() * scriptureLines.length
+                );
+            } while (
+                nextIndex === lastScriptureIndex &&
+                scriptureLines.length > 1
+            );
+
+            lastScriptureIndex = nextIndex;
+
+            return scriptureLines[nextIndex];
+        }
+
+        function showScripture() {
+            clearTimeout(fadeTimer);
+            clearTimeout(resetTimer);
+
+            scriptureElement.classList.remove(
+                "is-visible",
+                "is-fading"
+            );
+
+            scriptureElement.textContent = getRandomScripture();
+
+            // 强制重新计算样式
+            void scriptureElement.offsetWidth;
+
+            scriptureElement.classList.add("is-visible");
+
+            // 显示 4 秒后开始消失
+            fadeTimer = setTimeout(() => {
+                scriptureElement.classList.remove("is-visible");
+                scriptureElement.classList.add("is-fading");
+            }, 4000);
+
+            // 动画结束后清除状态
+            resetTimer = setTimeout(() => {
+                scriptureElement.classList.remove("is-fading");
+            }, 7000);
+        }
+
+        // 页面打开 2 秒后首次出现
+        setTimeout(showScripture, 2000);
+
+        // 之后每 10 秒出现一次
+        setInterval(showScripture, 10000);
+
+
+        // ========================================
+        // 手机端菜单
+        // ========================================
+
+        const menuButton =
+            document.getElementById("menu-button");
+
+        const mobileNav =
+            document.getElementById("mobile-nav");
+
+        menuButton.addEventListener("click", () => {
+            const isOpen =
+                mobileNav.classList.toggle("is-open");
+
+            menuButton.classList.toggle(
+                "is-open",
+                isOpen
+            );
+
+            menuButton.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+        });
+
+        mobileNav.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", () => {
+                mobileNav.classList.remove("is-open");
+                menuButton.classList.remove("is-open");
+
+                menuButton.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+            });
+        });
+
+        const worldTitle = document.getElementById("world-title");
+
+        document.addEventListener("selectionchange", () => {
+            const selection = window.getSelection();
+
+            if (!selection || selection.rangeCount === 0) {
+                worldTitle.classList.remove("title-selected");
+                return;
+            }
+
+            const selectedText = selection.toString().trim();
+            const range = selection.getRangeAt(0);
+
+            const selectionInsideTitle =
+                worldTitle.contains(range.commonAncestorContainer) ||
+                range.commonAncestorContainer === worldTitle;
+
+            if (
+                selectionInsideTitle &&
+                selectedText.includes("新世界")
+            ) {
+                worldTitle.classList.add("title-selected");
+            } else {
+                worldTitle.classList.remove("title-selected");
+            }
+        });
+
+        document.addEventListener("pointerdown", (event) => {
+            if (worldTitle.contains(event.target)) return;
+
+            // 恢复“新世界”
+            worldTitle.classList.remove("title-selected");
+
+            // 清除浏览器原生选中框
+            const selection = window.getSelection();
+
+            if (selection) {
+                selection.removeAllRanges();
+            }
+        });
+
+        window.addEventListener("blur", () => {
+            worldTitle.classList.remove("title-selected");
+
+            const selection = window.getSelection();
+
+            if (selection) {
+                selection.removeAllRanges();
+            }
+        });
+    </script>
+
+</body>
+</html>

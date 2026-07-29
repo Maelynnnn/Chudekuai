@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>记录窗口</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #ccc;
+            background: #000;
+
+            font-family:
+                "Noto Serif SC",
+                "Songti SC",
+                serif;
+
+            overflow: hidden;
+        }
+
+        body::after {
+            content: "";
+
+            position: fixed;
+            inset: 0;
+
+            pointer-events: none;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    transparent 30%,
+                    rgba(0, 0, 0, 0.9) 100%
+                );
+        }
+
+        .display-area {
+            position: relative;
+            z-index: 1;
+
+            width: 82%;
+
+            text-align: center;
+        }
+
+        .idle-text {
+            color: rgba(255, 255, 255, 0.08);
+            font-size: 11px;
+            letter-spacing: 5px;
+        }
+
+        .content-box {
+            opacity: 0;
+            filter: blur(8px);
+            transform: translateY(8px);
+
+            transition:
+                opacity 0.8s ease,
+                filter 0.8s ease,
+                transform 0.8s ease;
+        }
+
+        .content-box.visible {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0);
+        }
+
+        .content-label {
+            margin-bottom: 22px;
+
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 9px;
+            letter-spacing: 5px;
+        }
+
+        .content-title {
+            margin: 0 0 25px;
+
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: 7px;
+        }
+
+        .content-text {
+            margin: 0;
+
+            color: rgba(255, 255, 255, 0.42);
+            font-size: 14px;
+            line-height: 2;
+            letter-spacing: 2px;
+        }
+
+        .warning .content-title {
+            color: rgba(150, 20, 25, 0.85);
+        }
+
+        .scripture .content-text {
+            font-size: 18px;
+            line-height: 2.2;
+        }
+
+        .resident-number {
+            margin-bottom: 25px;
+
+            color: rgba(130, 15, 20, 0.8);
+            font-size: 11px;
+            letter-spacing: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="display-area">
+
+        <div class="idle-text" id="idle-text">
+            等待记录
+        </div>
+
+        <section
+            class="content-box"
+            id="content-box"
+            aria-live="polite"
+        >
+            <div
+                class="content-label"
+                id="content-label"
+            ></div>
+
+            <div
+                class="resident-number"
+                id="resident-number"
+            ></div>
+
+            <h1
+                class="content-title"
+                id="content-title"
+            ></h1>
+
+            <p
+                class="content-text"
+                id="content-text"
+            ></p>
+        </section>
+
+    </main>
+
+    <script>
+        const channel =
+            new BroadcastChannel("newworld_link");
+
+        const idleText =
+            document.getElementById("idle-text");
+
+        const contentBox =
+            document.getElementById("content-box");
+
+        const contentLabel =
+            document.getElementById("content-label");
+
+        const residentNumber =
+            document.getElementById("resident-number");
+
+        const contentTitle =
+            document.getElementById("content-title");
+
+        const contentText =
+            document.getElementById("content-text");
+
+        let hideTimer = null;
+
+        function resetClasses() {
+            contentBox.className = "content-box";
+        }
+
+        function clearDisplay() {
+            clearTimeout(hideTimer);
+
+            contentBox.classList.remove("visible");
+
+            setTimeout(() => {
+                resetClasses();
+
+                contentLabel.textContent = "";
+                residentNumber.textContent = "";
+                contentTitle.textContent = "";
+                contentText.textContent = "";
+
+                idleText.style.display = "block";
+            }, 800);
+        }
+
+        function revealContent(type) {
+            clearTimeout(hideTimer);
+
+            idleText.style.display = "none";
+
+            resetClasses();
+
+            if (type) {
+                contentBox.classList.add(type);
+            }
+
+            // 让浏览器先应用透明状态
+            void contentBox.offsetWidth;
+
+            contentBox.classList.add("visible");
+        }
+
+        channel.addEventListener("message", (event) => {
+            const data = event.data;
+
+            if (!data || !data.action) return;
+
+            switch (data.action) {
+
+                case "start":
+                    contentLabel.textContent = "SYSTEM";
+                    contentTitle.textContent = "连接已建立";
+                    contentText.textContent =
+                        "另一个窗口正在被观察。";
+
+                    revealContent();
+
+                    hideTimer = setTimeout(
+                        clearDisplay,
+                        2500
+                    );
+                    break;
+
+
+                case "show-scripture":
+                    contentLabel.textContent =
+                        "未署名经文";
+
+                    residentNumber.textContent = "";
+                    contentTitle.textContent = "";
+
+                    contentText.textContent =
+                        data.text || "";
+
+                    revealContent("scripture");
+                    break;
+
+
+                case "show-resident":
+                    contentLabel.textContent =
+                        "居民档案";
+
+                    residentNumber.textContent =
+                        data.residentId || "";
+
+                    contentTitle.textContent =
+                        data.title || "";
+
+                    contentText.textContent =
+                        data.description || "";
+
+                    revealContent("resident");
+                    break;
+
+
+                case "show-warning":
+                    contentLabel.textContent =
+                        "记录通知";
+
+                    residentNumber.textContent = "";
+
+                    contentTitle.textContent =
+                        data.text || "已被记录";
+
+                    contentText.textContent =
+                        "请继续当前行为。";
+
+                    revealContent("warning");
+                    break;
+
+
+                case "clear":
+                    clearDisplay();
+                    break;
+
+
+                case "main-page-closed":
+                    contentLabel.textContent =
+                        "CONNECTION LOST";
+
+                    residentNumber.textContent = "";
+
+                    contentTitle.textContent =
+                        "主页面已关闭";
+
+                    contentText.textContent =
+                        "本次观察记录已经完成。";
+
+                    revealContent("warning");
+                    break;
+            }
+        });
+    </script>
+
+</body>
+</html>

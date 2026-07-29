@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>页面 B</title>
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: #ddd;
+            background: #000;
+            font-family: "Songti SC", serif;
+        }
+
+        .start-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #000;
+        }
+
+        .start-button {
+            padding: 14px 30px;
+            color: #aaa;
+            background: transparent;
+            border: 1px solid #333;
+            letter-spacing: 5px;
+            cursor: pointer;
+        }
+
+        .start-button:hover {
+            color: #fff;
+            border-color: #777;
+        }
+
+        .content {
+            padding: 140px 10vw;
+        }
+
+        .interactive-item {
+            width: 260px;
+            margin: 80px 0;
+            padding: 35px;
+
+            border: 1px solid #222;
+            color: #777;
+
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .interactive-item:hover {
+            color: #ddd;
+            border-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 用户点击后，才能稳定打开页面 A -->
+    <div class="start-screen" id="start-screen">
+        <button class="start-button" id="start-button">
+            进入
+        </button>
+    </div>
+
+    <main class="content">
+
+        <div
+            class="interactive-item"
+            id="gospel-item"
+        >
+            福音
+        </div>
+
+        <div
+            class="interactive-item"
+            id="resident-item"
+        >
+            居民记录
+        </div>
+
+        <div
+            class="interactive-item"
+            id="sacrifice-item"
+        >
+            献祭登记
+        </div>
+
+    </main>
+
+    <script>
+        // 创建两个页面之间的通信频道
+        const channel = new BroadcastChannel("newworld_link");
+
+        const startScreen =
+            document.getElementById("start-screen");
+
+        const startButton =
+            document.getElementById("start-button");
+
+        let pageAWindow = null;
+
+        startButton.addEventListener("click", () => {
+            /*
+                打开一个较小的页面 A。
+
+                width 和 height 控制大小。
+                left 和 top 控制窗口位置。
+            */
+            pageAWindow = window.open(
+                "page_a.html",
+                "newworld_secondary_window",
+                [
+                    "width=460",
+                    "height=620",
+                    "left=40",
+                    "top=80",
+                    "resizable=yes",
+                    "scrollbars=no"
+                ].join(",")
+            );
+
+            if (!pageAWindow) {
+                alert("浏览器阻止了新窗口，请允许此网站打开弹出式窗口。");
+                return;
+            }
+
+            startScreen.style.display = "none";
+
+            // 告诉页面 A：主页面已经正式开始
+            setTimeout(() => {
+                channel.postMessage({
+                    action: "start"
+                });
+            }, 500);
+        });
+
+
+        // 鼠标悬停“福音”
+        const gospelItem =
+            document.getElementById("gospel-item");
+
+        gospelItem.addEventListener("mouseenter", () => {
+            channel.postMessage({
+                action: "show-scripture",
+                text: "凡被记得者，皆未完成最后一次离去。"
+            });
+        });
+
+        gospelItem.addEventListener("mouseleave", () => {
+            channel.postMessage({
+                action: "clear"
+            });
+        });
+
+
+        // 点击“居民记录”
+        const residentItem =
+            document.getElementById("resident-item");
+
+        residentItem.addEventListener("click", () => {
+            channel.postMessage({
+                action: "show-resident",
+                residentId: "A-017",
+                title: "意识持续存在",
+                description: "该居民已失去独立边界。"
+            });
+        });
+
+
+        // 悬停“献祭登记”
+        const sacrificeItem =
+            document.getElementById("sacrifice-item");
+
+        sacrificeItem.addEventListener("mouseenter", () => {
+            channel.postMessage({
+                action: "show-warning",
+                text: "该行为已被记录。"
+            });
+        });
+
+        sacrificeItem.addEventListener("mouseleave", () => {
+            channel.postMessage({
+                action: "clear"
+            });
+        });
+
+
+        // 页面 B 关闭前，通知页面 A
+        window.addEventListener("beforeunload", () => {
+            channel.postMessage({
+                action: "main-page-closed"
+            });
+
+            // 也可以让 A 跟着关闭
+            if (
+                pageAWindow &&
+                !pageAWindow.closed
+            ) {
+                pageAWindow.close();
+            }
+        });
+    </script>
+
+</body>
+</html>
