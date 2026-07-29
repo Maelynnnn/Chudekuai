@@ -5,6 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新世界服务平台</title>
     <link rel="stylesheet" href="baobei.css">
+
+    <style>
+        /* 默认状态：未完成 Welcome 时，隐藏所有 A 级意识入口 */
+        .logo-awakened-hint,
+        .revealed-site-action,
+        .revealed-bottom-field {
+            display: none !important;
+        }
+
+        .logo-awakened-hint.is-visible {
+            display: inline-block !important;
+        }
+
+        .revealed-site-action.is-visible {
+            display: inline-block !important;
+        }
+
+        .revealed-bottom-field.is-visible {
+            display: block !important;
+        }
+
+        /* 去掉包裹 Logo 的按钮默认样式 */
+        .awaken-logo-button {
+            padding: 0;
+            border: 0;
+            background: transparent;
+            font: inherit;
+            cursor: default;
+        }
+
+        .awaken-logo-button.is-awakened,
+        .awaken-logo-button.is-active {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
@@ -26,7 +61,7 @@
                         <button id="awaken-logo-button" class="awaken-logo-button" type="button" aria-label="新世界标志">
                             <img id="newworld-logo" src="../assets/logo/新世界logo.png" alt="新世界Logo" class="baobei-logo-img">
                         </button>
-                        <span id="logo-awakened-hint" class="logo-awakened-hint">点击标志，重新观看</span>
+                        <span id="logo-awakened-hint" class="logo-awakened-hint" hidden>点击标志，重新观看</span>
                     </div>
 
                     <div class="banner-title">
@@ -34,7 +69,7 @@
                         <h2 id="site-subtitle">NEW WORLD PUBLIC SERVICE CENTER</h2>
                         <p id="site-meta">中文域名：新世界.服务　　备案号：厨ICP备12609号</p>
 
-                        <button id="gospel-action" class="revealed-site-action" type="button">
+                        <button id="gospel-action" class="revealed-site-action" type="button" hidden>
                             聆听福音
                         </button>
                     </div>
@@ -220,7 +255,7 @@
                 </aside>
             </div>
 
-            <section id="revealed-bottom-field" class="revealed-bottom-field" aria-hidden="true">
+            <section id="revealed-bottom-field" class="revealed-bottom-field" aria-hidden="true" hidden>
                 <button id="memory-trace" class="memory-trace" type="button">
                     <span>共享记忆仍在发生</span>
                 </button>
@@ -347,8 +382,14 @@
         function applyRevealedWorld({ announce = false } = {}) {
             document.body.classList.add('revealed-world');
             logoHint.classList.remove('is-visible');
+            logoHint.hidden = true;
+
             logoButton.classList.add('is-active');
+
+            gospelAction.hidden = false;
             gospelAction.classList.add('is-visible');
+
+            bottomField.hidden = false;
             bottomField.classList.add('is-visible');
             bottomField.setAttribute('aria-hidden', 'false');
 
@@ -377,6 +418,7 @@
 
         if (awakened && !alreadyRevealed) {
             logoButton.classList.add('is-awakened');
+            logoHint.hidden = false;
             logoHint.classList.add('is-visible');
         }
 
@@ -407,6 +449,7 @@
 
         NewWorldLink.onMessage((message) => {
             if (message.type === 'guide_logo' && awakened && !alreadyRevealed) {
+                logoHint.hidden = false;
                 logoHint.classList.add('is-visible', 'is-guided');
                 logoButton.classList.add('is-awakened', 'is-guided');
             }
