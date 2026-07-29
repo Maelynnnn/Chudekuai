@@ -1,0 +1,231 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --red: #a70012;
+    --red-soft: rgba(167, 0, 18, 0.34);
+    --text: rgba(238, 238, 238, 0.72);
+    --muted: rgba(238, 238, 238, 0.28);
+    --line: rgba(255, 255, 255, 0.12);
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    background: #000;
+}
+
+body {
+    min-height: 100vh;
+    color: var(--text);
+    font-family: "Noto Serif SC", "Songti SC", SimSun, serif;
+    overflow: hidden;
+}
+
+.consciousness-page {
+    position: relative;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: 42px 34px 30px;
+    isolation: isolate;
+}
+
+.consciousness-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 50% 44%, rgba(95, 0, 11, 0.11), transparent 34%),
+        radial-gradient(circle at center, transparent 42%, rgba(0, 0, 0, 0.9) 100%);
+    z-index: -1;
+}
+
+.consciousness-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+}
+
+.consciousness-orb {
+    position: relative;
+    width: min(33vw, 250px);
+    aspect-ratio: 1;
+    margin-bottom: 42px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 43% 38%, rgba(255, 70, 84, 0.38), rgba(148, 0, 17, 0.54) 26%, rgba(52, 0, 7, 0.9) 64%, rgba(0, 0, 0, 0) 72%);
+    filter: blur(0.2px);
+    animation: consciousness-breathe 7.5s ease-in-out infinite;
+}
+
+.consciousness-orb::before,
+.consciousness-orb::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    inset: 9%;
+    border: 1px solid rgba(255, 32, 52, 0.3);
+    box-shadow:
+        0 0 30px rgba(150, 0, 18, 0.18),
+        inset 0 0 35px rgba(165, 0, 22, 0.16);
+    animation: inner-drift 10s ease-in-out infinite alternate;
+}
+
+.consciousness-orb::after {
+    inset: -8%;
+    border-color: rgba(150, 0, 18, 0.12);
+    animation-duration: 13s;
+    animation-direction: alternate-reverse;
+}
+
+.orb-grain {
+    position: absolute;
+    inset: 23%;
+    border-radius: 44% 56% 52% 48% / 58% 43% 57% 42%;
+    background: rgba(213, 0, 30, 0.2);
+    filter: blur(11px);
+    animation: grain-shift 6.8s ease-in-out infinite alternate;
+}
+
+@keyframes consciousness-breathe {
+    0%, 100% {
+        transform: scale(0.93);
+        opacity: 0.62;
+        filter: blur(0.5px);
+    }
+    50% {
+        transform: scale(1.045);
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+
+@keyframes inner-drift {
+    from { transform: translate(-3px, 2px) scale(0.96); }
+    to { transform: translate(4px, -3px) scale(1.04); }
+}
+
+@keyframes grain-shift {
+    from { transform: rotate(-7deg) scale(0.86); opacity: 0.3; }
+    to { transform: rotate(12deg) scale(1.12); opacity: 0.72; }
+}
+
+.dialogue-shell {
+    width: min(700px, 92vw);
+    text-align: center;
+}
+
+.consciousness-status {
+    min-height: 24px;
+    margin-bottom: 12px;
+    color: rgba(255, 255, 255, 0.18);
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 5px;
+}
+
+.response-area {
+    min-height: 92px;
+    max-height: 180px;
+    overflow-y: auto;
+    margin-bottom: 22px;
+    padding: 0 10px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.12) transparent;
+}
+
+.response-line {
+    margin-bottom: 10px;
+    color: rgba(236, 236, 236, 0.62);
+    font-size: clamp(13px, 1.3vw, 16px);
+    line-height: 2;
+    letter-spacing: 2px;
+    animation: response-in 1.15s ease both;
+}
+
+.response-line.player-line {
+    color: rgba(236, 236, 236, 0.25);
+    font-size: 12px;
+}
+
+@keyframes response-in {
+    from { opacity: 0; filter: blur(5px); transform: translateY(5px); }
+    to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+
+.question-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.018);
+    transition: border-color .45s ease, background .45s ease;
+}
+
+.question-row:focus-within {
+    border-color: rgba(137, 0, 15, 0.55);
+    background: rgba(120, 0, 15, 0.04);
+}
+
+.question-input {
+    flex: 1;
+    min-width: 0;
+    height: 48px;
+    padding: 0 16px;
+    border: 0;
+    outline: 0;
+    color: rgba(245, 245, 245, 0.72);
+    background: transparent;
+    font-family: inherit;
+    font-size: 14px;
+    letter-spacing: 2px;
+}
+
+.question-input::placeholder {
+    color: rgba(245, 245, 245, 0.18);
+}
+
+.send-question,
+.open-archive {
+    border: 0;
+    background: transparent;
+    color: rgba(245, 245, 245, 0.23);
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 3px;
+    transition: color .35s ease;
+}
+
+.send-question {
+    height: 48px;
+    padding: 0 16px;
+}
+
+.send-question:hover,
+.open-archive:hover {
+    color: rgba(211, 28, 47, 0.78);
+}
+
+.archive-row {
+    margin-top: 18px;
+    text-align: center;
+}
+
+.open-archive {
+    padding: 8px 14px;
+    font-size: 11px;
+}
+
+@media (max-width: 620px) {
+    .consciousness-page { padding: 26px 18px 24px; }
+    .consciousness-orb { width: min(52vw, 220px); margin-bottom: 28px; }
+    .response-area { min-height: 120px; }
+}

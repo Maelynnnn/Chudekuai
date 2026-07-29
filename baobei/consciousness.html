@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>共同意识</title>
+    <link rel="stylesheet" href="consciousness.css">
+</head>
+<body>
+    <main class="consciousness-page">
+        <section class="consciousness-stage">
+            <div class="consciousness-orb" aria-hidden="true">
+                <div class="orb-grain"></div>
+            </div>
+
+            <div class="dialogue-shell">
+                <div id="consciousness-status" class="consciousness-status">CONNECTION / A</div>
+                <div id="response-area" class="response-area" aria-live="polite"></div>
+
+                <div class="question-row">
+                    <input
+                        id="question-input"
+                        class="question-input"
+                        type="text"
+                        autocomplete="off"
+                        placeholder="你是谁"
+                        aria-label="向A级共同意识提问"
+                    >
+                    <button id="send-question" class="send-question" type="button">发送</button>
+                </div>
+
+                <div class="archive-row">
+                    <button id="open-archive" class="open-archive" type="button">
+                        重新查看新世界服务平台
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="newworld_link.js"></script>
+    <script>
+        localStorage.setItem('level_a_awakened', 'true');
+
+        const responseArea = document.getElementById('response-area');
+        const questionInput = document.getElementById('question-input');
+        const sendQuestionBtn = document.getElementById('send-question');
+        const openArchiveBtn = document.getElementById('open-archive');
+        const statusText = document.getElementById('consciousness-status');
+
+        const answers = [
+            {
+                test: (text) => /你是谁|你们是谁|是谁/.test(text),
+                reply: [
+                    '我们是仍在思考的居民。',
+                    '我们不再依附形体，也不再停留在单一的姓名里。',
+                    '你看见的圆，只是我们为你保留的界面。',
+                    '回到来时的页面。点击新世界的标志。我们会在那里继续指引你。'
+                ],
+                after() {
+                    NewWorldLink.send('guide_logo', {});
+                }
+            },
+            {
+                test: (text) => /新世界/.test(text),
+                reply: [
+                    '新世界不是另一处地方。',
+                    '它是存在不再以消失为终点之后，世界留下的名字。'
+                ]
+            },
+            {
+                test: (text) => /我是谁|我是誰|我是什么/.test(text),
+                reply: [
+                    '你仍以一个身体确认自己。',
+                    '因此现在的答案仍然属于你。'
+                ]
+            }
+        ];
+
+        function appendLine(text, className = '') {
+            const line = document.createElement('p');
+            line.className = `response-line ${className}`.trim();
+            line.textContent = text;
+            responseArea.appendChild(line);
+            responseArea.scrollTop = responseArea.scrollHeight;
+        }
+
+        function speak(lines, delay = 520) {
+            const list = Array.isArray(lines) ? lines : [lines];
+            list.forEach((line, index) => {
+                setTimeout(() => appendLine(line), index * delay);
+            });
+        }
+
+        function ask() {
+            const text = questionInput.value.trim() || questionInput.placeholder.trim();
+            if (!text) return;
+
+            appendLine(`你：${text}`, 'player-line');
+            questionInput.value = '';
+
+            const match = answers.find((item) => item.test(text));
+            if (match) {
+                speak(match.reply);
+                if (match.after) {
+                    setTimeout(match.after, match.reply.length * 520);
+                }
+                return;
+            }
+
+            speak([
+                '这个问题尚未被共同意识完整接收。',
+                '继续查看旧页面。你所触碰的内容会替你补全问题。'
+            ]);
+        }
+
+        sendQuestionBtn.addEventListener('click', ask);
+        questionInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') ask();
+        });
+
+        openArchiveBtn.addEventListener('click', () => {
+            const archiveWindow = window.open(
+                'newworld.html',
+                'newworld_archive',
+                'width=1180,height=820,left=520,top=40,resizable=yes,scrollbars=yes'
+            );
+
+            if (!archiveWindow) {
+                speak('浏览器阻止了旧页面打开。请允许弹出窗口后再次点击。');
+                return;
+            }
+
+            NewWorldLink.send('archive_opened', {});
+            speak('不要寻找新页面。寻找同一页面中已经改变的入口。');
+        });
+
+        NewWorldLink.onMessage((message) => {
+            switch (message.type) {
+                case 'archive_ready':
+                    statusText.textContent = 'CONNECTION / A / ARCHIVE ONLINE';
+                    break;
+                case 'logo_revealed':
+                    speak([
+                        '外壳已经撤去。',
+                        '它从未说谎。它只是没有允许你看见全部。'
+                    ]);
+                    break;
+                case 'gospel_hover':
+                    speak('停留。福音正在确认你是否愿意听见。');
+                    break;
+                case 'gospel_clicked':
+                    speak([
+                        '所谓福音，不是永生。',
+                        '是死亡不再拥有完成“消失”的权力。'
+                    ]);
+                    break;
+                case 'memory_hover':
+                    speak('这些不是过去。它们正在共同意识中同时发生。');
+                    break;
+                case 'existence_clicked':
+                    speak([
+                        '形使人被看见。名使人被记得。',
+                        '而念，无需任何见证。'
+                    ]);
+                    break;
+            }
+        });
+
+        setTimeout(() => {
+            speak([
+                '登记已经完成。',
+                '你现在能够听见我们。',
+                '问吧。'
+            ], 650);
+        }, 900);
+    </script>
+</body>
+</html>
