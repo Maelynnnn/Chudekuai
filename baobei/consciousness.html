@@ -5,17 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>共同意识</title>
     <link rel="stylesheet" href="consciousness.css">
+    <style>
+        .response-progress {
+            position: absolute;
+            left: 50%;
+            bottom: 1%;
+            z-index: 24;
+            margin: 0;
+            transform: translateX(-50%);
+            color: rgba(225, 225, 225, 0.32);
+            font-family: Arial, sans-serif;
+            font-size: 9px;
+            line-height: 1;
+            letter-spacing: 2px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.65s ease;
+        }
+
+        .response-progress.is-visible {
+            opacity: 1;
+        }
+
+        @media (max-width: 620px) {
+            .response-progress {
+                bottom: 1%;
+                font-size: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
     <main class="consciousness-page">
+
         <section class="consciousness-stage">
-            <div class="consciousness-orb" aria-hidden="true">
-                <div class="orb-grain"></div>
+            <div class="consciousness-orb">
+                <canvas id="orb-particles" class="orb-particles" aria-hidden="true"></canvas>
+
+                <div class="orb-shadow-core" aria-hidden="true"></div>
+                <div class="orb-ring orb-ring-one" aria-hidden="true"></div>
+                <div class="orb-ring orb-ring-two" aria-hidden="true"></div>
+
+                <div class="orb-message-layer" aria-live="polite" aria-atomic="true">
+                    <div class="response-stack">
+                        <p id="response-line-1" class="response-line"></p>
+                        <p id="response-line-2" class="response-line"></p>
+                    </div>
+                    <p id="response-progress" class="response-progress" aria-hidden="true"></p>
+                </div>
+            </div>
+
+            <div class="question-echo-layer" aria-live="polite" aria-atomic="true">
+                <p id="question-echo" class="question-echo"></p>
             </div>
 
             <div class="dialogue-shell">
-                <div id="consciousness-status" class="consciousness-status">CONNECTION / A</div>
-                <div id="response-area" class="response-area" aria-live="polite"></div>
 
                 <div class="question-row">
                     <input
@@ -31,7 +75,7 @@
 
                 <div class="archive-row">
                     <button id="open-archive" class="open-archive" type="button">
-                        重新查看新世界服务平台
+                        新世界永存
                     </button>
                 </div>
             </div>
@@ -42,20 +86,63 @@
     <script>
         localStorage.setItem('level_a_awakened', 'true');
 
-        const responseArea = document.getElementById('response-area');
+        const responseLines = [
+            document.getElementById('response-line-1'),
+            document.getElementById('response-line-2')
+        ];
+        const questionEcho = document.getElementById('question-echo');
+        const responseProgress = document.getElementById('response-progress');
+
+        let questionEchoFadeTimer = null;
+        let questionEchoClearTimer = null;
+
+        function showQuestionEcho(text) {
+            if (!questionEcho || !text) return;
+
+            clearTimeout(questionEchoFadeTimer);
+            clearTimeout(questionEchoClearTimer);
+
+            questionEcho.classList.remove(
+                'is-visible',
+                'is-dissolving'
+            );
+
+            questionEcho.textContent = text;
+
+            // 强制浏览器重置动画状态
+            void questionEcho.offsetWidth;
+
+            questionEcho.classList.add('is-visible');
+
+            questionEchoFadeTimer = setTimeout(() => {
+                questionEcho.classList.remove('is-visible');
+                questionEcho.classList.add('is-dissolving');
+            }, 1250);
+
+            questionEchoClearTimer = setTimeout(() => {
+                questionEcho.classList.remove('is-dissolving');
+                questionEcho.textContent = '';
+            }, 4200);
+        }
         const questionInput = document.getElementById('question-input');
         const sendQuestionBtn = document.getElementById('send-question');
         const openArchiveBtn = document.getElementById('open-archive');
         const statusText = document.getElementById('consciousness-status');
 
+        // “你是谁”只在本次页面体验中出现一次。
+        // 玩家提问后消失；重新进入共同意识页面时会再次出现。
+        let firstQuestionUsed = false;
+        questionInput.placeholder = '你是谁';
+
         const answers = [
             {
-                test: (text) => /你是谁|你们是谁|是谁/.test(text),
+                test: (text) => /你是谁|你们是谁/.test(text),
                 reply: [
-                    '我们是仍在思考的居民。',
-                    '我们不再依附形体，也不再停留在单一的姓名里。',
-                    '你看见的圆，只是我们为你保留的界面。',
-                    '回到来时的页面。点击新世界的标志。我们会在那里继续指引你。'
+                    '我们是A级居民。',
+                    '我们不再依附物质而存在。',
+                    '你所看见的，只是我们为你保留的沟通窗口。',
+                    '我们共享意识，所以这里已经没有‘我’。',
+                    '我是我，我们也是我，我也是我们。'
                 ],
                 after() {
                     NewWorldLink.send('guide_logo', {});
@@ -64,57 +151,247 @@
             {
                 test: (text) => /新世界/.test(text),
                 reply: [
-                    '新世界不是另一处地方。',
-                    '它是存在不再以消失为终点之后，世界留下的名字。'
+                    '新世界中，你的存在将不再被局限。',
+                    '你可以摒弃一切却依然存在。',
+                    '是什么让你存在，由你决定。'
                 ]
             },
             {
                 test: (text) => /我是谁|我是誰|我是什么/.test(text),
                 reply: [
-                    '你仍以一个身体确认自己。',
-                    '因此现在的答案仍然属于你。'
+                    '什么是‘我’？',
+                    '你称呼自己为我，我们称呼自己也为我。',
+                    '这个字本身没有任何含义',
+                    '当你使用这个字的时候，称呼的是你的容器，还是你的意识？',
+                    '当你的容器消亡了以后，你的意识是否还能自称‘我’？',
+                    '又或者，当你的意识消亡了以后，你的容器是否还能自称‘我’？'
                 ]
             }
         ];
 
-        function appendLine(text, className = '') {
-            const line = document.createElement('p');
-            line.className = `response-line ${className}`.trim();
-            line.textContent = text;
-            responseArea.appendChild(line);
-            responseArea.scrollTop = responseArea.scrollHeight;
+        const speechQueue = [];
+        let isSpeaking = false;
+
+        function wait(ms) {
+            return new Promise((resolve) => setTimeout(resolve, ms));
         }
 
-        function speak(lines, delay = 520) {
-            const list = Array.isArray(lines) ? lines : [lines];
-            list.forEach((line, index) => {
-                setTimeout(() => appendLine(line), index * delay);
+        let previousResponseText = '';
+
+        async function showOneRollingLine(item) {
+            const upperLine = responseLines[0];
+            const currentLine = responseLines[1];
+
+            if (responseProgress) {
+                responseProgress.textContent = `${item.position}/${item.total}`;
+                responseProgress.classList.add('is-visible');
+            }
+
+            upperLine.getAnimations().forEach((animation) => animation.cancel());
+            currentLine.getAnimations().forEach((animation) => animation.cancel());
+
+            upperLine.className = 'response-line';
+            currentLine.className = 'response-line';
+
+            if (previousResponseText) {
+                upperLine.textContent = previousResponseText;
+                upperLine.style.opacity = '1';
+                upperLine.style.filter = 'blur(0px)';
+                upperLine.style.transform = 'translate3d(0, 0, 0) scale(1)';
+                upperLine.style.color = 'rgba(232, 232, 232, 0.74)';
+            } else {
+                upperLine.textContent = '';
+                upperLine.style.opacity = '0';
+            }
+
+            currentLine.textContent = item.text;
+            currentLine.style.opacity = '0';
+            currentLine.style.filter = 'blur(7px)';
+            currentLine.style.transform = 'translate3d(0, 30px, 0) scale(0.985)';
+            currentLine.style.color = 'rgba(232, 232, 232, 0.74)';
+
+            await new Promise((resolve) => {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(resolve);
+                });
             });
+
+            const duration = 1750;
+            const easing = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+            const animations = [];
+
+            if (previousResponseText) {
+                animations.push(
+                    upperLine.animate(
+                        [
+                            {
+                                transform: 'translate3d(0, 0, 0) scale(1)',
+                                opacity: 1,
+                                filter: 'blur(0px)',
+                                color: 'rgba(232, 232, 232, 0.74)'
+                            },
+                            {
+                                offset: 0.72,
+                                transform: 'translate3d(0, -20px, 0) scale(0.992)',
+                                opacity: 0.74,
+                                filter: 'blur(0.15px)',
+                                color: 'rgba(218, 218, 218, 0.46)'
+                            },
+                            {
+                                transform: 'translate3d(0, -24px, 0) scale(0.99)',
+                                opacity: 0.68,
+                                filter: 'blur(0.25px)',
+                                color: 'rgba(210, 210, 210, 0.40)'
+                            }
+                        ],
+                        {
+                            duration,
+                            easing,
+                            fill: 'forwards'
+                        }
+                    )
+                );
+            }
+
+            animations.push(
+                currentLine.animate(
+                    [
+                        {
+                            transform: 'translate3d(0, 30px, 0) scale(0.985)',
+                            opacity: 0,
+                            filter: 'blur(7px)'
+                        },
+                        {
+                            offset: 0.18,
+                            opacity: 0.18
+                        },
+                        {
+                            offset: 0.72,
+                            transform: 'translate3d(0, 2px, 0) scale(0.998)',
+                            opacity: 0.92,
+                            filter: 'blur(0.35px)'
+                        },
+                        {
+                            transform: 'translate3d(0, 0, 0) scale(1)',
+                            opacity: 1,
+                            filter: 'blur(0px)'
+                        }
+                    ],
+                    {
+                        duration,
+                        easing,
+                        fill: 'forwards'
+                    }
+                )
+            );
+
+            await Promise.all(
+                animations.map((animation) => animation.finished.catch(() => {}))
+            );
+
+            if (previousResponseText) {
+                upperLine.style.transform = 'translate3d(0, -24px, 0) scale(0.99)';
+                upperLine.style.opacity = '0.68';
+                upperLine.style.filter = 'blur(0.25px)';
+                upperLine.style.color = 'rgba(210, 210, 210, 0.40)';
+            }
+
+            currentLine.style.transform = 'translate3d(0, 0, 0) scale(1)';
+            currentLine.style.opacity = '1';
+            currentLine.style.filter = 'blur(0px)';
+
+            const hold = item.hold || 1500;
+            await wait(hold);
+
+            previousResponseText = item.text;
+
+            if (item.after) {
+                item.after();
+            }
+        }
+
+        async function processSpeechQueue() {
+            if (isSpeaking) return;
+            isSpeaking = true;
+
+            while (speechQueue.length > 0) {
+                const item = speechQueue.shift();
+                await showOneRollingLine(item);
+            }
+
+            isSpeaking = false;
+
+            if (responseProgress) {
+                responseProgress.classList.remove('is-visible');
+                setTimeout(() => {
+                    if (!isSpeaking && speechQueue.length === 0) {
+                        responseProgress.textContent = '';
+                    }
+                }, 700);
+            }
+        }
+
+        function speak(lines, options = {}) {
+            const list = Array.isArray(lines) ? lines : [lines];
+            const hold = options.hold || 1500;
+            const total = list.length;
+
+            // 玩家连续操作时，只保留最近的六句话，避免回应严重滞后
+            if (speechQueue.length > 8) {
+                speechQueue.splice(0, speechQueue.length - 6);
+            }
+
+            list.forEach((text, index) => {
+                speechQueue.push({
+                    text,
+                    hold,
+                    position: index + 1,
+                    total,
+                    after: index === list.length - 1 ? options.after : null
+                });
+            });
+
+            processSpeechQueue();
+        }
+
+        function removeFirstQuestionPreset() {
+            if (firstQuestionUsed) return;
+
+            firstQuestionUsed = true;
+            questionInput.placeholder = '';
         }
 
         function ask() {
-            const text = questionInput.value.trim() || questionInput.placeholder.trim();
+            const typedText = questionInput.value.trim();
+            const text = typedText || questionInput.placeholder.trim();
+
             if (!text) return;
 
-            appendLine(`你：${text}`, 'player-line');
+            // 无论玩家是输入文字，还是直接发送预设的“你是谁”，
+            // 都先在页面顶部显示本次提问。
+            showQuestionEcho(text);
+
+            removeFirstQuestionPreset();
             questionInput.value = '';
 
             const match = answers.find((item) => item.test(text));
+
             if (match) {
-                speak(match.reply);
-                if (match.after) {
-                    setTimeout(match.after, match.reply.length * 520);
-                }
+                speak(match.reply, {
+                    after: match.after || null
+                });
                 return;
             }
 
             speak([
                 '这个问题尚未被共同意识完整接收。',
-                '继续查看旧页面。你所触碰的内容会替你补全问题。'
+                '继续触碰旧页面。它会替你补全问题。'
             ]);
         }
 
         sendQuestionBtn.addEventListener('click', ask);
+
         questionInput.addEventListener('keydown', (event) => {
             if (event.key === 'Enter') ask();
         });
@@ -127,37 +404,220 @@
             );
 
             if (!archiveWindow) {
-                speak('浏览器阻止了旧页面打开。请允许弹出窗口后再次点击。');
+                speak('有一道门没有打开。允许它出现，再试一次。');
                 return;
             }
 
             NewWorldLink.send('archive_opened', {});
-            speak('不要寻找新页面。寻找同一页面中已经改变的入口。');
+            speak([
+                '不要寻找新的地方。',
+                '让两个页面同时留在世界上。',
+                '变化会在你没有注视的地方发生。'
+            ]);
         });
+
+
+        // ==================== 共同意识粒子体 ====================
+
+        const particleCanvas = document.getElementById('orb-particles');
+        const particleContext = particleCanvas.getContext('2d', {
+            alpha: true
+        });
+
+        let particleWidth = 0;
+        let particleHeight = 0;
+        let particleRatio = Math.min(window.devicePixelRatio || 1, 2);
+        let orbParticles = [];
+        let particleAnimationFrame = null;
+        let particleTime = 0;
+
+        function createOrbParticles() {
+            const amount = window.innerWidth <= 620 ? 150 : 230;
+
+            orbParticles = Array.from({ length: amount }, (_, index) => {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.pow(Math.random(), 0.68);
+                const darknessBias = Math.random();
+
+                return {
+                    angle,
+                    radius,
+                    baseRadius: radius,
+                    speed: 0.0007 + Math.random() * 0.0016,
+                    drift: (Math.random() - 0.5) * 0.34,
+                    size: 0.35 + Math.random() * 1.6,
+                    opacity: 0.04 + Math.random() * 0.28,
+                    pulseOffset: Math.random() * Math.PI * 2,
+                    darknessBias,
+                    red: darknessBias > 0.72
+                        ? 104 + Math.floor(Math.random() * 42)
+                        : 42 + Math.floor(Math.random() * 35)
+                };
+            });
+        }
+
+        function resizeParticleCanvas() {
+            const rect = particleCanvas.getBoundingClientRect();
+
+            particleWidth = Math.max(1, rect.width);
+            particleHeight = Math.max(1, rect.height);
+            particleRatio = Math.min(window.devicePixelRatio || 1, 2);
+
+            particleCanvas.width = Math.round(
+                particleWidth * particleRatio
+            );
+
+            particleCanvas.height = Math.round(
+                particleHeight * particleRatio
+            );
+
+            particleContext.setTransform(
+                particleRatio,
+                0,
+                0,
+                particleRatio,
+                0,
+                0
+            );
+
+            createOrbParticles();
+        }
+
+        function drawOrbParticles(timestamp) {
+            particleTime = timestamp;
+
+            particleContext.clearRect(
+                0,
+                0,
+                particleWidth,
+                particleHeight
+            );
+
+            const centerX = particleWidth / 2;
+            const centerY = particleHeight / 2;
+            const maximumRadius =
+                Math.min(particleWidth, particleHeight) * 0.43;
+
+            const breathing =
+                0.94 +
+                Math.sin(timestamp * 0.00072) * 0.045;
+
+            orbParticles.forEach((particle, index) => {
+                particle.angle +=
+                    particle.speed *
+                    (index % 2 === 0 ? 1 : -1);
+
+                const localPulse =
+                    1 +
+                    Math.sin(
+                        timestamp * 0.0011 +
+                        particle.pulseOffset
+                    ) * 0.045;
+
+                const radius =
+                    maximumRadius *
+                    particle.baseRadius *
+                    breathing *
+                    localPulse;
+
+                const disturbance =
+                    Math.sin(
+                        timestamp * 0.00047 +
+                        particle.angle * 3.2 +
+                        particle.drift
+                    ) *
+                    maximumRadius *
+                    0.028 *
+                    (1 - particle.baseRadius);
+
+                const x =
+                    centerX +
+                    Math.cos(particle.angle) *
+                    (radius + disturbance);
+
+                const y =
+                    centerY +
+                    Math.sin(particle.angle) *
+                    (
+                        radius * 0.91 -
+                        disturbance * 0.35
+                    );
+
+                const edgeFade =
+                    Math.max(
+                        0,
+                        1 - Math.pow(particle.baseRadius, 2.35)
+                    );
+
+                const flicker =
+                    0.68 +
+                    Math.sin(
+                        timestamp * 0.0018 +
+                        particle.pulseOffset
+                    ) * 0.32;
+
+                const alpha =
+                    particle.opacity *
+                    edgeFade *
+                    flicker;
+
+                particleContext.beginPath();
+                particleContext.arc(
+                    x,
+                    y,
+                    particle.size,
+                    0,
+                    Math.PI * 2
+                );
+
+                particleContext.fillStyle =
+                    `rgba(${particle.red}, 0, 10, ${alpha})`;
+
+                particleContext.fill();
+            });
+
+            particleAnimationFrame =
+                requestAnimationFrame(drawOrbParticles);
+        }
+
+        resizeParticleCanvas();
+        particleAnimationFrame =
+            requestAnimationFrame(drawOrbParticles);
+
+        window.addEventListener(
+            'resize',
+            resizeParticleCanvas
+        );
+
 
         NewWorldLink.onMessage((message) => {
             switch (message.type) {
                 case 'archive_ready':
                     statusText.textContent = 'CONNECTION / A / ARCHIVE ONLINE';
                     break;
+
                 case 'logo_revealed':
                     speak([
                         '外壳已经撤去。',
                         '它从未说谎。它只是没有允许你看见全部。'
                     ]);
                     break;
+
                 case 'gospel_hover':
                     speak('停留。福音正在确认你是否愿意听见。');
                     break;
+
                 case 'gospel_clicked':
                     speak([
                         '所谓福音，不是永生。',
-                        '是死亡不再拥有完成“消失”的权力。'
+                        '是死亡不再拥有完成消失的权力。'
                     ]);
                     break;
+
                 case 'memory_hover':
                     speak('这些不是过去。它们正在共同意识中同时发生。');
                     break;
+
                 case 'existence_clicked':
                     speak([
                         '形使人被看见。名使人被记得。',
@@ -169,10 +629,11 @@
 
         setTimeout(() => {
             speak([
-                '登记已经完成。',
-                '你现在能够听见我们。',
-                '问吧。'
-            ], 650);
+                '我们总是同时出现。',
+                '不要忘记你是如何到达这里的。',
+                '让我们一起为你指引。',
+                '欢迎来到新世界。'
+            ], { hold: 1500 });
         }, 900);
     </script>
 </body>
