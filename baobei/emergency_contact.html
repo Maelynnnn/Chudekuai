@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="newworld_link.js"></script>
+<title>紧急联系人设置｜新世界居民服务平台</title>
+<style>
+:root{
+    --bg:#000;
+    --text:#f3f3f3;
+    --muted:#858585;
+    --line:rgba(255,255,255,.22);
+    --soft:rgba(255,255,255,.10);
+    --red:#ff0000;
+}
+*{box-sizing:border-box}
+html,body{
+    margin:0;
+    width:100%;
+    min-height:100%;
+    background:#000;
+    color:var(--text);
+    font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+
+.page{
+    min-height:100vh;
+    padding:42px 28px 70px;
+}
+.shell{
+    width:min(920px,100%);
+    margin:0 auto;
+}
+.topbar{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding-bottom:20px;
+    border-bottom:1px solid var(--line);
+}
+.back-link{
+    color:#aaa;
+    text-decoration:none;
+    font-size:11px;
+}
+.back-link:hover{
+    color:#fff;
+    text-decoration:underline;
+    text-underline-offset:4px;
+}
+.kicker{
+    margin-left:auto;
+    color:var(--muted);
+    font-size:9px;
+    letter-spacing:3px;
+}
+.heading{
+    padding:42px 0 28px;
+    border-bottom:1px solid var(--line);
+}
+.heading h1{
+    margin:0 0 12px;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:38px;
+    font-weight:500;
+}
+.heading p{
+    margin:0;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.8;
+}
+.status-line{
+    margin-top:18px;
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    color:#aaa;
+    font-size:10px;
+}
+.status-line strong{
+    color:#fff;
+    font-weight:500;
+}
+.form{
+    padding-top:28px;
+}
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px 26px;
+}
+.field{
+    display:grid;
+    gap:8px;
+}
+.field.full{
+    grid-column:1/-1;
+}
+.field label{
+    color:#bdbdbd;
+    font-size:10px;
+    letter-spacing:1px;
+}
+.required::after{
+    content:" *";
+    color:var(--red);
+}
+.field input,
+.field select,
+.field textarea{
+    width:100%;
+    border:0;
+    border-bottom:1px solid var(--line);
+    border-radius:0;
+    outline:none;
+    background:#000;
+    color:#fff;
+}
+.field input,
+.field select{
+    height:44px;
+    padding:0 2px;
+}
+.field textarea{
+    min-height:120px;
+    padding:12px 2px;
+    resize:vertical;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+    border-bottom-color:#fff;
+}
+.field input::placeholder,
+.field textarea::placeholder{
+    color:#4f4f4f;
+}
+.field-help{
+    color:#666;
+    font-size:9px;
+    line-height:1.6;
+}
+.actions{
+    margin-top:34px;
+    padding-top:22px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    border-top:1px solid var(--line);
+}
+.save-btn,
+.clear-btn{
+    min-width:126px;
+    padding:12px 18px;
+    border-radius:0;
+}
+.save-btn{
+    border:1px solid #fff;
+    background:#fff;
+    color:#000;
+    font-weight:600;
+}
+.save-btn:hover{
+    background:#dcdcdc;
+}
+.clear-btn{
+    border:1px solid var(--line);
+    background:#000;
+    color:#aaa;
+}
+.clear-btn:hover{
+    border-color:#fff;
+    color:#fff;
+}
+.feedback{
+    margin-left:auto;
+    min-height:18px;
+    color:#aaa;
+    font-size:10px;
+}
+.feedback.is-success{
+    color:#fff;
+}
+.saved-preview{
+    margin-top:42px;
+    border-top:1px solid var(--line);
+}
+.saved-preview[hidden]{
+    display:none;
+}
+.saved-preview h2{
+    margin:0;
+    padding:20px 0;
+    border-bottom:1px solid var(--soft);
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:20px;
+    font-weight:500;
+}
+.preview-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+}
+.preview-row{
+    min-height:64px;
+    padding:16px 0;
+    display:grid;
+    gap:6px;
+    border-bottom:1px solid var(--soft);
+}
+.preview-row:nth-child(odd){
+    padding-right:24px;
+}
+.preview-row:nth-child(even){
+    padding-left:24px;
+    border-left:1px solid var(--soft);
+}
+.preview-row.full{
+    grid-column:1/-1;
+    padding-left:0;
+    padding-right:0;
+    border-left:0;
+}
+.preview-row span{
+    color:var(--muted);
+    font-size:9px;
+}
+.preview-row strong{
+    font-size:12px;
+    font-weight:500;
+    white-space:pre-wrap;
+    word-break:break-word;
+}
+
+.contact-card{padding:22px 0;border-bottom:1px solid var(--line)}
+.contact-card-header{display:flex;justify-content:space-between;gap:16px;margin-bottom:10px}
+.contact-card-header strong{font-family:"Noto Serif SC","Songti SC",SimSun,serif;font-size:17px;font-weight:500}
+.contact-card-header span{color:var(--muted);font-size:10px}
+.contact-card-actions{margin-top:14px}
+.contact-card-actions button{padding:8px 12px;border:1px solid var(--line);border-radius:0;background:#000;color:#aaa;font-size:10px}
+.contact-card-actions button:hover{border-color:#fff;color:#fff}
+
+@media(max-width:700px){
+    .page{padding:28px 18px 54px}
+    .heading h1{font-size:30px}
+    .form-grid,.preview-grid{grid-template-columns:1fr}
+    .field.full,.preview-row.full{grid-column:auto}
+    .preview-row,
+    .preview-row:nth-child(odd),
+    .preview-row:nth-child(even){
+        padding-left:0;
+        padding-right:0;
+        border-left:0;
+    }
+    .actions{
+        align-items:stretch;
+        flex-direction:column;
+    }
+    .feedback{margin-left:0}
+}
+</style>
+</head>
+<body>
+<main class="page">
+    <div class="shell">
+        <header class="topbar">
+            <a class="back-link" href="newworld_real.html#services">← 返回居民服务平台</a>
+            <span class="kicker">EMERGENCY CONTACT</span>
+        </header>
+
+        <section class="heading">
+            <h1>紧急联系人设置</h1>
+            <p>请填写在居民失联、状态异常或场域调度中可优先联系的人员。邮箱为可选项。</p>
+            <div class="status-line">
+                <span>当前居民</span>
+                <strong>C132-CMZ-00975</strong>
+            </div>
+        </section>
+
+        <form id="contact-form" class="form" novalidate>
+            <div class="form-grid">
+                <div class="field">
+                    <label class="required" for="contact-name">联系人姓名</label>
+                    <input id="contact-name" name="name" type="text" autocomplete="name" placeholder="请输入姓名" required>
+                </div>
+
+                <div class="field">
+                    <label class="required" for="contact-relation">与居民关系</label>
+                    <select id="contact-relation" name="relation" required>
+                        <option value="">请选择</option>
+                        <option value="父母">父母</option>
+                        <option value="兄弟姐妹">兄弟姐妹</option>
+                        <option value="配偶">配偶</option>
+                        <option value="亲属">亲属</option>
+                        <option value="朋友">朋友</option>
+                        <option value="同事">同事</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label class="required" for="contact-phone">联系电话</label>
+                    <input id="contact-phone" name="phone" type="tel" autocomplete="tel" placeholder="请勿输入空格或特殊字符" required>
+                </div>
+
+                <div class="field">
+                    <label for="contact-phone-alt">备用联系电话</label>
+                    <input id="contact-phone-alt" name="phoneAlt" type="tel" placeholder="可选">
+                </div>
+
+                <div class="field">
+                    <label for="contact-email">邮箱</label>
+                    <input id="contact-email" name="email" type="email" autocomplete="email" placeholder="可选">
+                </div>
+
+                <div class="field">
+                    <label for="contact-priority">联系优先级</label>
+                    <select id="contact-priority" name="priority">
+                        <option value="第一联系人">第一联系人</option>
+                        <option value="第二联系人">第二联系人</option>
+                        <option value="仅在无法联系第一联系人时使用">仅在无法联系第一联系人时使用</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="save-btn" type="submit">保存联系人</button>
+                <button id="clear-btn" class="clear-btn" type="button">清除记录</button>
+                <p id="feedback" class="feedback" aria-live="polite"></p>
+            </div>
+        </form>
+
+        <section id="saved-preview" class="saved-preview" hidden>
+            <h2>已保存的紧急联系人</h2>
+            <div id="preview-grid" class="preview-grid"></div>
+        </section>
+    </div>
+</main>
+
+<script>
+const STORAGE_KEY = 'newworld_emergency_contacts_C132_CMZ_00975';
+const LEGACY_STORAGE_KEY = 'newworld_emergency_contact_C132_CMZ_00975';
+
+const form = document.getElementById('contact-form');
+const clearBtn = document.getElementById('clear-btn');
+const feedback = document.getElementById('feedback');
+const savedPreview = document.getElementById('saved-preview');
+const previewGrid = document.getElementById('preview-grid');
+
+const fields = {
+    name: document.getElementById('contact-name'),
+    relation: document.getElementById('contact-relation'),
+    phone: document.getElementById('contact-phone'),
+    phoneAlt: document.getElementById('contact-phone-alt'),
+    email: document.getElementById('contact-email'),
+    priority: document.getElementById('contact-priority'),
+};
+
+function escapeHTML(value) {
+    return String(value || '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+}
+
+function createId() {
+    return 'contact_' + Date.now() + '_' +
+        Math.random().toString(36).slice(2, 8);
+}
+
+function normalizePhone(value) {
+    return String(value || '').replace(/\D/g, '');
+}
+
+function readSavedContacts() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+        }
+
+        const legacyRaw = localStorage.getItem(LEGACY_STORAGE_KEY);
+
+        if (!legacyRaw) return [];
+
+        const legacy = JSON.parse(legacyRaw);
+
+        if (!legacy || !legacy.name) return [];
+
+        const migrated = [{
+            ...legacy,
+            id: legacy.id || createId()
+        }];
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(migrated)
+        );
+
+        return migrated;
+    } catch (error) {
+        return [];
+    }
+}
+
+function saveContacts(contacts) {
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(contacts)
+    );
+}
+
+function renderPreview(contacts) {
+    if (!contacts.length) {
+        savedPreview.hidden = true;
+        previewGrid.innerHTML = '';
+        return;
+    }
+
+    savedPreview.hidden = false;
+
+    previewGrid.innerHTML = contacts.map((data, index) => `
+        <article class="contact-card">
+            <div class="contact-card-header">
+                <strong>${escapeHTML(data.name)}</strong>
+            </div>
+
+            <div class="preview-grid">
+                <div class="preview-row">
+                    <span>与居民关系</span>
+                    <strong>${escapeHTML(data.relation)}</strong>
+                </div>
+                <div class="preview-row">
+                    <span>联系电话</span>
+                    <strong>${escapeHTML(data.phone)}</strong>
+                </div>
+                <div class="preview-row">
+                    <span>备用联系电话</span>
+                    <strong>${escapeHTML(data.phoneAlt || '未填写')}</strong>
+                </div>
+                <div class="preview-row">
+                    <span>邮箱</span>
+                    <strong>${escapeHTML(data.email || '未填写')}</strong>
+                </div>
+                <div class="preview-row full">
+                    <span>联系优先级</span>
+                    <strong>${escapeHTML(data.priority || '第一联系人')}</strong>
+                </div>
+                <div class="preview-row full">
+                    <span>常住地址</span>
+                    <strong>${escapeHTML(data.address || '未填写')}</strong>
+                </div>
+                <div class="preview-row full">
+                    <span>备注</span>
+                    <strong>${escapeHTML(data.note || '未填写')}</strong>
+                </div>
+            </div>
+
+            <div class="contact-card-actions">
+                <button type="button" data-delete-contact="${escapeHTML(data.id)}">
+                    删除此联系人
+                </button>
+            </div>
+        </article>
+    `).join('');
+
+    previewGrid.querySelectorAll('[data-delete-contact]')
+        .forEach(button => {
+            button.addEventListener('click', () => {
+                deleteContact(button.dataset.deleteContact);
+            });
+        });
+}
+
+function showFeedback(text, success = false) {
+    feedback.textContent = text;
+    feedback.classList.toggle('is-success', success);
+}
+
+function deleteContact(id) {
+    const contacts = readSavedContacts();
+    const target = contacts.find(item => item.id === id);
+
+    if (!target) return;
+    if (!confirm(`确定要删除联系人“${target.name}”吗？`)) return;
+
+    const nextContacts = contacts.filter(item => item.id !== id);
+    saveContacts(nextContacts);
+    renderPreview(nextContacts);
+    showFeedback('联系人已删除');
+}
+
+form.addEventListener('submit', event => {
+    event.preventDefault();
+
+    const name = fields.name.value.trim();
+    const relation = fields.relation.value.trim();
+    const phone = fields.phone.value.trim();
+    const email = fields.email.value.trim();
+
+    if (!name || !relation || !phone) {
+        showFeedback('请填写姓名、关系和联系电话');
+        return;
+    }
+
+    if (email && !fields.email.checkValidity()) {
+        showFeedback('邮箱格式不正确');
+        return;
+    }
+
+    const contacts = readSavedContacts();
+    const duplicate = contacts.some(item =>
+        item.name.trim() === name &&
+        normalizePhone(item.phone) === normalizePhone(phone)
+    );
+
+    if (duplicate) {
+        showFeedback('该联系人已经存在');
+        return;
+    }
+
+    contacts.push({
+        id: createId(),
+        name,
+        relation,
+        phone,
+        phoneAlt: fields.phoneAlt.value.trim(),
+        email,
+        priority: fields.priority.value,
+        updatedAt: new Date().toLocaleString('zh-CN', {
+            hour12: false
+        })
+    });
+
+    saveContacts(contacts);
+    renderPreview(contacts);
+    form.reset();
+    fields.priority.value = '第一联系人';
+    showFeedback('紧急联系人已添加', true);
+});
+
+clearBtn.addEventListener('click', () => {
+    const contacts = readSavedContacts();
+
+    if (!contacts.length) {
+        showFeedback('当前没有已保存的联系人');
+        return;
+    }
+
+    if (!confirm('确定要删除全部紧急联系人信息吗？')) return;
+
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(LEGACY_STORAGE_KEY);
+    form.reset();
+    renderPreview([]);
+    showFeedback('全部联系人记录已清除');
+});
+
+const savedContacts = readSavedContacts();
+renderPreview(savedContacts);
+
+NewWorldLink.send('emergency_contact_opened', {
+    page: 'emergency_contact',
+    count: savedContacts.length
+});
+</script>
+</body>
+</html>

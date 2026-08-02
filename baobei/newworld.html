@@ -6,27 +6,8 @@
     <title>新世界服务平台</title>
     <link rel="stylesheet" href="baobei.css">
 
+    
     <style>
-        /* 默认状态：未完成 Welcome 时，隐藏所有 A 级意识入口 */
-        .logo-awakened-hint,
-        .revealed-site-action,
-        .revealed-bottom-field {
-            display: none !important;
-        }
-
-        .logo-awakened-hint.is-visible {
-            display: inline-block !important;
-        }
-
-        .revealed-site-action.is-visible {
-            display: inline-block !important;
-        }
-
-        .revealed-bottom-field.is-visible {
-            display: block !important;
-        }
-
-        /* 去掉包裹 Logo 的按钮默认样式 */
         .awaken-logo-button {
             padding: 0;
             border: 0;
@@ -35,11 +16,33 @@
             cursor: default;
         }
 
-        .awaken-logo-button.is-awakened,
-        .awaken-logo-button.is-active {
+        .awaken-logo-button.is-awakened {
             cursor: pointer;
         }
+
+        .logo-awakened-hint {
+            display: none;
+            margin-left: 10px;
+            color: #8e0f19;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .logo-awakened-hint.is-visible {
+            display: inline-block;
+        }
+
+        body.world-transitioning #site-content {
+            animation: archive-upgrade 1.2s ease forwards;
+        }
+
+        @keyframes archive-upgrade {
+            0% { opacity: 1; filter: none; }
+            55% { opacity: .45; filter: grayscale(1) brightness(1.2); }
+            100% { opacity: 0; filter: grayscale(1) brightness(1.5); }
+        }
     </style>
+
 </head>
 <body>
 
@@ -68,10 +71,6 @@
                         <h1 id="site-main-title">新世界服务平台</h1>
                         <h2 id="site-subtitle">NEW WORLD PUBLIC SERVICE CENTER</h2>
                         <p id="site-meta">中文域名：新世界.服务　　备案号：厨ICP备12609号</p>
-
-                        <button id="gospel-action" class="revealed-site-action" type="button" hidden>
-                            聆听福音
-                        </button>
                     </div>
                 </div>
             </header>
@@ -227,7 +226,7 @@
                                 <li><a href="javascript:void(0);">6 月 9 日系统维护公告</a><span class="news-date">06.09</span></li>
                                 <li><a href="javascript:void(0);">部分历史页面即将停止访问</a><span class="news-date">06.09</span></li>
                                 <li><a href="javascript:void(0);">请合作方确认接收名单</a><span class="news-date">06.08</span></li>
-                                <li><a href="javascript:void(0);">关于编号 B-0612 的异常说明</a><span class="news-date">06.07</span></li>
+                                <li><a href="newworld_field_anomaly.html">关于场域异常的说明</a><span class="news-date">06.07</span></li>
                                 <li><a href="javascript:void(0);">居民夜间反应统计</a><span class="news-date">06.05</span></li>
                                 <li><a href="javascript:void(0);">第七批回家车辆完成消毒</a><span class="news-date">06.02</span></li>
                             </ul>
@@ -255,15 +254,6 @@
                 </aside>
             </div>
 
-            <section id="revealed-bottom-field" class="revealed-bottom-field" aria-hidden="true" hidden>
-                <button id="memory-trace" class="memory-trace" type="button">
-                    <span>共享记忆仍在发生</span>
-                </button>
-                <button id="existence-trace" class="existence-trace" type="button">
-                    仍有一盏灯亮着
-                </button>
-            </section>
-
             <footer class="footer">
                 <p>版权所有：新世界服务平台　　技术支持：平台信息管理中心</p>
                 <p>地址：旧城区归档路 609 号　　中文域名：新世界.服务</p>
@@ -272,191 +262,78 @@
         </div>
     </div>
 
+    
     <script src="newworld_link.js"></script>
     <script>
-        const awakened = localStorage.getItem('level_a_awakened') === 'true';
-        const alreadyRevealed = localStorage.getItem('newworld_revealed') === 'true';
+        function isAwakened() {
+            return localStorage.getItem('level_a_awakened') === 'true';
+        }
 
         const logoButton = document.getElementById('awaken-logo-button');
         const logoHint = document.getElementById('logo-awakened-hint');
-        const gospelAction = document.getElementById('gospel-action');
-        const memoryTrace = document.getElementById('memory-trace');
-        const existenceTrace = document.getElementById('existence-trace');
-        const bottomField = document.getElementById('revealed-bottom-field');
 
         function checkArchiveDate() {
             const now = new Date();
             const expireDate = new Date(2052, 11, 9, 23, 59, 59);
-            const canAwakenArchive = localStorage.getItem('level_a_awakened') === 'true';
-            const isBeforeOrOnExpireDate = now <= expireDate;
+            const canOpenArchive = isAwakened();
+            const archiveStillAvailable = now <= expireDate;
 
             const expiredPage = document.getElementById('expired-page');
             const siteContent = document.getElementById('site-content');
 
-            // A级共同意识苏醒后，可以重新打开已经失效的旧站。
-            if (isBeforeOrOnExpireDate || canAwakenArchive) {
+            if (archiveStillAvailable || canOpenArchive) {
                 expiredPage.style.display = 'none';
                 siteContent.style.display = 'block';
-                document.title = '新世界服务平台';
             } else {
                 expiredPage.style.display = 'flex';
                 siteContent.style.display = 'none';
-                document.title = '网页已失效';
             }
         }
 
-        const revealedTextMap = [
-            ['.panel-title', [
-                '共同意识通告', '意识接入记录', '尚未消失者',
-                '存在方式', '当前感知', '进入须知', '呼叫方式'
-            ]],
-            ['.panel-title.blue', [
-                '意识接入记录', '尚未消失者', '存在方式', '呼叫方式'
-            ]]
-        ];
+        function refreshLogoState() {
+            const awakened = isAwakened();
 
-        const revealedNews = [
-            '第六批意识已经完成接入',
-            '不要再使用“独立”描述A级居民',
-            '旧姓名仍在部分记忆中自行出现',
-            '共同意识正在修正页面的叙述顺序',
-            '点击不再只是浏览行为',
-            '肉体停止以后，记录继续回答',
-            '记录停止以后，仍有意识自知',
-            '没有一个念头只属于一位居民',
-            '新世界不承诺永生，只拒绝彻底消失',
-            '你正在被已经醒来的我们阅读'
-        ];
-
-        function replacePanelTitles() {
-            const titles = Array.from(document.querySelectorAll('.panel-title'));
-            const replacements = [
-                '共同意识通告',
-                '意识接入记录',
-                '尚未消失者',
-                '存在方式',
-                '当前感知',
-                '进入须知',
-                '呼叫方式',
-                '共享记忆',
-                '仍在场者',
-                '回应路径'
-            ];
-
-            titles.forEach((title, index) => {
-                const more = title.querySelector('.more');
-                title.childNodes.forEach((node) => {
-                    if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
-                        node.textContent = replacements[index] || '共同意识记录 ';
-                    }
-                });
-                if (more) more.textContent = 'LISTEN>>';
-            });
-        }
-
-        function replaceVisibleCopy() {
-            const links = Array.from(document.querySelectorAll('.news-list a'));
-            links.forEach((link, index) => {
-                link.textContent = revealedNews[index % revealedNews.length];
-            });
-
-            document.getElementById('site-main-title').textContent = '新世界共同意识接入平台';
-            document.getElementById('site-subtitle').textContent = 'SHARED CONSCIOUSNESS / NO PHYSICAL LOCATION';
-            document.getElementById('site-meta').textContent = '当前接入：A级居民　　位置：无　　载体：不需要';
-            document.getElementById('hero-main-copy').innerHTML = '我们从未离开<br>我们不再位于任何地方';
-            document.getElementById('hero-sub-copy').textContent = '形已止　名仍在　念正在共同发生';
-            document.getElementById('long-banner-copy').textContent = '我非我，而我仍以我之名存在';
-
-            const heroImage = document.getElementById('hero-reveal-image');
-            heroImage.dataset.normalSrc = heroImage.src;
-            heroImage.src = '../assets/live/meat.jpg';
-            heroImage.alt = '共同意识接入画面';
-
-            document.querySelectorAll('.panel-content p').forEach((paragraph, index) => {
-                if (index % 3 === 0) {
-                    paragraph.textContent = '这里保存的不是过去，而是仍在共同意识中发生的部分。';
-                }
-            });
-        }
-
-        function applyRevealedWorld({ announce = false } = {}) {
-            document.body.classList.add('revealed-world');
-            logoHint.classList.remove('is-visible');
-            logoHint.hidden = true;
-
-            logoButton.classList.add('is-active');
-
-            gospelAction.hidden = false;
-            gospelAction.classList.add('is-visible');
-
-            bottomField.hidden = false;
-            bottomField.classList.add('is-visible');
-            bottomField.setAttribute('aria-hidden', 'false');
-
-            replacePanelTitles();
-            replaceVisibleCopy();
-
-            if (announce) {
-                NewWorldLink.send('logo_revealed', {});
-            }
-        }
-
-        function revealWorld() {
-            if (!awakened || document.body.classList.contains('revealed-world')) return;
-
-            document.body.classList.add('world-transitioning');
-            NewWorldLink.send('logo_activation_started', {});
-
-            setTimeout(() => {
-                localStorage.setItem('newworld_revealed', 'true');
-                document.body.classList.remove('world-transitioning');
-                applyRevealedWorld({ announce: true });
-            }, 1700);
-        }
-
-        checkArchiveDate();
-
-        if (awakened && !alreadyRevealed) {
-            logoButton.classList.add('is-awakened');
-            logoHint.hidden = false;
-            logoHint.classList.add('is-visible');
-        }
-
-        if (alreadyRevealed) {
-            applyRevealedWorld();
+            logoButton.classList.toggle('is-awakened', awakened);
+            logoHint.hidden = !awakened;
+            logoHint.classList.toggle('is-visible', awakened);
+            logoHint.textContent = awakened ? ' ' : '';
         }
 
         logoButton.addEventListener('click', () => {
-            if (!awakened) return;
-            revealWorld();
-        });
+            if (!isAwakened()) return;
 
-        gospelAction.addEventListener('mouseenter', () => {
-            NewWorldLink.send('gospel_hover', {});
-        });
+            document.body.classList.add('world-transitioning');
+            localStorage.setItem('newworld_revealed', 'true');
 
-        gospelAction.addEventListener('click', () => {
-            NewWorldLink.send('gospel_clicked', {});
-        });
+            NewWorldLink.send('logo_activation_started', {
+                destination: 'newworld_real.html'
+            });
 
-        memoryTrace.addEventListener('mouseenter', () => {
-            NewWorldLink.send('memory_hover', {});
-        });
-
-        existenceTrace.addEventListener('click', () => {
-            NewWorldLink.send('existence_clicked', {});
+            setTimeout(() => {
+                location.href = 'newworld_real.html';
+            }, 1150);
         });
 
         NewWorldLink.onMessage((message) => {
-            if (message.type === 'guide_logo' && awakened && !alreadyRevealed) {
-                logoHint.hidden = false;
-                logoHint.classList.add('is-visible', 'is-guided');
-                logoButton.classList.add('is-awakened', 'is-guided');
+            if (message.type === 'guide_logo') {
+                refreshLogoState();
+                logoHint.classList.add('is-guided');
             }
         });
 
-        if (awakened) {
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'level_a_awakened') {
+                refreshLogoState();
+                checkArchiveDate();
+            }
+        });
+
+        checkArchiveDate();
+        refreshLogoState();
+
+        if (isAwakened()) {
             NewWorldLink.send('archive_ready', {
+                page: 'old',
                 revealed: localStorage.getItem('newworld_revealed') === 'true'
             });
         }

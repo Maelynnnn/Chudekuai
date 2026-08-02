@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>身份更新｜新世界居民服务平台</title>
+<script src="newworld_link.js"></script>
+<style>
+:root{
+    --bg:#000;
+    --text:#f3f3f3;
+    --muted:#858585;
+    --line:rgba(255,255,255,.22);
+    --soft:rgba(255,255,255,.10);
+}
+*{box-sizing:border-box}
+html,body{
+    margin:0;
+    width:100%;
+    min-height:100%;
+    background:#000;
+    color:var(--text);
+    font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.page{min-height:100vh;padding:42px 28px 70px}
+.shell{width:min(860px,100%);margin:0 auto}
+.topbar{
+    display:flex;align-items:center;gap:18px;
+    padding-bottom:20px;border-bottom:1px solid var(--line)
+}
+.back-link{color:#aaa;text-decoration:none;font-size:11px}
+.back-link:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
+.kicker{margin-left:auto;color:var(--muted);font-size:9px;letter-spacing:3px}
+.heading{padding:42px 0 28px;border-bottom:1px solid var(--line)}
+.heading h1{
+    margin:0 0 12px;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:38px;font-weight:500
+}
+.heading p{
+    margin:0;max-width:680px;color:var(--muted);
+    font-size:12px;line-height:1.9
+}
+.step{padding-top:32px}
+.step[hidden]{display:none}
+.step-label{margin:0 0 12px;color:var(--muted);font-size:9px;letter-spacing:3px}
+.step h2{
+    margin:0 0 22px;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:24px;font-weight:500
+}
+.field{display:grid;gap:9px}
+.field label{color:#bbb;font-size:10px;letter-spacing:1px}
+.field input{
+    width:100%;height:48px;padding:0 2px;
+    border:0;border-bottom:1px solid var(--line);
+    border-radius:0;outline:none;background:#000;color:#fff
+}
+.field input:focus{border-bottom-color:#fff}
+.feedback{min-height:20px;margin:12px 0 0;color:#aaa;font-size:10px}
+.actions{
+    margin-top:28px;padding-top:20px;display:flex;gap:12px;
+    border-top:1px solid var(--line)
+}
+.primary,.secondary{
+    min-width:150px;padding:12px 18px;border-radius:0
+}
+.primary{
+    border:1px solid #fff;background:#fff;color:#000;font-weight:600
+}
+.primary:hover{background:#ddd}
+.secondary{
+    border:1px solid var(--line);background:#000;color:#aaa
+}
+.secondary:hover{border-color:#fff;color:#fff}
+.witness-panel{border-top:1px solid var(--line)}
+.witness-trigger{
+    width:100%;padding:20px 0;display:flex;
+    align-items:center;justify-content:space-between;
+    border:0;border-bottom:1px solid var(--line);
+    background:#000;color:#fff;text-align:left
+}
+.witness-trigger span{color:var(--muted)}
+.witness-list{border-bottom:1px solid var(--line)}
+.witness-list[hidden]{display:none}
+.witness-option{
+    width:100%;padding:18px 0;display:grid;
+    grid-template-columns:22px 1fr auto;gap:14px;align-items:center;
+    border:0;border-bottom:1px solid var(--soft);
+    background:#000;color:#fff;text-align:left
+}
+.witness-option:last-child{border-bottom:0}
+.witness-option:hover{background:#050505}
+.witness-option.is-selected{background:#0a0a0a}
+.witness-marker{width:12px;height:12px;border:1px solid #777}
+.witness-option.is-selected .witness-marker{
+    border-color:#fff;background:#fff
+}
+.witness-main{display:grid;gap:5px}
+.witness-main strong{font-size:13px;font-weight:500}
+.witness-main small,.witness-phone{color:#888;font-size:10px}
+.empty{padding:24px 0;color:#888;font-size:11px}
+.selected-summary{
+    margin-top:24px;padding:18px 0;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line)
+}
+.selected-summary[hidden]{display:none}
+.selected-summary span{
+    display:block;margin-bottom:7px;color:#777;
+    font-size:9px;letter-spacing:2px
+}
+.selected-summary strong{
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:20px;font-weight:500
+}
+.confirm-modal[hidden]{display:none}
+.confirm-modal{
+    position:fixed;inset:0;z-index:100;
+    display:grid;place-items:center;padding:20px
+}
+.confirm-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.84)}
+.confirm-dialog{
+    position:relative;z-index:1;width:min(460px,100%);
+    padding:30px;border:1px solid var(--line);background:#000
+}
+.confirm-dialog h2{
+    margin:0 0 14px;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:25px;font-weight:500
+}
+.confirm-dialog p{margin:0;color:#999;font-size:12px;line-height:1.8}
+.confirm-actions{
+    margin-top:26px;display:grid;
+    grid-template-columns:1fr 1fr;gap:10px
+}
+@media(max-width:640px){
+    .page{padding:28px 18px 54px}
+    .heading h1{font-size:30px}
+    .actions,.confirm-actions{grid-template-columns:1fr;display:grid}
+    .primary,.secondary{width:100%}
+    .witness-option{grid-template-columns:22px 1fr}
+    .witness-phone{grid-column:2}
+}
+</style>
+</head>
+<body>
+<main class="page">
+    <div class="shell">
+        <header class="topbar">
+            <a class="back-link" href="newworld_real.html#services">← 返回居民服务平台</a>
+            <span class="kicker">IDENTITY UPDATE</span>
+        </header>
+
+        <section class="heading">
+            <h1>身份更新</h1>
+            <p>提交报告代码后，可指定一名见证人确认本次身份更新。见证人资料来自当前居民已保存的紧急联系人记录。</p>
+        </section>
+
+        <section id="code-step" class="step">
+            <p class="step-label">STEP 01 / REPORT CODE</p>
+            <h2>提交报告代码</h2>
+
+            <div class="field">
+                <label for="report-code">报告代码</label>
+                <input id="report-code" type="text" autocomplete="off" placeholder="请输入报告代码">
+            </div>
+
+            <p id="code-feedback" class="feedback"></p>
+
+            <div class="actions">
+                <button id="code-submit" class="primary" type="button">提交代码</button>
+            </div>
+        </section>
+
+        <section id="witness-step" class="step" hidden>
+            <p class="step-label">STEP 02 / WITNESS</p>
+            <h2>指定见证人</h2>
+
+            <div class="witness-panel">
+                <button id="witness-trigger" class="witness-trigger" type="button">
+                    <strong>选择见证人</strong>
+                    <span>展开联系人记录 →</span>
+                </button>
+
+                <div id="witness-list" class="witness-list" hidden></div>
+            </div>
+
+            <div id="selected-summary" class="selected-summary" hidden>
+                <span>SELECTED WITNESS</span>
+                <strong id="selected-name"></strong>
+            </div>
+
+            <p id="witness-feedback" class="feedback"></p>
+
+            <div class="actions">
+                <button id="final-submit" class="primary" type="button">提交身份更新</button>
+            </div>
+        </section>
+    </div>
+</main>
+
+<section id="confirm-modal" class="confirm-modal" hidden>
+    <div class="confirm-backdrop"></div>
+    <div class="confirm-dialog" role="dialog" aria-modal="true">
+        <h2>确认提交</h2>
+        <p id="confirm-copy"></p>
+
+        <div class="confirm-actions">
+            <button id="confirm-cancel" class="secondary" type="button">返回检查</button>
+            <button id="confirm-submit" class="primary" type="button">确认提交</button>
+        </div>
+    </div>
+</section>
+
+<script>
+const CONTACT_STORAGE_KEY =
+    'newworld_emergency_contacts_C132_CMZ_00975';
+
+const LEGACY_CONTACT_STORAGE_KEY =
+    'newworld_emergency_contact_C132_CMZ_00975';
+
+const SUCCESS_PHONE = '136457239';
+
+// 后续修改成你的真实页面文件名。
+const SUCCESS_PAGE = 'success.html';
+const FAILURE_PAGE = 'fail.html';
+const CORRECT_REPORT_CODE = 'ZYA-EXIT-774219';
+
+const codeStep = document.getElementById('code-step');
+const witnessStep = document.getElementById('witness-step');
+const reportCode = document.getElementById('report-code');
+const codeSubmit = document.getElementById('code-submit');
+const codeFeedback = document.getElementById('code-feedback');
+
+const witnessTrigger = document.getElementById('witness-trigger');
+const witnessList = document.getElementById('witness-list');
+const witnessFeedback = document.getElementById('witness-feedback');
+const selectedSummary = document.getElementById('selected-summary');
+const selectedName = document.getElementById('selected-name');
+const finalSubmit = document.getElementById('final-submit');
+
+const confirmModal = document.getElementById('confirm-modal');
+const confirmCopy = document.getElementById('confirm-copy');
+const confirmCancel = document.getElementById('confirm-cancel');
+const confirmSubmit = document.getElementById('confirm-submit');
+
+let contacts = [];
+let selectedWitnessId = '';
+
+function normalizePhone(value) {
+    return String(value || '').replace(/\D/g, '');
+}
+
+function escapeHTML(value) {
+    return String(value || '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+}
+
+function readContacts() {
+    try {
+        const raw = localStorage.getItem(CONTACT_STORAGE_KEY);
+
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+        }
+
+        const legacyRaw =
+            localStorage.getItem(LEGACY_CONTACT_STORAGE_KEY);
+
+        if (!legacyRaw) return [];
+
+        const legacy = JSON.parse(legacyRaw);
+
+        return legacy && legacy.name
+            ? [{
+                ...legacy,
+                id: legacy.id || 'legacy_contact'
+            }]
+            : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function renderWitnesses() {
+    contacts = readContacts();
+
+    if (!contacts.length) {
+        witnessList.innerHTML = `
+            <div class="empty">
+                尚未保存紧急联系人。请先返回居民服务平台填写联系人信息。
+            </div>
+        `;
+        return;
+    }
+
+    witnessList.innerHTML = contacts.map(contact => `
+        <button
+            class="witness-option"
+            type="button"
+            data-witness-id="${escapeHTML(contact.id)}"
+        >
+            <span class="witness-marker"></span>
+            <span class="witness-main">
+                <strong>${escapeHTML(contact.name)}</strong>
+                <small>${escapeHTML(contact.relation || '关系未填写')}</small>
+            </span>
+            <span class="witness-phone">
+                ${escapeHTML(contact.phone || '')}
+            </span>
+        </button>
+    `).join('');
+
+    witnessList.querySelectorAll('[data-witness-id]')
+        .forEach(button => {
+            button.addEventListener('click', () => {
+                selectWitness(button.dataset.witnessId);
+            });
+        });
+}
+
+function selectWitness(id) {
+    const witness = contacts.find(item => item.id === id);
+
+    if (!witness) return;
+
+    selectedWitnessId = id;
+    selectedSummary.hidden = false;
+    selectedName.textContent =
+        `${witness.name} · ${witness.phone}`;
+
+    witnessFeedback.textContent = '';
+
+    witnessList.querySelectorAll('.witness-option')
+        .forEach(button => {
+            button.classList.toggle(
+                'is-selected',
+                button.dataset.witnessId === id
+            );
+        });
+}
+
+function getSelectedWitness() {
+    return contacts.find(
+        item => item.id === selectedWitnessId
+    ) || null;
+}
+
+function enterWitnessStep() {
+    const code = reportCode.value.trim();
+
+    if (!code) {
+        codeFeedback.textContent = '请输入报告代码';
+        return;
+    }
+
+    if (
+        code.toUpperCase() !==
+        CORRECT_REPORT_CODE.toUpperCase()
+    ) {
+        codeFeedback.textContent = '报告代码匹配失败';
+        return;
+    }
+
+    codeFeedback.textContent = '';
+    codeStep.hidden = true;
+    witnessStep.hidden = false;
+    renderWitnesses();
+}
+
+codeSubmit.addEventListener('click', enterWitnessStep);
+
+reportCode.addEventListener('keydown', event => {
+    if (event.key === 'Enter') enterWitnessStep();
+});
+
+witnessTrigger.addEventListener('click', () => {
+    witnessList.hidden = !witnessList.hidden;
+
+    if (!witnessList.hidden) {
+        renderWitnesses();
+
+        NewWorldLink.send(
+            'identity_witness_selection_opened',
+            { count: contacts.length }
+        );
+    }
+});
+
+finalSubmit.addEventListener('click', () => {
+    const witness = getSelectedWitness();
+
+    if (!witness) {
+        witnessFeedback.textContent = '请选择一名见证人';
+        return;
+    }
+
+    confirmCopy.textContent =
+        `你选择了“${witness.name}”作为本次身份更新的见证人。提交后将无法在此页面撤回。`;
+
+    confirmModal.hidden = false;
+
+    NewWorldLink.send(
+        'identity_update_confirmation_requested',
+        {
+            witnessName: witness.name,
+            witnessPhone: witness.phone
+        }
+    );
+});
+
+confirmCancel.addEventListener('click', () => {
+    confirmModal.hidden = true;
+});
+
+confirmSubmit.addEventListener('click', () => {
+    const witness = getSelectedWitness();
+
+    if (!witness) {
+        confirmModal.hidden = true;
+        witnessFeedback.textContent =
+            '见证人记录已失效，请重新选择';
+        return;
+    }
+
+    const isSuccess =
+        normalizePhone(witness.phone) ===
+        normalizePhone(SUCCESS_PHONE);
+
+    sessionStorage.setItem(
+        'newworld_identity_update_witness',
+        JSON.stringify({
+            id: witness.id,
+            name: witness.name,
+            relation: witness.relation,
+            phone: witness.phone,
+            email: witness.email || '',
+            result: isSuccess ? 'success' : 'failure'
+        })
+    );
+
+    NewWorldLink.send(
+        'identity_update_submitted',
+        {
+            witnessName: witness.name,
+            result: isSuccess ? 'success' : 'failure'
+        }
+    );
+
+    location.href =
+        isSuccess ? SUCCESS_PAGE : FAILURE_PAGE;
+});
+</script>
+</body>
+</html>

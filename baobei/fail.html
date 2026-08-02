@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>失败结局｜新世界</title>
+
+<style>
+:root{
+    --bg:#000;
+    --text:#f5f5f5;
+    --muted:#a0a0a0;
+    --red:#ff0000;
+}
+*{
+    box-sizing:border-box;
+}
+html,
+body{
+    margin:0;
+    width:100%;
+    min-height:100%;
+    background:var(--bg);
+    color:var(--text);
+    overflow:hidden;
+    font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+body{
+    position:relative;
+}
+.credits-stage{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    background:#000;
+}
+.credits-roll{
+    position:absolute;
+    left:50%;
+    top:100vh;
+    width:min(860px,calc(100% - 48px));
+    transform:translateX(-50%);
+    text-align:center;
+    animation:creditsScroll 38s linear forwards;
+}
+.credits-copy{
+    min-height:150vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    gap:34px;
+    padding-top:12vh;
+}
+.credit-section{
+    display:grid;
+    gap:18px;
+}
+.credit-section p{
+    margin:0;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:clamp(18px,2.2vw,30px);
+    line-height:2.1;
+    letter-spacing:.08em;
+}
+.placeholder{
+    color:#777;
+}
+.ending-block{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:42px;
+    padding:14vh 0;
+}
+.ending-message{
+    margin:0;
+    max-width:920px;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:clamp(20px,5vw,40px);
+    font-weight:500;
+    line-height:1.45;
+    letter-spacing:.04em;
+}
+.chapter-end{
+    margin:0;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:clamp(30px,4vw,48px);
+    letter-spacing:.3em;
+}
+.thanks{
+    margin:12vh 0 0;
+    color:var(--red);
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:clamp(50px,10vw,100px);
+    font-weight:700;
+    line-height:1.15;
+    letter-spacing:.02em;
+}
+.follow{
+    margin:0;
+    color:#fff;
+    font-size:clamp(15px,1.8vw,24px);
+    letter-spacing:.08em;
+}
+@keyframes creditsScroll{
+    from{
+        transform:translate(-50%,0);
+    }
+    to{
+        transform:translate(-50%,-100%);
+    }
+}
+@media(max-width:700px){
+    .credits-roll{
+        width:calc(100% - 28px);
+        animation-duration:42s;
+    }
+    .credits-copy{
+        gap:24px;
+    }
+    .ending-message{
+        font-size:clamp(30px,9vw,48px);
+    }
+    .thanks{
+        font-size:clamp(52px,14vw,92px);
+    }
+}
+</style>
+
+</head>
+<body>
+<main class="credits-stage">
+    <section class="credits-roll">
+        <div class="credits-copy">
+
+            <section class="credit-section">
+                <p class="placeholder">你提交的出世报告，很快有了消息。</p>
+                <p class="placeholder">不 通 过</p>
+                <p class="placeholder">你百思不得其解，究竟是哪里出了问题。</p>
+            </section>
+
+            <section class="credit-section">
+                <p class="placeholder">你想起了B级居民的工作内容。</p>
+                <p class="placeholder">他们修改了你看到的贴子。</p>
+                <p class="placeholder">那么猜猜看，他们是否也修改了你看到的电话号码呢？</p>
+            </section>
+
+            <section class="credit-section">
+                <p class="placeholder">如果你再多一点疑心就好了。</p>
+                <p class="placeholder">如果你看到了周言安的求救邮件，记住了他的邮箱账号</p>
+                <p class="placeholder">使用身份证尾号登陆他的邮箱，就能看到真正的电话号码。</p>
+            </section>
+
+            <section class="credit-section">
+                <p class="placeholder">新世界，永远不会消失</p>
+                <p class="placeholder">就像他们说的一样，他们的存在已经来到了更高的维度</p>
+                <p class="placeholder">那些你至今无法点进去的页面，究竟还藏着什么样的秘密？</p>
+                <p class="placeholder">你是否有一天，能够解开那些谜团？</p>
+            </section>
+
+            <section class="ending-block">
+                <p class="ending-message">
+                    你失败了，你的朋友永远留在了新世界。<br>而已经引起它们注意的你，能逃脱吗？
+                </p>
+
+                <p class="chapter-end">
+                    本篇终
+                </p>
+
+                <p class="thanks">
+                    感谢体验本游戏
+                </p>
+
+                <p class="follow">
+                    更多内容请关注微信公众号：乱码螺母
+                    关注ig：@Giltch_Nut<br>
+                    下一部作品再见
+                </p>
+            </section>
+
+        </div>
+    </section>
+</main>
+</body>
+</html>

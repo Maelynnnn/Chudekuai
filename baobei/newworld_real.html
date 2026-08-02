@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新世界居民服务平台</title>
+    <link rel="stylesheet" href="newworld_real.css">
+
+    <style>
+        .permission-modal[hidden] {
+            display: none;
+        }
+
+        .permission-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+        }
+
+        .permission-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(3, 6, 10, 0.78);
+            backdrop-filter: blur(8px);
+        }
+
+        .permission-dialog {
+            position: relative;
+            z-index: 1;
+            width: min(440px, 100%);
+            padding: 34px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            background: #131923;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.48);
+        }
+
+        .permission-close {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            border: 0;
+            background: transparent;
+            color: #7e8998;
+            font-size: 22px;
+        }
+
+        .permission-kicker {
+            margin-bottom: 10px;
+            color: #65b8b0;
+            font-size: 9px;
+            letter-spacing: 4px;
+        }
+
+        .permission-dialog h2 {
+            margin-bottom: 12px;
+            font-size: 28px;
+            font-weight: 520;
+        }
+
+        .permission-description {
+            margin-bottom: 26px;
+            color: #8d98a8;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .permission-label {
+            display: block;
+            margin-bottom: 9px;
+            color: #aab4c0;
+            font-size: 11px;
+        }
+
+        .permission-input {
+            width: 100%;
+            height: 46px;
+            padding: 0 13px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            outline: none;
+            background: #0d1117;
+            color: #f4f7fb;
+            font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+            letter-spacing: 2px;
+        }
+
+        .permission-input:focus {
+            border-color: rgba(101, 184, 176, 0.7);
+        }
+
+        .permission-feedback {
+            min-height: 20px;
+            margin: 10px 0 4px;
+            color: #bd5965;
+            font-size: 11px;
+        }
+
+        .permission-feedback.is-success {
+            color: #83c4ae;
+        }
+
+        .permission-submit {
+            width: 100%;
+            margin-top: 12px;
+            padding: 12px;
+            border: 0;
+            border-radius: 8px;
+            background: #f4f7fb;
+            color: #10151d;
+            font-weight: 600;
+        }
+
+        .permission-submit:hover {
+            background: #ffffff;
+        }
+    
+        .primary-action {
+            border: 0;
+            cursor: pointer;
+        }
+
+        .login-password-label {
+            margin-top: 16px;
+        }
+
+        .inbox-aside {
+            cursor: pointer;
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .inbox-aside:hover,
+        .inbox-aside:focus-visible {
+            transform: translateY(-3px);
+            border-color: rgba(101, 184, 176, 0.48);
+            background: #171f2b;
+            outline: none;
+        }
+
+        .header-resident-greeting {
+            margin-right: auto;
+            padding: 8px 0;
+            border: 0;
+            background: transparent;
+            color: #8f8f8f;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-align: left;
+        }
+
+        .header-resident-greeting:hover {
+            color: #ffffff;
+        }
+
+        .header-resident-greeting.is-logged-in {
+            color: #ffffff;
+            cursor: default;
+        }
+        .resident-mail-entry[hidden] {
+            display: none;
+        }
+
+        .resident-mail-entry {
+            width: 100%;
+            margin: 14px 0;
+            padding: 14px 0;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 12px;
+            align-items: center;
+            border: 0;
+            border-top: 1px solid rgba(255,255,255,.18);
+            border-bottom: 1px solid rgba(255,255,255,.18);
+            border-radius: 0;
+            background: transparent;
+            color: #fff;
+            text-align: left;
+        }
+
+        .resident-mail-entry:hover {
+            background: rgba(255,255,255,.04);
+        }
+
+        .resident-mail-entry-status {
+            padding: 3px 6px;
+            border: 1px solid #fff;
+            font-size: 9px;
+        }
+
+        .resident-mail-entry-main {
+            display: grid;
+            gap: 4px;
+        }
+
+        .resident-mail-entry-main strong {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .resident-mail-entry-main small {
+            color: #8f8f8f;
+            font-size: 10px;
+        }
+
+        .resident-mail-entry-arrow {
+            color: #8f8f8f;
+        }
+
+        .resident-mail-screen[hidden] {
+            display: none;
+        }
+
+        .resident-mail-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 1200;
+            display: grid;
+            grid-template-rows: 62px minmax(0, 1fr);
+            overflow: hidden;
+            background: #f5f5f2;
+            color: #111;
+        }
+
+        .resident-mail-appbar {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 0 22px;
+            border-bottom: 1px solid #c8c8c3;
+            background: #efefeb;
+            font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        .resident-mail-back {
+            padding: 8px 0;
+            border: 0;
+            background: transparent;
+            color: #111;
+            font-size: 13px;
+        }
+
+        .resident-mail-back:hover {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .resident-mail-app-title {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .resident-mail-app-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 18px;
+            color: #666;
+            font-size: 11px;
+        }
+
+        .resident-mail-reader {
+            min-height: 0;
+            overflow: auto;
+            background: #fff;
+        }
+
+        .resident-mail-reader-header {
+            padding: 28px 34px 22px;
+            border-bottom: 1px solid #d9d9d4;
+            background: #fff;
+        }
+
+        .resident-mail-reader-header h1 {
+            margin-bottom: 22px;
+            font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .resident-mail-address-row {
+            display: grid;
+            grid-template-columns: 42px 1fr auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .resident-mail-avatar {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #222;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .resident-mail-address {
+            display: grid;
+            gap: 4px;
+        }
+
+        .resident-mail-address strong {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .resident-mail-address span,
+        .resident-mail-address-row time {
+            color: #777;
+            font-size: 11px;
+        }
+
+        .resident-mail-content {
+            position: relative;
+            min-height: calc(100vh - 190px);
+            overflow: hidden;
+            background: #ff0000;
+        }
+
+        .resident-mail-wall {
+            position: absolute;
+            inset: 0;
+            display: grid;
+
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            grid-auto-rows: 42px;
+
+            column-gap: 6px;
+            row-gap: 2px;
+
+            align-content: start;
+            align-items: center;
+            justify-items: center;
+
+            padding: 12px;
+
+            font-family: "Noto Serif SC", "Songti SC", SimSun, serif;
+            font-size: clamp(22px, 2.2vw, 38px);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -.1em;
+            color: #000;
+            user-select: none;
+        }
+
+        .resident-mail-wall span {
+            white-space: nowrap;
+        }
+
+        @media (max-width: 700px) {
+            .resident-mail-appbar {
+                padding-inline: 14px;
+            }
+
+            .resident-mail-app-actions {
+                display: none;
+            }
+
+            .resident-mail-reader-header {
+                padding: 22px 18px 18px;
+            }
+
+            .resident-mail-reader-header h1 {
+                font-size: 20px;
+            }
+
+            .resident-mail-wall {
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+                grid-auto-rows: 38px;
+                column-gap: 4px;
+                row-gap: 2px;
+                padding: 8px;
+                font-size: clamp(20px, 7vw, 32px);
+                align-content: start;
+            }
+            .resident-mail-center strong {
+                font-size: clamp(64px, 24vw, 130px);
+            }
+        }
+
+        .system-mail-entry[hidden] {
+            display: none;
+        }
+
+        .system-mail-entry {
+            width: 100%;
+            margin: 14px 0;
+            padding: 14px 0;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 12px;
+            align-items: center;
+            border: 0;
+            border-top: 1px solid rgba(255,255,255,.18);
+            border-bottom: 1px solid rgba(255,255,255,.18);
+            border-radius: 0;
+            background: transparent;
+            color: #fff;
+            text-align: left;
+        }
+
+        .system-mail-entry:hover {
+            background: rgba(255,255,255,.04);
+        }
+
+        .system-mail-body {
+            min-height: calc(100vh - 190px);
+            padding: 54px 34px 80px;
+            background: #000;
+            color: #f3f3f3;
+            font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        .system-mail-document {
+            width: min(760px, 100%);
+            margin: 0 auto;
+            border-top: 1px solid rgba(255,255,255,.32);
+            border-bottom: 1px solid rgba(255,255,255,.32);
+            padding: 32px 0 38px;
+        }
+
+        .system-mail-kicker {
+            margin: 0 0 18px;
+            color: #777;
+            font-size: 9px;
+            letter-spacing: 3px;
+        }
+
+        .system-mail-document h2 {
+            margin: 0 0 28px;
+            font-family: "Noto Serif SC", "Songti SC", SimSun, serif;
+            font-size: 30px;
+            font-weight: 500;
+        }
+
+        .system-mail-document p {
+            margin: 0 0 18px;
+            color: #b8b8b8;
+            font-size: 13px;
+            line-height: 2;
+        }
+
+        .system-mail-document strong {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .system-mail-warning {
+            margin: 30px 0;
+            padding: 16px 0;
+            border-top: 1px solid #ff0000;
+            border-bottom: 1px solid #ff0000;
+            color: #ff0000;
+            font-size: 12px;
+            line-height: 1.9;
+        }
+
+        .system-mail-action {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 11px 16px;
+            border: 1px solid #fff;
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .system-mail-action:hover {
+            background: #dcdcdc;
+        }
+
+        .mail-toast {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 2000;
+            width: min(340px, calc(100% - 44px));
+            padding: 16px 18px;
+            border: 1px solid rgba(255,255,255,.28);
+            background: #000;
+            color: #fff;
+            opacity: 0;
+            transform: translateY(18px);
+            pointer-events: none;
+            transition:
+                opacity .28s ease,
+                transform .28s ease;
+        }
+
+        .mail-toast.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .mail-toast small {
+            display: block;
+            margin-bottom: 7px;
+            color: #777;
+            font-size: 9px;
+            letter-spacing: 2px;
+        }
+
+        .mail-toast strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .mail-toast span {
+            color: #999;
+            font-size: 10px;
+        }
+
+    </style>
+
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="#top" aria-label="新世界居民服务平台">
+            <img src="../assets/logo/新世界logo.png" alt="新世界">
+            <span>
+                <strong>新世界</strong>
+                <small>居民服务平台</small>
+            </span>
+        </a>
+
+        <button id="header-resident-greeting" class="header-resident-greeting" type="button">
+            请登录
+        </button>
+
+        <nav class="main-nav" aria-label="主导航">
+            <a href="#departments">分区协作</a>
+            <a href="#results">工作成果</a>
+            <a href="#services">居民服务</a>
+            <a href="#notices">工作动态</a>
+        </nav>
+
+        <div id="system-pill" class="system-pill" aria-live="polite">
+            <span aria-hidden="true"></span>
+            <strong id="system-status-text">系统运行正常</strong>
+        </div>
+    </header>
+
+    <main id="top">
+        <section class="hero">
+            <div class="hero-copy">
+                <p class="eyebrow">NEW WORLD RESIDENT SERVICE PLATFORM</p>
+                <h1>欢迎每一位居民<br>来到新世界</h1>
+                <p class="hero-description">
+                    邀请-入世-维护-存在
+                </p>
+
+                <div class="hero-actions">
+                    <!-- 预留：以后在 data-page 中填写目标页面 -->
+                    <button id="resident-login-entry" class="primary-action" type="button">
+                        居民登录
+                    </button>
+
+                    <!-- 预留：以后在 data-page 中填写目标页面 -->
+                    <button
+                        id="overview-action"
+                        class="text-action page-placeholder"
+                        type="button"
+                        data-page="monthly_announcements.html"
+                    >
+                        查看本月公告
+                    </button>
+                </div>
+            </div>
+
+            <div class="hero-status">
+                <article>
+                    <span>当前在线居民</span>
+                    <strong>18,426</strong>
+                </article>
+                <article>
+                    <span>本月完成协作</span>
+                    <strong>4,391</strong>
+                </article>
+                <article>
+                    <span>覆盖场域</span>
+                    <strong>612</strong>
+                </article>
+            </div>
+        </section>
+
+        <section id="departments" class="section-block">
+            <header class="section-heading">
+                <div>
+                    <p class="eyebrow">DIVISION NETWORK</p>
+                    <h2>居民协作分区</h2>
+                </div>
+                <p>不同等级承担不同层面的维护工作，共同确保新世界持续运转。</p>
+            </header>
+
+            <div class="department-grid">
+                <article class="department-card c-card" data-event="department_c_opened">
+                    <div class="department-index">C</div>
+                    <div class="department-copy">
+                        <p class="department-name">现实执行部</p>
+                        <h3>现场接触与场域维护</h3>
+                        <p>负责现实场域中的样本追踪、路线管理、居民转移与现场秩序。</p>
+                        <dl>
+                            <div><dt>本月执行</dt><dd>127</dd></div>
+                            <div><dt>当前追踪</dt><dd>43</dd></div>
+                            <div><dt>转移完成率</dt><dd>97.2%</dd></div>
+                        </dl>
+                        <button class="department-detail-button" type="button" data-department="C">查看工作详情</button>
+                    </div>
+                </article>
+
+                <article class="department-card b-card" data-event="department_b_opened">
+                    <div class="department-index">B</div>
+                    <div class="department-copy">
+                        <p class="department-name">信息维护部</p>
+                        <h3>记录校正与认知环境维护</h3>
+                        <p>负责公共记录、网络叙事与社会认知的一致性维护。</p>
+                        <dl>
+                            <div><dt>记录修订</dt><dd>3,412</dd></div>
+                            <div><dt>异常叙事</dt><dd>186</dd></div>
+                            <div><dt>校正完成率</dt><dd>98.7%</dd></div>
+                        </dl>
+                        <button class="department-detail-button" type="button" data-department="B">查看工作详情</button>
+                    </div>
+                </article>
+
+                <article class="department-card a-card" data-event="department_a_opened">
+                    <div class="department-index">A</div>
+                    <div class="department-copy">
+                        <p class="department-name">意识协调部</p>
+                        <h3>全域监测与任务统筹</h3>
+                        <p>负责居民状态同步、行为预测、跨场域调度与长期存在规划。</p>
+                        <dl>
+                            <div><dt>在线意识</dt><dd>12,609</dd></div>
+                            <div><dt>待分配任务</dt><dd>284</dd></div>
+                            <div><dt>同步稳定率</dt><dd>99.98%</dd></div>
+                        </dl>
+                        <button class="department-detail-button" type="button" data-department="A">查看工作详情</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="results" class="section-block results-section">
+            <header class="section-heading">
+                <div>
+                    <p class="eyebrow">RECENT RESULTS</p>
+                    <h2>近期工作成果</h2>
+                </div>
+                <p>所有数据均已完成跨分区同步。</p>
+            </header>
+
+            <div class="result-grid">
+                <button class="result-card" data-event="result_transfer">
+                    <span>现实转移完成</span><strong>91</strong><small>C区</small>
+                </button>
+                <button class="result-card" data-event="result_records">
+                    <span>公共记录校正</span><strong>3,412</strong><small>B区</small>
+                </button>
+                <button class="result-card" data-event="result_dispatch">
+                    <span>信息采集</span><strong>284</strong><small>A区</small>
+                </button>
+                <button class="result-card abnormal" data-event="result_independence">
+                    <span>样本意识残留</span><strong>1.7%</strong><small>状态良好</small>
+                </button>
+            </div>
+        </section>
+
+        <section id="services" class="section-block split-layout">
+            <div>
+                <header class="section-heading compact">
+                    <div>
+                        <p class="eyebrow">RESIDENT SERVICES</p>
+                        <h2>居民服务</h2>
+                    </div>
+                </header>
+
+                <div class="service-list">
+                    <button
+                        class="login-required-link"
+                        data-event="service_identity"
+                        data-page="public_info.html"
+                        data-popup="true"
+                    >
+                        公共信息查询<span>→</span>
+                    </button>
+                    <button class="login-required-link" data-event="service_task" data-page="personal_tasks.html">
+                        个人任务记录<span>→</span>
+                    </button>
+                    <button class="login-required-link" data-event="service_memory" data-page="">
+                        升域献祭申请<span>→</span>
+                    </button>
+                    <button class="login-required-link" data-event="service_existence" data-page="identity_update.html">
+                        身份更新<span>→</span>
+                    </button>
+                    <button class="login-required-link" data-event="service_transfer" data-page="emergency_contact.html">
+                        紧急联系人设置<span>→</span>
+                    </button>
+                </div>
+            </div>
+
+            <aside
+                id="resident-inbox"
+                class="service-aside inbox-aside"
+                aria-label="居民收件箱"
+            >
+                <p class="eyebrow">RESIDENT INBOX</p>
+                <h3>居民收件箱</h3>
+                <p>登录后可查看任务通知、系统消息与居民服务回执。</p>
+
+                <div class="permission-row">
+                    <span>未读消息</span>
+                    <strong id="inbox-unread-count">—</strong>
+                </div>
+
+                <button
+                    id="resident-mail-entry"
+                    class="resident-mail-entry"
+                    type="button"
+                    hidden
+                >
+                    <span class="resident-mail-entry-status">未读</span>
+                    <span class="resident-mail-entry-main">
+                        <strong>（无主题）</strong>
+                        <small>zhouyanan@mail.com</small>
+                    </span>
+                    <span class="resident-mail-entry-arrow">→</span>
+                </button>
+
+                <button
+                    id="system-mail-entry"
+                    class="system-mail-entry"
+                    type="button"
+                    hidden
+                >
+                    <span class="resident-mail-entry-status">未读</span>
+                    <span class="resident-mail-entry-main">
+                        <strong>意识状态变更通知</strong>
+                        <small>NW-AD-C132@newworld.com</small>
+                    </span>
+                    <span class="resident-mail-entry-arrow">→</span>
+                </button>
+
+                <div class="permission-row">
+                    <span></span>
+                    <strong id="inbox-login-state"> </strong>
+                </div>
+            </aside>
+        </section>
+
+        <section id="notices" class="section-block">
+            <header class="section-heading">
+                <div>
+                    <p class="eyebrow">LATEST UPDATES</p>
+                    <h2>最新工作动态</h2>
+                </div>
+            </header>
+
+            <div class="notice-table">
+                <button data-event="notice_c">
+                    <span class="notice-tag">C</span>
+                    <span>关于扩大东部场域夜间转移权限的通知</span>
+                    <time>07.31</time>
+                </button>
+                <button data-event="notice_b">
+                    <span class="notice-tag">B</span>
+                    <span>公共记录校正标准与搜索结果排序更新</span>
+                    <time>07.30</time>
+                </button>
+                <button data-event="notice_a">
+                    <span class="notice-tag">A</span>
+                    <span>意识集合与更新结果通知</span>
+                    <time>07.28</time>
+                </button>
+                <button data-event="notice_name">
+                    <span class="notice-tag">全体</span>
+                    <span>关于居民编号整体调整的统一说明</span>
+                    <time>07.25</time>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div>
+            <strong>新世界居民服务平台</strong>
+            <p>居民 · 存在 · 新世界</p>
+        </div>
+        <p>系统版本 NW-26.7　当前接入状态：稳定</p>
+    </footer>
+
+
+
+    <div id="resident-login-modal" class="permission-modal" hidden>
+        <div class="permission-backdrop" data-close-login></div>
+        <section class="permission-dialog" role="dialog" aria-modal="true" aria-labelledby="resident-login-title">
+            <button class="permission-close" type="button" aria-label="关闭" data-close-login>×</button>
+            <p class="permission-kicker">RESIDENT ACCESS</p>
+            <h2 id="resident-login-title">居民登录</h2>
+            <p class="permission-description">请输入居民编号与登录密码。</p>
+
+            <label class="permission-label" for="resident-id-input">居民编号</label>
+            <input id="resident-id-input" class="permission-input" type="text"
+                autocomplete="username" spellcheck="false"
+                placeholder=" ">
+
+            <label class="permission-label login-password-label" for="resident-password-input">密码</label>
+            <input id="resident-password-input" class="permission-input" type="password"
+                autocomplete="current-password" placeholder=" ">
+
+            <p id="resident-login-feedback" class="permission-feedback" aria-live="polite"></p>
+            <button id="resident-login-submit" class="permission-submit" type="button">登录</button>
+        </section>
+    </div>
+
+    <div id="permission-modal" class="permission-modal" hidden>
+        <div class="permission-backdrop" data-close-permission></div>
+
+        <section
+            class="permission-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="permission-title"
+        >
+            <button
+                class="permission-close"
+                type="button"
+                aria-label="关闭"
+                data-close-permission
+            >×</button>
+
+            <p class="permission-kicker">RESTRICTED ACCESS</p>
+            <h2 id="permission-title">权限验证</h2>
+            <p id="permission-description" class="permission-description">
+                该工作记录仅向授权居民开放。
+            </p>
+
+            <label class="permission-label" for="permission-code">
+                居民权限口令
+            </label>
+
+            <input
+                id="permission-code"
+                class="permission-input"
+                type="text"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="请输入权限口令"
+            >
+
+            <p id="permission-feedback" class="permission-feedback" aria-live="polite"></p>
+
+            <button id="permission-submit" class="permission-submit" type="button">
+                验证权限
+            </button>
+        </section>
+    </div>
+    <section id="resident-mail-screen" class="resident-mail-screen" hidden aria-label="居民邮件">
+        <header class="resident-mail-appbar">
+            <button id="resident-mail-close" class="resident-mail-back" type="button">
+                ← 返回收件箱
+            </button>
+            <div class="resident-mail-app-title">居民邮件</div>
+            <div class="resident-mail-app-actions">
+                <span>归档</span>
+                <span>标记</span>
+                <span>更多</span>
+            </div>
+        </header>
+
+        <article class="resident-mail-reader">
+            <header class="resident-mail-reader-header">
+                <h1 id="resident-mail-subject">（无主题）</h1>
+
+                <div class="resident-mail-address-row">
+                    <div id="resident-mail-avatar" class="resident-mail-avatar">周</div>
+                    <div class="resident-mail-address">
+                        <strong id="resident-mail-sender">zhouyanan@mail.com</strong>
+                        <span>发送给：C132-CMZ-00975</span>
+                    </div>
+                    <time id="resident-mail-time">今天 03:17</time>
+                </div>
+            </header>
+
+            <div id="resident-mail-content" class="resident-mail-content">
+                <div id="resident-mail-wall" class="resident-mail-wall" aria-hidden="true"></div>
+            </div>
+
+            <div id="system-mail-body" class="system-mail-body" hidden>
+                <article class="system-mail-document">
+                    <p class="system-mail-kicker">
+                        NEW WORLD / ADMINISTRATIVE NOTICE
+                    </p>
+
+                    <h2>意识状态变更通知</h2>
+
+                    <p>
+                        居民编号：
+                        <strong>C132-CMZ-00975</strong>
+                    </p>
+
+                    <p>
+                        系统检测到您的意识记录已由管理员从当前意识名单中删除。
+                    </p>
+
+                    <div class="system-mail-warning">
+                        当前状态：意识记录已删除<br>
+                        后续流程：正在进行出世流程
+                    </div>
+
+                    <p>
+                        为完成身份状态更新，请尽快填写出世报告。
+                    </p>
+                </article>
+            </div>
+        </article>
+    </section>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<div id="mail-toast" class="mail-toast" role="status" aria-live="polite">
+    <small>NEW MAIL</small>
+    <strong>收到一封新邮件</strong>
+    <span>NW-AD-C132@newworld.com</span>
+</div>
+
+    <script src="newworld_link.js"></script>
+    <script>
+        localStorage.setItem('newworld_revealed', 'true');
+
+        const toast = document.getElementById('toast');
+        let toastTimer = null;
+
+        function showToast(text) {
+            clearTimeout(toastTimer);
+            toast.textContent = text;
+            toast.classList.add('is-visible');
+
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('is-visible');
+            }, 1800);
+        }
+
+        function broadcast(type, payload = {}) {
+            NewWorldLink.send(type, payload);
+        }
+
+        document.querySelectorAll('[data-event]').forEach((element) => {
+            element.addEventListener('mouseenter', () => {
+                broadcast(element.dataset.event + '_hover', {
+                    label: element.textContent.trim()
+                });
+            });
+
+            element.addEventListener('click', () => {
+                if (element.classList.contains('login-required-link')) {
+                    return;
+                }
+
+                broadcast(element.dataset.event, {
+                    label: element.textContent.trim()
+                });
+
+            });
+        });
+
+        // 首页两个入口暂时预留，不执行跳转。
+        document.querySelectorAll('.page-placeholder').forEach((element) => {
+            element.addEventListener('click', (event) => {
+                event.preventDefault();
+
+                const targetPage = element.dataset.page.trim();
+
+                if (targetPage) {
+                    location.href = targetPage;
+                    return;
+                }
+
+                showToast('该入口尚未接入');
+            });
+        });
+
+
+        // ====================
+        // 居民登录配置
+        // ====================
+        // 稍后把解谜获得的居民编号与密码填写在这里。
+        const RESIDENT_LOGIN_CONFIG = {
+            residentId: 'c132-cmz-00975',
+            password: '1543'
+        };
+
+        const RESIDENT_LOGIN_STORAGE_KEY = 'newworld_resident_logged_in';
+        const RESIDENT_MAIL_READ_STORAGE_KEY =
+            'newworld_resident_mail_read';
+
+        const SYSTEM_MAIL_READ_STORAGE_KEY =
+            'newworld_system_mail_read';
+
+        const CHEN_MUZE_DELETED_STORAGE_KEY =
+            'newworld_deleted_consciousness_C132_CMZ_00975';
+
+        const SYSTEM_MAIL_TOAST_STORAGE_KEY =
+            'newworld_system_mail_toast_shown';
+
+        const residentLoginEntry = document.getElementById('resident-login-entry');
+        const residentLoginModal = document.getElementById('resident-login-modal');
+        const headerResidentGreeting = document.getElementById('header-resident-greeting');
+        const residentIdInput = document.getElementById('resident-id-input');
+        const residentPasswordInput = document.getElementById('resident-password-input');
+        const residentLoginSubmit = document.getElementById('resident-login-submit');
+        const residentLoginFeedback = document.getElementById('resident-login-feedback');
+        const inboxLoginState = document.getElementById('inbox-login-state');
+        const inboxUnreadCount = document.getElementById('inbox-unread-count');
+                const residentInbox = document.getElementById('resident-inbox');
+        const residentMailEntry =
+            document.getElementById('resident-mail-entry');
+
+        const systemMailEntry =
+            document.getElementById('system-mail-entry');
+
+        const residentMailScreen =
+            document.getElementById('resident-mail-screen');
+
+        const residentMailClose =
+            document.getElementById('resident-mail-close');
+
+        const residentMailWall =
+            document.getElementById('resident-mail-wall');
+
+        const residentMailContent =
+            document.getElementById('resident-mail-content');
+
+        const systemMailBody =
+            document.getElementById('system-mail-body');
+
+        const residentMailSubject =
+            document.getElementById('resident-mail-subject');
+
+        const residentMailSender =
+            document.getElementById('resident-mail-sender');
+
+        const residentMailAvatar =
+            document.getElementById('resident-mail-avatar');
+
+        const residentMailTime =
+            document.getElementById('resident-mail-time');
+
+        const mailToast =
+            document.getElementById('mail-toast');
+
+        let pendingLoginTarget = '';
+
+        function isResidentLoggedIn() {
+            return localStorage.getItem(RESIDENT_LOGIN_STORAGE_KEY) === 'true';
+        }
+
+        function updateResidentLoginUI() {
+            const loggedIn = isResidentLoggedIn();
+
+            const regularMailRead =
+                localStorage.getItem(
+                    RESIDENT_MAIL_READ_STORAGE_KEY
+                ) === 'true';
+
+            const systemMailExists =
+                localStorage.getItem(
+                    CHEN_MUZE_DELETED_STORAGE_KEY
+                ) === 'true';
+
+            const systemMailRead =
+                localStorage.getItem(
+                    SYSTEM_MAIL_READ_STORAGE_KEY
+                ) === 'true';
+
+            const unreadCount =
+                (regularMailRead ? 0 : 1) +
+                (
+                    systemMailExists && !systemMailRead
+                        ? 1
+                        : 0
+                );
+
+            residentLoginEntry.textContent =
+                loggedIn ? '已登录' : '居民登录';
+
+            inboxUnreadCount.textContent =
+                loggedIn ? String(unreadCount) : '—';
+
+            residentMailEntry.hidden = !loggedIn;
+            systemMailEntry.hidden =
+                !loggedIn || !systemMailExists;
+
+            const regularMailStatus =
+                residentMailEntry.querySelector(
+                    '.resident-mail-entry-status'
+                );
+
+            regularMailStatus.textContent =
+                regularMailRead ? '已读' : '未读';
+
+            const systemMailStatus =
+                systemMailEntry.querySelector(
+                    '.resident-mail-entry-status'
+                );
+
+            systemMailStatus.textContent =
+                systemMailRead ? '已读' : '未读';
+
+            headerResidentGreeting.textContent =
+                loggedIn ? '陈木泽，欢迎您！' : '请登录';
+
+            headerResidentGreeting.classList.toggle(
+                'is-logged-in',
+                loggedIn
+            );
+        }
+
+        function buildResidentMailWall() {
+            if (residentMailWall.children.length > 0) {
+                return;
+            }
+
+            for (let index = 0; index < 192; index += 1) {
+                const text = document.createElement('span');
+                text.textContent = '救救我';
+                residentMailWall.appendChild(text);
+            }
+        }
+
+        function openResidentMail() {
+            if (!isResidentLoggedIn()) {
+                showToast('请先登录');
+                openResidentLogin();
+                return;
+            }
+
+            buildResidentMailWall();
+
+            residentMailSubject.textContent = '（无主题）';
+            residentMailSender.textContent =
+                'zhouyanan@mail.com';
+            residentMailAvatar.textContent = '周';
+            residentMailTime.textContent = '今天 03:17';
+
+            residentMailContent.hidden = false;
+            systemMailBody.hidden = true;
+
+            residentMailScreen.hidden = false;
+            document.body.style.overflow = 'hidden';
+
+            localStorage.setItem(
+                RESIDENT_MAIL_READ_STORAGE_KEY,
+                'true'
+            );
+
+            updateResidentLoginUI();
+
+            broadcast('resident_mail_opened', {
+                sender: 'zhouyanan@mail.com'
+            });
+        }
+
+        function openSystemMail() {
+            if (!isResidentLoggedIn()) {
+                showToast('请先登录');
+                openResidentLogin();
+                return;
+            }
+
+            residentMailSubject.textContent =
+                '意识状态变更通知';
+
+            residentMailSender.textContent =
+                'NW-AD-C132@newworld.com';
+
+            residentMailAvatar.textContent = 'NW';
+            residentMailTime.textContent = '刚刚';
+
+            residentMailContent.hidden = true;
+            systemMailBody.hidden = false;
+
+            residentMailScreen.hidden = false;
+            document.body.style.overflow = 'hidden';
+
+            localStorage.setItem(
+                SYSTEM_MAIL_READ_STORAGE_KEY,
+                'true'
+            );
+
+            updateResidentLoginUI();
+
+            broadcast('system_mail_opened', {
+                sender: 'NW-AD-C132@newworld.com',
+                subject: '意识状态变更通知'
+            });
+        }
+
+        function closeResidentMail() {
+            residentMailScreen.hidden = true;
+            document.body.style.overflow = '';
+        }
+
+        residentMailEntry.addEventListener(
+            'click',
+            openResidentMail
+        );
+
+        systemMailEntry.addEventListener(
+            'click',
+            openSystemMail
+        );
+        residentMailClose.addEventListener('click', closeResidentMail);
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !residentMailScreen.hidden) {
+                closeResidentMail();
+            }
+        });
+
+
+        function showSystemMailToastOnce() {
+            const systemMailExists =
+                localStorage.getItem(
+                    CHEN_MUZE_DELETED_STORAGE_KEY
+                ) === 'true';
+
+            const toastShown =
+                localStorage.getItem(
+                    SYSTEM_MAIL_TOAST_STORAGE_KEY
+                ) === 'true';
+
+            if (
+                !systemMailExists ||
+                toastShown ||
+                !isResidentLoggedIn()
+            ) {
+                return;
+            }
+
+            localStorage.setItem(
+                SYSTEM_MAIL_TOAST_STORAGE_KEY,
+                'true'
+            );
+
+            setTimeout(() => {
+                mailToast.classList.add('is-visible');
+
+                setTimeout(() => {
+                    mailToast.classList.remove('is-visible');
+                }, 5200);
+            }, 700);
+        }
+
+        mailToast.addEventListener('click', () => {
+            mailToast.classList.remove('is-visible');
+            openSystemMail();
+        });
+
+        function openResidentLogin(targetPage = '') {
+            pendingLoginTarget = targetPage;
+            residentIdInput.value = '';
+            residentPasswordInput.value = '';
+            residentLoginFeedback.textContent = '';
+            residentLoginFeedback.classList.remove('is-success');
+            residentLoginModal.hidden = false;
+
+            requestAnimationFrame(() => {
+                residentIdInput.focus();
+            });
+        }
+
+        function closeResidentLogin() {
+            residentLoginModal.hidden = true;
+            pendingLoginTarget = '';
+        }
+
+        function finishResidentLogin() {
+            const configuredId = RESIDENT_LOGIN_CONFIG.residentId.trim();
+            const configuredPassword = RESIDENT_LOGIN_CONFIG.password.trim();
+
+            if (!configuredId || !configuredPassword) {
+                residentLoginFeedback.textContent = '登录凭证尚未接入';
+                residentLoginFeedback.classList.remove('is-success');
+                return;
+            }
+
+            const enteredId = residentIdInput.value.trim().toUpperCase();
+            const enteredPassword = residentPasswordInput.value.trim();
+
+            if (
+                enteredId !== configuredId.toUpperCase() ||
+                enteredPassword !== configuredPassword
+            ) {
+                residentLoginFeedback.textContent = '居民编号或密码错误';
+                residentLoginFeedback.classList.remove('is-success');
+                return;
+            }
+
+            localStorage.setItem(RESIDENT_LOGIN_STORAGE_KEY, 'true');
+            residentLoginFeedback.textContent = '登录成功';
+            residentLoginFeedback.classList.add('is-success');
+            updateResidentLoginUI();
+
+            broadcast('resident_login_succeeded', {
+                residentId: enteredId
+            });
+
+            const destination = pendingLoginTarget;
+
+            setTimeout(() => {
+                residentLoginModal.hidden = true;
+                pendingLoginTarget = '';
+
+                if (destination) {
+                    location.href = destination;
+                }
+            }, 450);
+        }
+
+        residentLoginEntry.addEventListener('click', () => {
+            if (isResidentLoggedIn()) {
+                showToast('居民账户已登录');
+                return;
+            }
+
+            openResidentLogin();
+        });
+
+        headerResidentGreeting.addEventListener('click', () => {
+            if (isResidentLoggedIn()) {
+                return;
+            }
+
+            openResidentLogin();
+        });
+
+        document.querySelectorAll('[data-close-login]').forEach((element) => {
+            element.addEventListener('click', closeResidentLogin);
+        });
+
+        residentLoginSubmit.addEventListener('click', finishResidentLogin);
+
+        [residentIdInput, residentPasswordInput].forEach((input) => {
+            input.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    finishResidentLogin();
+                }
+
+                if (event.key === 'Escape') {
+                    closeResidentLogin();
+                }
+            });
+        });
+
+        document.querySelectorAll('.login-required-link').forEach((element) => {
+            const handleProtectedLink = (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const targetPage =
+                    (element.dataset.page || '').trim();
+
+                const eventName =
+                    (element.dataset.event || '').trim();
+
+                if (eventName === 'service_memory') {
+                    showToast(
+                        '居民身份等级不足，该行为已被阻止。'
+                    );
+
+                    broadcast(
+                        'service_memory_blocked',
+                        {
+                            reason: 'insufficient_level'
+                        }
+                    );
+
+                    return;
+                }
+
+                if (!isResidentLoggedIn()) {
+                    showToast('请先登录');
+                    openResidentLogin(targetPage);
+                    return;
+                }
+
+                if (eventName) {
+                    broadcast(eventName, {
+                        label: element.textContent.trim(),
+                        page: targetPage
+                    });
+                }
+
+                if (!targetPage) {
+                    showToast('该页面尚未接入');
+                    return;
+                }
+
+                if (element.dataset.popup === 'true') {
+                    const popup = window.open(
+                        targetPage,
+                        'newworld_public_information',
+                        'width=980,height=720,left=160,top=90,resizable=yes,scrollbars=yes'
+                    );
+
+                    if (!popup) {
+                        showToast('请允许浏览器打开新窗口');
+                    }
+
+                    return;
+                }
+
+                location.href = targetPage;
+            };
+
+            element.addEventListener('click', handleProtectedLink);
+
+            element.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    handleProtectedLink(event);
+                }
+            });
+        });
+
+        updateResidentLoginUI();
+        showSystemMailToastOnce();
+
+        const A_LEVEL_PERMISSION_CODE = 'A-12609-WE';
+        const permissionModal = document.getElementById('permission-modal');
+        const permissionInput = document.getElementById('permission-code');
+        const permissionSubmit = document.getElementById('permission-submit');
+        const permissionFeedback = document.getElementById('permission-feedback');
+        const permissionDescription =
+            document.getElementById('permission-description');
+
+        let requestedDepartment = '';
+
+        function openPermissionModal(department) {
+            requestedDepartment = department;
+            permissionDescription.textContent =
+                `${department}区工作记录仅向授权居民开放。`;
+
+            permissionInput.value = '';
+            permissionFeedback.textContent = '';
+            permissionFeedback.classList.remove('is-success');
+            permissionModal.hidden = false;
+
+            requestAnimationFrame(() => {
+                permissionInput.focus();
+            });
+
+            // A区不会主动提供任何权限口令。
+            if (department === 'A') {
+                broadcast('department_a_permission_opened', {
+                    department
+                });
+                return;
+            }
+
+            broadcast('department_permission_requested', {
+                department
+            });
+        }
+
+        function closePermissionModal() {
+            permissionModal.hidden = true;
+            requestedDepartment = '';
+        }
+
+        function verifyPermission() {
+            const enteredCode = permissionInput.value.trim().toUpperCase();
+
+            if (requestedDepartment === 'A') {
+                permissionFeedback.textContent = '行为已被阻止';
+                permissionFeedback.classList.remove('is-success');
+
+                broadcast('department_a_permission_attempted', {
+                    department: requestedDepartment,
+                    entered: Boolean(enteredCode)
+                });
+                return;
+            }
+
+            if (enteredCode !== A_LEVEL_PERMISSION_CODE) {
+                permissionFeedback.textContent = '权限口令无效';
+                permissionFeedback.classList.remove('is-success');
+
+                broadcast('department_permission_denied', {
+                    department: requestedDepartment
+                });
+                return;
+            }
+
+            permissionFeedback.textContent =
+                `A级居民权限已确认 · ${requestedDepartment}区记录已解锁`;
+            permissionFeedback.classList.add('is-success');
+
+            broadcast('department_permission_granted', {
+                department: requestedDepartment
+            });
+
+            if (requestedDepartment === 'B') {
+                setTimeout(() => {
+                    permissionModal.hidden = true;
+                    location.href = 'b_work.html';
+                }, 650);
+
+                return;
+            }
+
+            if (requestedDepartment === 'C') {
+                setTimeout(() => {
+                    permissionModal.hidden = true;
+                    location.href = 'c_work.html';
+                }, 650);
+
+                return;
+            }
+
+            // 以后接入详情页时，可在这里添加跳转。
+            // location.href = `${requestedDepartment.toLowerCase()}_department.html`;
+        }
+
+        document.querySelectorAll('.department-detail-button').forEach((button) => {
+            button.addEventListener('click', (event) => {
+                event.stopPropagation();
+                openPermissionModal(button.dataset.department);
+            });
+        });
+
+        document.querySelectorAll('[data-close-permission]').forEach((element) => {
+            element.addEventListener('click', closePermissionModal);
+        });
+
+        permissionSubmit.addEventListener('click', verifyPermission);
+
+        permissionInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                verifyPermission();
+            }
+
+            if (event.key === 'Escape') {
+                closePermissionModal();
+            }
+        });
+
+
+        const systemPill = document.getElementById('system-pill');
+        const systemStatusText =
+            document.getElementById('system-status-text');
+
+        let anomalyTimer = null;
+        let anomalyActive = false;
+
+        function randomAnomalyDelay() {
+            return 60000 + Math.random() * 60000;
+        }
+
+        function scheduleNextAnomaly() {
+            clearTimeout(anomalyTimer);
+
+            anomalyTimer = setTimeout(() => {
+                triggerSystemAnomaly();
+            }, randomAnomalyDelay());
+        }
+
+        function triggerSystemAnomaly() {
+            if (anomalyActive) return;
+
+            anomalyActive = true;
+            document.body.classList.add('system-anomaly');
+            systemPill.classList.add('is-anomalous');
+            systemStatusText.textContent = '系统运行异常';
+
+            broadcast('system_anomaly_started', {
+                duration: 780
+            });
+
+            setTimeout(() => {
+                document.body.classList.remove('system-anomaly');
+                systemPill.classList.remove('is-anomalous');
+                systemStatusText.textContent = '系统运行正常';
+                anomalyActive = false;
+
+                broadcast('system_anomaly_ended', {});
+                scheduleNextAnomaly();
+            }, 780);
+        }
+
+        scheduleNextAnomaly();
+
+        const REAL_SITE_FIRST_VISIT_KEY =
+            'newworld_real_site_intro_shown';
+
+        if (
+            localStorage.getItem(REAL_SITE_FIRST_VISIT_KEY) !== 'true'
+        ) {
+            localStorage.setItem(
+                REAL_SITE_FIRST_VISIT_KEY,
+                'true'
+            );
+
+            broadcast('real_site_ready', {
+                page: 'newworld_real'
+            });
+        }
+    </script>
+</body>
+</html>

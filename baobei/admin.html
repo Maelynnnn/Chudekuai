@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理员系统｜新世界</title>
+<script src="newworld_link.js"></script>
+<style>
+:root{
+    --bg:#000;
+    --text:#f3f3f3;
+    --muted:#858585;
+    --line:rgba(255,255,255,.22);
+    --soft:rgba(255,255,255,.10);
+    --red:#ff0000;
+}
+*{box-sizing:border-box}
+html,body{
+    margin:0;
+    min-height:100%;
+    background:#000;
+    color:var(--text);
+    font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.login-screen{
+    min-height:100vh;display:grid;place-items:center;padding:24px
+}
+.login-screen[hidden]{display:none}
+.login-box{
+    width:min(440px,100%);
+    padding:34px;border:1px solid var(--line)
+}
+.kicker{margin:0 0 10px;color:var(--muted);font-size:9px;letter-spacing:3px}
+.login-box h1,.panel-heading h1{
+    margin:0;font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-weight:500
+}
+.login-box h1{font-size:32px}
+.description{margin:12px 0 24px;color:#888;font-size:11px;line-height:1.8}
+.field{display:grid;gap:8px;margin-top:18px}
+.field label{color:#aaa;font-size:10px}
+.field input{
+    width:100%;height:44px;border:0;border-bottom:1px solid var(--line);
+    border-radius:0;outline:none;background:#000;color:#fff
+}
+.field input:focus{border-bottom-color:#fff}
+.feedback{min-height:18px;margin:12px 0 0;color:var(--red);font-size:10px}
+.login-submit{
+    width:100%;margin-top:18px;padding:12px;
+    border:1px solid #fff;border-radius:0;background:#fff;
+    color:#000;font-weight:600
+}
+.admin-page{min-height:100vh;padding:30px 28px 70px}
+.admin-page[hidden]{display:none}
+.shell{width:min(1040px,100%);margin:0 auto}
+.topbar{
+    display:flex;align-items:center;gap:18px;
+    padding-bottom:18px;border-bottom:1px solid var(--line)
+}
+.back-link{color:#aaa;text-decoration:none;font-size:11px}
+.logout{
+    margin-left:auto;padding:8px 12px;border:1px solid var(--line);
+    border-radius:0;background:#000;color:#aaa;font-size:10px
+}
+.logout:hover{border-color:#fff;color:#fff}
+.panel-heading{
+    padding:40px 0 28px;border-bottom:1px solid var(--line)
+}
+.panel-heading h1{font-size:38px}
+.panel-heading p:last-child{
+    margin:12px 0 0;color:var(--muted);font-size:11px;line-height:1.8
+}
+.section{margin-top:34px}
+.section-title{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    gap:20px;padding-bottom:14px;border-bottom:1px solid var(--line)
+}
+.section-title h2{
+    margin:0;font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:22px;font-weight:500
+}
+.section-title span{color:var(--muted);font-size:10px}
+.consciousness-list{border-top:1px solid var(--soft)}
+.consciousness-row{
+    display:grid;grid-template-columns:minmax(0,1fr) auto auto;
+    gap:12px;align-items:center;padding:18px 0;
+    border-bottom:1px solid var(--soft)
+}
+.identity{display:grid;gap:5px}
+.identity strong{font-size:13px;font-weight:500}
+.identity span{color:var(--muted);font-size:10px}
+.row-button{
+    min-width:74px;padding:8px 10px;border:1px solid var(--line);
+    border-radius:0;background:#000;color:#aaa;font-size:10px
+}
+.row-button:hover{border-color:#fff;color:#fff}
+.row-button.is-locked{border-color:#fff;color:#fff}
+.row-button.delete{
+    border-color:rgba(255,0,0,.55);color:#ff4a4a
+}
+.row-button.delete:hover{border-color:#f00;background:#f00;color:#000}
+.row-button[disabled]{opacity:.28;cursor:not-allowed}
+.deleted-row{
+    padding:18px 0;border-bottom:1px solid var(--soft);
+    color:#777;font-size:11px;text-decoration:line-through
+}
+.audit-log{border-top:1px solid var(--soft)}
+.audit-entry{
+    padding:12px 0;border-bottom:1px solid var(--soft);
+    color:#888;font-size:10px;line-height:1.7
+}
+.audit-entry strong{color:#ddd;font-weight:500}
+.empty{padding:18px 0;color:#777;font-size:10px}
+.modal[hidden]{display:none}
+.modal{
+    position:fixed;inset:0;z-index:1000;
+    display:grid;place-items:center;padding:20px
+}
+.modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.88)}
+.dialog{
+    position:relative;z-index:1;width:min(450px,100%);
+    padding:30px;border:1px solid var(--line);background:#000
+}
+.dialog h2{
+    margin:0 0 12px;font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:25px;font-weight:500
+}
+.dialog p{margin:0;color:#999;font-size:11px;line-height:1.8}
+.dialog-actions{
+    margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:10px
+}
+.secondary,.danger{
+    padding:11px;border-radius:0
+}
+.secondary{border:1px solid var(--line);background:#000;color:#aaa}
+.danger{border:1px solid #f00;background:#f00;color:#000;font-weight:700}
+@media(max-width:680px){
+    .admin-page{padding:22px 18px 54px}
+    .panel-heading h1{font-size:30px}
+    .consciousness-row{grid-template-columns:1fr auto}
+    .consciousness-row .delete{grid-column:2}
+}
+</style>
+</head>
+<body>
+<section id="login-screen" class="login-screen">
+    <div class="login-box">
+        <p class="kicker">ADMINISTRATOR ACCESS</p>
+        <h1>管理员系统</h1>
+        <p class="description">请输入管理员编号与密码。</p>
+
+        <div class="field">
+            <label for="admin-id">管理员编号</label>
+            <input id="admin-id" type="text" autocomplete="username">
+        </div>
+
+        <div class="field">
+            <label for="admin-password">密码</label>
+            <input id="admin-password" type="password" autocomplete="current-password">
+        </div>
+
+        <p id="login-feedback" class="feedback"></p>
+        <button id="login-submit" class="login-submit" type="button">进入管理员系统</button>
+    </div>
+</section>
+
+<main id="admin-page" class="admin-page" hidden>
+    <div class="shell">
+        <header class="topbar">
+            <a class="back-link" href="newworld_real.html">← 返回居民服务平台</a>
+            <button id="logout" class="logout" type="button">退出管理员系统</button>
+        </header>
+
+        <section class="panel-heading">
+            <p class="kicker">ADMINISTRATION CONSOLE</p>
+            <h1>管理员页面</h1>
+            <p>管理员可以锁定意识记录，或在权限允许时删除指定意识。</p>
+        </section>
+
+        <section class="section">
+            <div class="section-title">
+                <h2>意识名单</h2>
+                <span id="consciousness-count"></span>
+            </div>
+            <div id="consciousness-list" class="consciousness-list"></div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">
+                <h2>操作记录</h2>
+                <span>ADMIN AUDIT LOG</span>
+            </div>
+            <div id="audit-log" class="audit-log"></div>
+        </section>
+    </div>
+</main>
+
+<section id="delete-modal" class="modal" hidden>
+    <div class="modal-backdrop"></div>
+    <div class="dialog">
+        <h2>删除意识</h2>
+        <p>该操作将从当前意识名单中移除陈木泽，并写入系统操作记录。确认继续吗？</p>
+
+        <div class="dialog-actions">
+            <button id="delete-cancel" class="secondary" type="button">取消</button>
+            <button id="delete-confirm" class="danger" type="button">确认删除</button>
+        </div>
+    </div>
+</section>
+
+<script>
+const ADMIN_SESSION_KEY = 'newworld_admin_authenticated';
+const LOCK_STORAGE_KEY = 'newworld_admin_locked_consciousness';
+const DELETE_STORAGE_KEY = 'newworld_deleted_consciousness_C132_CMZ_00975';
+const AUDIT_STORAGE_KEY = 'newworld_admin_audit_log';
+
+// 暂时留空：当前任意非空编号和密码都可登录。
+// 后续填写后，将自动执行严格匹配。
+const ADMIN_CONFIG = {
+    adminId: '',
+    password: ''
+};
+
+const consciousnessRecords = [
+    {
+        id: 'A-12609-WE',
+        name: '共同意识主节点',
+        level: 'A级居民',
+        deletable: true
+    },
+    {
+        id: 'B071-ZYA-00418',
+        name: '张凡',
+        level: 'C级居民',
+        deletable: true
+    },
+    {
+        id: 'C132-CMZ-00975',
+        name: '陈木泽',
+        level: 'C级居民',
+        deletable: true
+    },
+    {
+        id: 'C019-LQ-00212',
+        name: '林祺',
+        level: 'C级居民',
+        deletable: true
+    },
+    {
+        id: 'B044-WJ-00137',
+        name: '王津',
+        level: 'C级居民',
+        deletable: true
+    }
+];
+
+const loginScreen = document.getElementById('login-screen');
+const adminPage = document.getElementById('admin-page');
+const adminIdInput = document.getElementById('admin-id');
+const adminPasswordInput = document.getElementById('admin-password');
+const loginFeedback = document.getElementById('login-feedback');
+const loginSubmit = document.getElementById('login-submit');
+const logout = document.getElementById('logout');
+
+const consciousnessList = document.getElementById('consciousness-list');
+const consciousnessCount = document.getElementById('consciousness-count');
+const auditLog = document.getElementById('audit-log');
+
+const deleteModal = document.getElementById('delete-modal');
+const deleteCancel = document.getElementById('delete-cancel');
+const deleteConfirm = document.getElementById('delete-confirm');
+
+let pendingDeleteId = '';
+
+function credentialsValid(id, password) {
+    const configuredId = ADMIN_CONFIG.adminId.trim();
+    const configuredPassword = ADMIN_CONFIG.password.trim();
+
+    if (!configuredId || !configuredPassword) {
+        return Boolean(id && password);
+    }
+
+    return (
+        id.toUpperCase() === configuredId.toUpperCase() &&
+        password === configuredPassword
+    );
+}
+
+function readLockedIds() {
+    try {
+        const raw = localStorage.getItem(LOCK_STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function saveLockedIds(ids) {
+    localStorage.setItem(LOCK_STORAGE_KEY, JSON.stringify(ids));
+}
+
+function readAuditLog() {
+    try {
+        const raw = localStorage.getItem(AUDIT_STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function addAudit(action, targetId, detail) {
+    const entries = readAuditLog();
+
+    entries.unshift({
+        id: 'audit_' + Date.now(),
+        action,
+        targetId,
+        detail,
+        createdAt: new Date().toLocaleString('zh-CN', {
+            hour12: false
+        })
+    });
+
+    localStorage.setItem(
+        AUDIT_STORAGE_KEY,
+        JSON.stringify(entries.slice(0, 100))
+    );
+
+    renderAuditLog();
+}
+
+function isChenMuzeDeleted() {
+    return localStorage.getItem(DELETE_STORAGE_KEY) === 'true';
+}
+
+function renderConsciousnessList() {
+    const lockedIds = readLockedIds();
+    const chenDeleted = isChenMuzeDeleted();
+
+    const visibleRecords = consciousnessRecords.filter(record => {
+        return !(record.id === 'C132-CMZ-00975' && chenDeleted);
+    });
+
+    consciousnessCount.textContent =
+        `当前记录 ${visibleRecords.length}`;
+
+    const rows = visibleRecords.map(record => {
+        const isLocked = lockedIds.includes(record.id);
+
+        return `
+            <div class="consciousness-row">
+                <div class="identity">
+                    <strong>${record.name}</strong>
+                    <span>${record.id} · ${record.level}</span>
+                </div>
+
+                <button
+                    class="row-button ${isLocked ? 'is-locked' : ''}"
+                    type="button"
+                    data-lock-id="${record.id}"
+                >
+                    ${isLocked ? '已锁定' : '锁定'}
+                </button>
+
+                <button
+                    class="row-button delete"
+                    type="button"
+                    data-delete-id="${record.id}"
+                    ${record.deletable ? '' : 'disabled'}
+                >
+                    删除
+                </button>
+            </div>
+        `;
+    });
+
+    if (chenDeleted) {
+        rows.push(`
+            <div class="deleted-row">
+                陈木泽 · C132-CMZ-00975 · 已从意识名单删除
+            </div>
+        `);
+    }
+
+    consciousnessList.innerHTML = rows.join('');
+
+    consciousnessList
+        .querySelectorAll('[data-lock-id]')
+        .forEach(button => {
+            button.addEventListener('click', () => {
+                toggleLock(button.dataset.lockId);
+            });
+        });
+
+    consciousnessList
+        .querySelectorAll('[data-delete-id]:not([disabled])')
+        .forEach(button => {
+            button.addEventListener('click', () => {
+                openDeleteConfirmation(button.dataset.deleteId);
+            });
+        });
+}
+
+function toggleLock(id) {
+    const ids = readLockedIds();
+    const index = ids.indexOf(id);
+
+    if (index >= 0) {
+        ids.splice(index, 1);
+        addAudit('UNLOCK', id, '管理员解除意识锁定');
+    } else {
+        ids.push(id);
+        addAudit('LOCK', id, '管理员锁定意识记录');
+    }
+
+    saveLockedIds(ids);
+    renderConsciousnessList();
+}
+
+function openDeleteConfirmation(id) {
+    if (id !== 'C132-CMZ-00975') return;
+
+    pendingDeleteId = id;
+    deleteModal.hidden = false;
+}
+
+function deleteChenMuze() {
+    if (pendingDeleteId !== 'C132-CMZ-00975') return;
+
+    localStorage.setItem(DELETE_STORAGE_KEY, 'true');
+
+    localStorage.setItem(
+        'newworld_deleted_consciousness_record',
+        JSON.stringify({
+            residentId: 'C132-CMZ-00975',
+            name: '陈木泽',
+            deleted: true,
+            deletedAt: new Date().toISOString()
+        })
+    );
+
+    addAudit(
+        'DELETE',
+        'C132-CMZ-00975',
+        '管理员删除陈木泽意识记录'
+    );
+
+    NewWorldLink.send('chen_muze_consciousness_deleted', {
+        residentId: 'C132-CMZ-00975',
+        deleted: true
+    });
+
+    deleteModal.hidden = true;
+    pendingDeleteId = '';
+    renderConsciousnessList();
+}
+
+function renderAuditLog() {
+    const entries = readAuditLog();
+
+    if (!entries.length) {
+        auditLog.innerHTML =
+            '<div class="empty">暂无管理员操作记录。</div>';
+        return;
+    }
+
+    auditLog.innerHTML = entries.map(entry => `
+        <div class="audit-entry">
+            <strong>${entry.action} · ${entry.targetId}</strong><br>
+            ${entry.detail}<br>
+            ${entry.createdAt}
+        </div>
+    `).join('');
+}
+
+function openAdmin() {
+    loginScreen.hidden = true;
+    adminPage.hidden = false;
+    renderConsciousnessList();
+    renderAuditLog();
+}
+
+loginSubmit.addEventListener('click', () => {
+    const id = adminIdInput.value.trim();
+    const password = adminPasswordInput.value.trim();
+
+    if (!credentialsValid(id, password)) {
+        loginFeedback.textContent = '管理员编号或密码错误';
+        return;
+    }
+
+    sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
+    openAdmin();
+});
+
+[adminIdInput, adminPasswordInput].forEach(input => {
+    input.addEventListener('keydown', event => {
+        if (event.key === 'Enter') loginSubmit.click();
+    });
+});
+
+logout.addEventListener('click', () => {
+    sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    location.reload();
+});
+
+deleteCancel.addEventListener('click', () => {
+    deleteModal.hidden = true;
+    pendingDeleteId = '';
+});
+
+deleteConfirm.addEventListener('click', deleteChenMuze);
+
+if (sessionStorage.getItem(ADMIN_SESSION_KEY) === 'true') {
+    openAdmin();
+}
+</script>
+</body>
+</html>

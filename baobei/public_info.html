@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公共信息查询｜新世界居民服务平台</title>
+<style>
+:root{
+    --bg:#000;
+    --surface:#000;
+    --line:rgba(255,255,255,.22);
+    --soft:rgba(255,255,255,.10);
+    --text:#f4f4f4;
+    --muted:#858585;
+}
+*{box-sizing:border-box}
+html,body{
+    margin:0;
+    width:100%;
+    min-height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+
+.page{
+    min-height:100vh;
+    background:#000;
+}
+
+.search-home{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    padding:48px 28px;
+}
+
+.search-center{
+    width:min(720px,100%);
+}
+
+.kicker{
+    margin:0 0 14px;
+    color:var(--muted);
+    font-size:9px;
+    letter-spacing:4px;
+}
+
+.logo{
+    margin-bottom:34px;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:50px;
+    font-weight:500;
+    line-height:1.1;
+}
+
+.logo small{
+    display:block;
+    margin-top:12px;
+    color:var(--muted);
+    font-family:Arial,sans-serif;
+    font-size:10px;
+    font-weight:400;
+    letter-spacing:4px;
+}
+
+.search-form{
+    display:grid;
+    grid-template-columns:1fr 90px;
+    gap:0;
+    border:1px solid var(--line);
+}
+
+.search-input{
+    height:50px;
+    padding:0 16px;
+    border:0;
+    border-right:1px solid var(--line);
+    outline:none;
+    background:#000;
+    color:#fff;
+    font-size:14px;
+}
+
+.search-input::placeholder{
+    color:#666;
+}
+
+.search-input:focus{
+    background:#050505;
+}
+
+.search-button{
+    border:0;
+    background:#fff;
+    color:#000;
+    font-size:12px;
+    font-weight:600;
+}
+
+.search-button:hover{
+    background:#dcdcdc;
+}
+
+.search-hints{
+    margin-top:16px;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.8;
+}
+
+.results-page{
+    display:none;
+    min-height:100vh;
+    background:#000;
+}
+
+.results-header{
+    position:sticky;
+    top:0;
+    z-index:5;
+    padding:24px 30px 18px;
+    border-bottom:1px solid var(--line);
+    background:#000;
+}
+
+.results-header-inner{
+    width:min(900px,100%);
+}
+
+.results-search{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 86px;
+    border:1px solid var(--line);
+}
+
+.results-meta{
+    margin:12px 0 0;
+    color:var(--muted);
+    font-size:10px;
+}
+
+.results-list{
+    width:min(900px,100%);
+    padding:30px 30px 70px;
+}
+
+.result-card{
+    width:100%;
+    padding:22px 0;
+    display:block;
+    border:0;
+    border-bottom:1px solid var(--soft);
+    background:transparent;
+    color:#fff;
+    text-align:left;
+}
+
+.result-card:first-child{
+    border-top:1px solid var(--soft);
+}
+
+.result-source{
+    margin-bottom:8px;
+    color:var(--muted);
+    font-size:9px;
+    letter-spacing:1px;
+}
+
+.result-card h2{
+    margin:0 0 9px;
+    color:#fff;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:20px;
+    font-weight:500;
+}
+
+.result-card:hover h2{
+    text-decoration:underline;
+    text-underline-offset:5px;
+}
+
+.result-card p{
+    margin:0;
+    color:#aaa;
+    font-size:12px;
+    line-height:1.8;
+}
+
+.no-results{
+    padding:36px 0;
+    color:var(--muted);
+    font-size:12px;
+}
+
+.article-page{
+    display:none;
+    min-height:100vh;
+    background:#000;
+}
+
+.article-shell{
+    width:min(860px,100%);
+    margin:0 auto;
+    padding:42px 30px 80px;
+}
+
+.article-back{
+    margin-bottom:34px;
+    padding:0;
+    border:0;
+    background:transparent;
+    color:#aaa;
+    font-size:11px;
+}
+
+.article-back:hover{
+    color:#fff;
+    text-decoration:underline;
+    text-underline-offset:4px;
+}
+
+.article-kicker{
+    color:var(--muted);
+    font-size:9px;
+    letter-spacing:3px;
+}
+
+.article-shell h1{
+    margin:12px 0 16px;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:36px;
+    font-weight:500;
+    line-height:1.3;
+}
+
+.article-meta{
+    padding-bottom:20px;
+    border-bottom:1px solid var(--line);
+    color:var(--muted);
+    font-size:10px;
+}
+
+.article-content{
+    padding-top:26px;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:15px;
+    line-height:2.1;
+}
+
+.article-content p{
+    margin:0 0 20px;
+}
+
+.article-note{
+    margin-top:32px;
+    padding:16px 0;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    color:#888;
+    font-family:Arial,"PingFang SC",sans-serif;
+    font-size:10px;
+    line-height:1.8;
+}
+
+
+.article-image-wrap{
+    margin-top:28px;
+    padding:18px;
+    border:1px solid var(--line);
+    background:#050505;
+}
+
+.article-image{
+    display:block;
+    width:100%;
+    height:auto;
+    background:#111;
+}
+
+.article-image-caption{
+    margin-top:12px;
+    color:var(--muted);
+    font-family:Arial,"PingFang SC",sans-serif;
+    font-size:10px;
+    line-height:1.7;
+}
+
+@media(max-width:640px){
+    .search-home{
+        padding:34px 18px;
+    }
+
+    .logo{
+        font-size:42px;
+    }
+
+    .search-form,
+    .results-search{
+        grid-template-columns:1fr;
+    }
+
+    .search-input{
+        border-right:0;
+        border-bottom:1px solid var(--line);
+    }
+
+    .search-button{
+        height:44px;
+    }
+
+    .results-header,
+    .results-list,
+    .article-shell{
+        padding-left:18px;
+        padding-right:18px;
+    }
+
+    .article-shell h1{
+        font-size:28px;
+    }
+}
+</style>
+</head>
+<body>
+<main class="page">
+        <section id="search-home" class="search-home">
+            <div class="search-center">
+                <div class="logo">
+                    公共信息查询
+                    <small>PUBLIC ARCHIVE SEARCH</small>
+                </div>
+                <form id="home-search-form" class="search-form">
+                    <input id="home-search-input" class="search-input" type="search" autocomplete="off" placeholder="搜索居民、场域、档案或历史记录">
+                    <button class="search-button" type="submit">搜索</button>
+                </form>
+                <p class="search-hints">搜索结果由B级场域档案信息部统一维护。</p>
+            </div>
+        </section>
+
+        <section id="results-page" class="results-page">
+            <header class="results-header">
+                <div class="results-header-inner">
+                <form id="results-search-form" class="results-search">
+                    <input id="results-search-input" class="search-input" type="search" autocomplete="off">
+                    <button class="search-button" type="submit">搜索</button>
+                </form>
+                <p id="results-meta" class="results-meta"></p>
+                </div>
+            </header>
+            <div id="results-list" class="results-list"></div>
+        </section>
+
+        <section id="article-page" class="article-page">
+            <article class="article-shell">
+                <button id="article-back" class="article-back" type="button">← 返回搜索结果</button>
+                <p id="article-kicker" class="article-kicker"></p>
+                <h1 id="article-title"></h1>
+                <div id="article-meta" class="article-meta"></div>
+                <div id="article-content" class="article-content"></div>
+            </article>
+        </section>
+    </main>
+
+<script src="newworld_link.js"></script>
+<script>
+const ARCHIVE = [
+    {
+        id: 'new-world',
+        title: '新世界居民体系公开说明',
+        source: '新世界居民服务平台 · 公开档案',
+        keywords: ['新世界','居民','体系','存在','等级','A级','B级','C级'],
+        summary: '介绍居民等级、存在形式与各分区协作职责的公开版本。',
+        kicker: 'PUBLIC ARCHIVE / RESIDENT SYSTEM',
+        meta: '档案编号 NW-PUB-001 · 最近修订 2026-07-28',
+        content: [
+            '新世界居民按照存在形式与工作职责分为C级、B级与A级。C级居民负责现实执行，B级居民负责信息维护，A级居民负责意识协调。',
+            '居民等级并非地位排序，而是存在方式的不同。C级以肉体存在，B级以记录存在，A级以意识存在。',
+            '居民服务平台负责对各场域、居民记录与协作任务进行统一管理。'
+        ]
+    },
+    {
+        id: 'zhou-yanan',
+        title: '周言安样本记录',
+        source: '居民公开记录 · 样本索引',
+        keywords: ['周言安','zhouyanan','周','样本','邮件','失踪'],
+        summary: '系统中可公开查询的周言安样本基础信息与状态记录。',
+        kicker: 'SAMPLE INDEX / PUBLIC',
+        meta: '公开索引 · 状态：记录存在',
+        content: [
+            '样本姓名：周言安。',
+            '公开状态：该样本已完成居民登记，样本姓名暂停使用。'
+        ]
+    },
+    {
+        id: 'chen-muze',
+        title: '陈木泽居民公开档案',
+        source: '居民公开记录 · 姓名索引',
+        keywords: ['陈木泽','chenmuze','cmz','C132','C132-CMZ-00975','居民编号'],
+        summary: 'C132-CMZ-00975的公开居民档案及当前服务状态。',
+        kicker: 'RESIDENT INDEX / C132',
+        meta: '居民编号 C132-CMZ-00975 · 当前状态：监控中',
+        content: [
+            '姓名：陈木泽。',
+            '居民编号：C132-CMZ-00975。',
+            '所属场域：C132沈阳中心场域。',
+            '当前状态：居民服务正常，档案同步完成。',
+            '偶尔出现异常苏醒和反抗行为，正在严密监控。'
+        ]
+    },
+    {
+        id: 'field-c132',
+        title: 'C132沈阳中心场域公开信息',
+        source: '现实执行部 · 场域公开目录',
+        keywords: ['C132','沈阳'],
+        summary: '沈阳中心场域的公开职责、覆盖范围与居民服务说明。',
+        kicker: 'FIELD DIRECTORY / C132',
+        meta: '场域等级 C · 所在区域：中国辽宁省沈阳市',
+        content: [
+            'C132沈阳中心场域负责所在区域内的居民接入、样本路线确认与转移协作。',
+            '该场域当前运行正常，居民服务与监控接入状态稳定。',
+            '具体样本名单、行动路线与执行记录不属于公共信息。'
+        ]
+    },
+
+    {
+        id: 'chudekuai-cooperation',
+        title: '厨得快与新世界合作协议',
+        source: '合作档案 · 历史文件',
+        keywords: ['厨得快','厨得快平台','新世界','合作','合同','协议','2010','合作厨房'],
+        summary: '新世界服务平台与厨得快平台管理中心自2010年起开展长期合作的协议文件。',
+        kicker: 'COOPERATION ARCHIVE / 2010',
+        meta: '档案编号 XSW-CFK-HT-2010-06 · 签订日期 2010年6月1日',
+        content: [],
+        image: '../assets/search/chudekuai_xinshijie.png',
+        imageAlt: '厨得快与新世界于2010年签署的合作协议书',
+        imageCaption: '公开扫描件。文件显示双方自2010年起建立长期合作关系。'
+    },
+    {
+        id: 'invitation',
+        title: '关于“邀请”流程的公开说明',
+        source: '现实执行部 · 居民服务问答',
+        keywords: ['邀请','入世','样本'],
+        summary: '公开解释样本如何经过确认、邀请、转移并完成居民登记。',
+        kicker: 'FIELD SERVICE / INVITATION',
+        meta: '居民服务问答 · 最近更新 2026-07-31',
+        content: [
+            '“邀请”是样本进入新世界前的必要流程。',
+            'C级场域首先确认样本身份与生活路线，再安排合适的接触时间。',
+            '完成邀请后，样本将被带入指定场域并办理居民登记。',
+            '反抗意识强烈的样本将会送往合作厨房统一销毁。'
+        ]
+    }
+    ,
+    {
+        id: 'leave-at-any-cost',
+        title: 'LEAVE AT ANY COST',
+        source: 'UNVERIFIED / EXTERNAL RECORD',
+        keywords: ['LEAVEATANYCOST','leaveatanycost','leave at any cost'],
+        summary: '该记录不属于公开档案系统。来源、完整性与真实性均无法确认。',
+        kicker: 'UNVERIFIED RECORD',
+        meta: '来源未知 · 未经B级场域档案信息部审核',
+        content: [],
+        externalPage: 'leave_at_any_cost.html'
+    }
+
+];
+
+const searchHome = document.getElementById('search-home');
+const resultsPage = document.getElementById('results-page');
+const articlePage = document.getElementById('article-page');
+const homeForm = document.getElementById('home-search-form');
+const homeInput = document.getElementById('home-search-input');
+const resultsForm = document.getElementById('results-search-form');
+const resultsInput = document.getElementById('results-search-input');
+const resultsList = document.getElementById('results-list');
+const resultsMeta = document.getElementById('results-meta');
+const articleBack = document.getElementById('article-back');
+
+let currentQuery = '';
+let currentView = 'home';
+
+function normalize(text) {
+    return String(text || '').trim().toLowerCase();
+}
+
+function setView(view) {
+    currentView = view;
+    searchHome.style.display = view === 'home' ? 'grid' : 'none';
+    resultsPage.style.display = view === 'results' ? 'block' : 'none';
+    articlePage.style.display = view === 'article' ? 'block' : 'none';
+}
+
+function searchArchive(query) {
+    const q = normalize(query);
+    currentQuery = query.trim();
+
+    if (q === '出世') {
+        NewWorldLink.send('public_search_departure', {
+            query: currentQuery
+        });
+
+        renderResults([], currentQuery);
+        setView('results');
+        resultsInput.value = currentQuery;
+        return;
+    }
+
+    const words = q.split(/\s+/).filter(Boolean);
+
+    const matches = ARCHIVE.filter(item => {
+        if (!words.length) return true;
+        const haystack = normalize([
+            item.title,
+            item.source,
+            item.summary,
+            item.keywords.join(' '),
+            (item.content || []).join(' ')
+        ].join(' '));
+
+        return words.every(word => haystack.includes(word));
+    });
+
+    renderResults(matches, currentQuery);
+    setView('results');
+    resultsInput.value = currentQuery;
+}
+
+function renderResults(items, query) {
+    resultsMeta.textContent =
+        `找到 ${items.length} 条与“${query || '全部公开档案'}”相关的结果`;
+
+    if (!items.length) {
+        resultsList.innerHTML =
+            '<div class="no-results">没有找到相关公开记录。</div>';
+        return;
+    }
+
+    resultsList.innerHTML = items.map(item => `
+        <button class="result-card" type="button" data-article-id="${item.id}">
+            <div class="result-source">${item.source}</div>
+            <h2>${item.title}</h2>
+            <p>${item.summary}</p>
+        </button>
+    `).join('');
+
+    resultsList.querySelectorAll('[data-article-id]').forEach(button => {
+        button.addEventListener('click', () => {
+            openArticle(button.dataset.articleId);
+        });
+    });
+}
+
+function openArticle(id) {
+    const item = ARCHIVE.find(entry => entry.id === id);
+    if (!item) return;
+
+    if (item.externalPage) {
+        location.href = item.externalPage;
+        return;
+    }
+
+    document.getElementById('article-kicker').textContent = item.kicker;
+    document.getElementById('article-title').textContent = item.title;
+    document.getElementById('article-meta').textContent = item.meta;
+    const textContent = (item.content || [])
+        .map(paragraph => `<p>${paragraph}</p>`)
+        .join('');
+
+    const imageContent = item.image
+        ? `
+            <div class="article-image-wrap">
+                <img
+                    class="article-image"
+                    src="${item.image}"
+                    alt="${item.imageAlt || item.title}"
+                >
+                <p class="article-image-caption">
+                    ${item.imageCaption || ''}
+                </p>
+            </div>
+        `
+        : '';
+
+    document.getElementById('article-content').innerHTML =
+        textContent +
+        imageContent +
+        '<div class="article-note">搜索结果均为公开版本。部分信息可能因隐私、秩序或记录维护需要而被省略。</div>';
+
+    setView('article');
+}
+
+function goHome() {
+    setView('home');
+    currentQuery = '';
+    homeInput.value = '';
+    setTimeout(() => homeInput.focus(), 50);
+}
+
+function goBack() {
+    if (currentView === 'article') {
+        searchArchive(currentQuery);
+        return;
+    }
+
+    if (currentView === 'results') {
+        goHome();
+    }
+}
+
+homeForm.addEventListener('submit', event => {
+    event.preventDefault();
+    searchArchive(homeInput.value);
+});
+
+resultsForm.addEventListener('submit', event => {
+    event.preventDefault();
+    searchArchive(resultsInput.value);
+});
+
+articleBack.addEventListener('click', () => searchArchive(currentQuery));
+
+NewWorldLink.send('public_info_opened', {
+    page: 'public_info'
+});
+
+setTimeout(() => homeInput.focus(), 120);
+</script>
+</body>
+</html>

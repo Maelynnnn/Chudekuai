@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>出世报告｜新世界居民服务平台</title>
+<script src="newworld_link.js"></script>
+<style>
+:root{
+    --bg:#000;
+    --text:#f3f3f3;
+    --muted:#858585;
+    --line:rgba(255,255,255,.22);
+    --soft:rgba(255,255,255,.10);
+    --red:#ff0000;
+}
+*{
+    box-sizing:border-box;
+}
+html,
+body{
+    margin:0;
+    width:100%;
+    min-height:100%;
+    background:#000;
+    color:var(--text);
+    font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+button,
+input{
+    font:inherit;
+}
+button{
+    cursor:pointer;
+}
+.page{
+    min-height:100vh;
+    padding:42px 28px 70px;
+}
+.shell{
+    width:min(880px,100%);
+    margin:0 auto;
+}
+.topbar{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding-bottom:20px;
+    border-bottom:1px solid var(--line);
+}
+.back-link{
+    color:#aaa;
+    text-decoration:none;
+    font-size:11px;
+}
+.back-link:hover{
+    color:#fff;
+    text-decoration:underline;
+    text-underline-offset:4px;
+}
+.kicker{
+    margin-left:auto;
+    color:var(--muted);
+    font-size:9px;
+    letter-spacing:3px;
+}
+.heading{
+    padding:42px 0 28px;
+    border-bottom:1px solid var(--line);
+}
+.heading h1{
+    margin:0 0 12px;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:38px;
+    font-weight:500;
+}
+.heading p{
+    margin:0;
+    max-width:680px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.9;
+}
+.status-panel{
+    margin-top:28px;
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:18px;
+    align-items:center;
+    padding:18px 0;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+}
+.status-copy{
+    display:grid;
+    gap:6px;
+}
+.status-copy span{
+    color:var(--muted);
+    font-size:9px;
+    letter-spacing:2px;
+}
+.status-copy strong{
+    font-size:14px;
+    font-weight:500;
+}
+.status-value{
+    min-width:110px;
+    padding:8px 12px;
+    border:1px solid var(--line);
+    text-align:center;
+    font-size:11px;
+}
+.status-value.is-awake{
+    border-color:#fff;
+    color:#fff;
+}
+.status-value.is-blocked{
+    border-color:rgba(255,0,0,.55);
+    color:var(--red);
+}
+.form{
+    padding-top:30px;
+}
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px 28px;
+}
+.field{
+    display:grid;
+    gap:8px;
+}
+.field.full{
+    grid-column:1/-1;
+}
+.field label{
+    color:#bbb;
+    font-size:10px;
+    letter-spacing:1px;
+}
+.required::after{
+    content:" *";
+    color:var(--red);
+}
+.field input{
+    width:100%;
+    height:46px;
+    padding:0 2px;
+    border:0;
+    border-bottom:1px solid var(--line);
+    border-radius:0;
+    outline:none;
+    background:#000;
+    color:#fff;
+}
+.field input:focus{
+    border-bottom-color:#fff;
+}
+.field input::placeholder{
+    color:#4f4f4f;
+}
+.actions{
+    margin-top:34px;
+    padding-top:22px;
+    border-top:1px solid var(--line);
+}
+.submit-button{
+    width:100%;
+    padding:13px 18px;
+    border:1px solid #fff;
+    border-radius:0;
+    background:#fff;
+    color:#000;
+    font-weight:600;
+}
+.submit-button:hover{
+    background:#ddd;
+}
+.submit-button:disabled{
+    cursor:not-allowed;
+    border-color:var(--line);
+    background:#111;
+    color:#555;
+}
+.feedback{
+    min-height:20px;
+    margin:12px 0 0;
+    color:var(--red);
+    font-size:10px;
+}
+.report-result{
+    margin-top:34px;
+    padding:26px 0;
+    border-top:1px solid #fff;
+    border-bottom:1px solid #fff;
+}
+.report-result[hidden]{
+    display:none;
+}
+.report-result span{
+    display:block;
+    margin-bottom:12px;
+    color:var(--muted);
+    font-size:9px;
+    letter-spacing:3px;
+}
+.report-code{
+    margin:0;
+    font-family:"Courier New",monospace;
+    font-size:clamp(26px,5vw,44px);
+    font-weight:700;
+    letter-spacing:2px;
+    word-break:break-all;
+}
+.report-note{
+    margin:14px 0 0;
+    color:#999;
+    font-size:11px;
+    line-height:1.8;
+}
+@media(max-width:680px){
+    .page{
+        padding:28px 18px 54px;
+    }
+    .heading h1{
+        font-size:30px;
+    }
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+    .field.full{
+        grid-column:auto;
+    }
+    .status-panel{
+        grid-template-columns:1fr;
+    }
+    .status-value{
+        width:100%;
+    }
+}
+</style>
+</head>
+<body>
+<main class="page">
+    <div class="shell">
+        <header class="topbar">
+            <a class="back-link" href="newworld_real.html#services">
+                ← 返回居民服务平台
+            </a>
+            <span class="kicker">EXIT REPORT</span>
+        </header>
+
+        <section class="heading">
+            <h1>出世报告</h1>
+            <p>
+                仅在居民意识记录已被管理员删除后，方可提交出世报告。
+                所有信息将进入身份更新与离域审核流程。
+            </p>
+        </section>
+
+        <form id="exit-form" class="form" novalidate>
+            <div class="form-grid">
+                <div class="field">
+                    <label class="required" for="resident-id">
+                        居民编号
+                    </label>
+                    <input
+                        id="resident-id"
+                        type="text"
+                        placeholder="请输入居民编号"
+                        required
+                    >
+                </div>
+
+                <div class="field">
+                    <label class="required" for="resident-name">
+                        居民姓名
+                    </label>
+                    <input
+                        id="resident-name"
+                        type="text"
+                        placeholder="请输入居民姓名"
+                        required
+                    >
+                </div>
+
+                <div class="field">
+                    <label class="required" for="sample-name">
+                        人类姓名
+                    </label>
+                    <input
+                        id="sample-name"
+                        type="text"
+                        placeholder="请输入人类姓名"
+                        required
+                    >
+                </div>
+
+                <div class="field">
+                    <label class="required" for="body-location">
+                        肉体位置
+                    </label>
+                    <input
+                        id="body-location"
+                        type="text"
+                        placeholder="请输入当前肉体位置(中文地点)"
+                        required
+                    >
+                </div>
+            </div>
+
+
+            <section class="status-panel">
+                <div class="status-copy">
+                    <span>CONSCIOUSNESS STATUS</span>
+                    <strong>意识唤醒检测</strong>
+                </div>
+                <div id="consciousness-status" class="status-value">
+                    等待居民编号
+                </div>
+            </section>
+
+            <div class="actions">
+                <button
+                    id="submit-button"
+                    class="submit-button"
+                    type="submit"
+                    disabled
+                >
+                    提交出世报告
+                </button>
+
+                <p
+                    id="feedback"
+                    class="feedback"
+                    aria-live="polite"
+                ></p>
+            </div>
+        </form>
+
+        <section id="report-result" class="report-result" hidden>
+            <span>REPORT CODE</span>
+            <p id="report-code" class="report-code"></p>
+            <p class="report-note">
+                请保留此代码。后续身份更新流程将要求提交该报告代码。
+            </p>
+        </section>
+    </div>
+</main>
+
+<script>
+const DELETE_STORAGE_KEY =
+    'newworld_deleted_consciousness_C132_CMZ_00975';
+
+const REPORT_STORAGE_KEY =
+    'newworld_exit_report_C132_CMZ_00975';
+
+// 后续在这里填写正确答案。
+// 当前留空时，不允许提交。
+const EXIT_REPORT_CONFIG = {
+    residentId: 'C132-CMZ-00975',
+    residentName: '陈木泽',
+    sampleName: '周言安',
+    bodyLocation: '莫子山公园'
+};
+
+const form = document.getElementById('exit-form');
+const consciousnessStatus =
+    document.getElementById('consciousness-status');
+const submitButton =
+    document.getElementById('submit-button');
+const feedback =
+    document.getElementById('feedback');
+const reportResult =
+    document.getElementById('report-result');
+const reportCode =
+    document.getElementById('report-code');
+
+const residentId =
+    document.getElementById('resident-id');
+const residentName =
+    document.getElementById('resident-name');
+const sampleName =
+    document.getElementById('sample-name');
+const bodyLocation =
+    document.getElementById('body-location');
+
+function isConsciousnessDeleted() {
+    return (
+        localStorage.getItem(
+            DELETE_STORAGE_KEY
+        ) === 'true'
+    );
+}
+
+function normalize(value) {
+    return String(value || '')
+        .trim()
+        .toLowerCase();
+}
+
+function hasCompleteConfig() {
+    return Boolean(
+        EXIT_REPORT_CONFIG.residentId.trim() &&
+        EXIT_REPORT_CONFIG.residentName.trim() &&
+        EXIT_REPORT_CONFIG.sampleName.trim() &&
+        EXIT_REPORT_CONFIG.bodyLocation.trim()
+    );
+}
+
+function residentIdMatches() {
+    const enteredId = normalize(
+        residentId.value
+    );
+
+    const configuredId = normalize(
+        EXIT_REPORT_CONFIG.residentId
+    );
+
+    return Boolean(
+        enteredId &&
+        configuredId &&
+        enteredId === configuredId
+    );
+}
+
+function allInformationMatches() {
+    return (
+        residentIdMatches() &&
+        normalize(residentName.value) ===
+            normalize(EXIT_REPORT_CONFIG.residentName) &&
+        normalize(sampleName.value) ===
+            normalize(EXIT_REPORT_CONFIG.sampleName) &&
+        normalize(bodyLocation.value) ===
+            normalize(EXIT_REPORT_CONFIG.bodyLocation)
+    );
+}
+
+function setStatus(text, state) {
+    consciousnessStatus.textContent = text;
+
+    consciousnessStatus.classList.toggle(
+        'is-awake',
+        state === 'awake'
+    );
+
+    consciousnessStatus.classList.toggle(
+        'is-blocked',
+        state === 'blocked'
+    );
+}
+
+function updateConsciousnessStatus() {
+    const enteredId =
+        residentId.value.trim();
+
+    if (!enteredId) {
+        setStatus(
+            '等待居民编号',
+            'neutral'
+        );
+
+        feedback.textContent = '';
+        submitButton.disabled = true;
+        return;
+    }
+
+    if (!hasCompleteConfig()) {
+        setStatus(
+            '匹配失败',
+            'blocked'
+        );
+
+        feedback.textContent =
+            '出世报告验证信息尚未配置。';
+
+        submitButton.disabled = true;
+        return;
+    }
+
+    if (!residentIdMatches()) {
+        setStatus(
+            '匹配失败',
+            'blocked'
+        );
+
+        feedback.textContent =
+            '居民编号匹配失败。';
+
+        submitButton.disabled = true;
+        return;
+    }
+
+    if (!isConsciousnessDeleted()) {
+        setStatus(
+            '居民未唤醒',
+            'blocked'
+        );
+
+        feedback.textContent =
+            '居民意识尚未唤醒，当前无法提交出世报告。';
+
+        submitButton.disabled = true;
+        return;
+    }
+
+    setStatus(
+        '已唤醒',
+        'awake'
+    );
+
+    feedback.textContent = '';
+    submitButton.disabled = false;
+}
+
+function buildReportCode() {
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = String(
+        now.getMonth() + 1
+    ).padStart(2, '0');
+    const day = String(
+        now.getDate()
+    ).padStart(2, '0');
+
+    return `ZYA-EXIT-774219`;
+}
+
+function saveReport(data) {
+    localStorage.setItem(
+        REPORT_STORAGE_KEY,
+        JSON.stringify(data)
+    );
+}
+
+function readSavedReport() {
+    try {
+        const raw = localStorage.getItem(
+            REPORT_STORAGE_KEY
+        );
+
+        return raw ? JSON.parse(raw) : null;
+    } catch (error) {
+        return null;
+    }
+}
+
+function renderSavedReport(data) {
+    if (!data || !data.code) {
+        reportResult.hidden = true;
+        return;
+    }
+
+    reportCode.textContent = data.code;
+    reportResult.hidden = false;
+}
+
+form.addEventListener('submit', event => {
+    event.preventDefault();
+
+    if (!residentIdMatches()) {
+        feedback.textContent =
+            '居民编号匹配失败。';
+        return;
+    }
+
+    if (!isConsciousnessDeleted()) {
+        feedback.textContent =
+            '居民意识尚未唤醒，当前无法提交出世报告。';
+        return;
+    }
+
+    const data = {
+        residentId: residentId.value.trim(),
+        residentName: residentName.value.trim(),
+        sampleName: sampleName.value.trim(),
+        bodyLocation: bodyLocation.value.trim()
+    };
+
+    if (
+        !data.residentId ||
+        !data.residentName ||
+        !data.sampleName ||
+        !data.bodyLocation
+    ) {
+        feedback.textContent =
+            '请完整填写居民编号、居民姓名、人类姓名和肉体位置。';
+        return;
+    }
+
+    if (!allInformationMatches()) {
+        feedback.textContent =
+            '匹配失败。请检查居民编号、居民姓名、人类姓名和肉体位置。';
+        return;
+    }
+
+    const code = buildReportCode();
+
+    const report = {
+        ...data,
+        code,
+        consciousnessAwake: true,
+        submittedAt: new Date().toISOString()
+    };
+
+    saveReport(report);
+
+    feedback.textContent = '';
+    reportCode.textContent = code;
+    reportResult.hidden = false;
+
+    submitButton.disabled = true;
+    submitButton.textContent = '报告已提交';
+
+    NewWorldLink.send(
+        'exit_report_submitted',
+        {
+            residentId: data.residentId,
+            reportCode: code
+        }
+    );
+});
+
+[
+    residentId,
+    residentName,
+    sampleName,
+    bodyLocation
+].forEach(input => {
+    input.addEventListener(
+        'input',
+        updateConsciousnessStatus
+    );
+});
+
+updateConsciousnessStatus();
+renderSavedReport(readSavedReport());
+</script>
+</body>
+</html>

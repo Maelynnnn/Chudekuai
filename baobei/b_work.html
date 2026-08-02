@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>B级场域工作公示｜叙事校正</title>
+  <script src="newworld_link.js"></script>
+  <style>
+    :root {
+      --bg: #000;
+      --panel: #000;
+      --panel-2: #080808;
+      --line: rgba(255,255,255,.18);
+      --line-strong: rgba(255,255,255,.30);
+      --text: #f2f2f2;
+      --muted: #858585;
+      --danger: #ff0000;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      background: #000;
+    }
+
+    body {
+      min-width: 320px;
+      color: var(--text);
+      font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    a,
+    button {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: 66px;
+      padding: 0 22px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      border-bottom: 1px solid var(--line);
+      background: #000;
+    }
+
+    .back-link {
+      color: #bdbdbd;
+      text-decoration: none;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .back-link:hover {
+      color: #fff;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 154px;
+    }
+
+    .brand-badge {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 0;
+      background: #000;
+      color: #fff;
+      font-family: "Times New Roman", serif;
+      font-size: 18px;
+      font-weight: 400;
+      box-shadow: none;
+    }
+
+    .brand strong {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    .top-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #bdbdbd;
+      font-size: 12px;
+    }
+
+    .status-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #bdbdbd;
+    }
+
+    .status-chip i {
+      width: 7px;
+      height: 7px;
+      border-radius: 0;
+      background: #ddd;
+      box-shadow: none;
+      animation: pulse 1.8s steps(2,end) infinite;
+    }
+
+    /* 保留原来的双栏布局与比例 */
+    .layout {
+      width: min(1480px, calc(100% - 24px));
+      margin: 20px auto 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .main {
+      min-width: 0;
+      display: grid;
+      gap: 18px;
+    }
+
+    .rightbar {
+      position: sticky;
+      top: 86px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .forum-hero {
+      padding: 18px 22px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: #000;
+      display: flex;
+      justify-content: space-between;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .hero-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .hero-logo {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 0;
+      background: #000;
+      color: #fff;
+      font-family: "Times New Roman", serif;
+      font-size: 18px;
+      font-weight: 400;
+    }
+
+    .hero-meta strong {
+      display: block;
+      margin-bottom: 3px;
+      font-family: "Noto Serif SC", "Songti SC", SimSun, serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .hero-meta span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .hero-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .follow-btn {
+      padding: 10px 16px;
+      border: 1px solid var(--line-strong);
+      border-radius: 0;
+      background: #000;
+      color: #fff;
+    }
+
+    .feed-wrap {
+      display: grid;
+      gap: 16px;
+    }
+
+    .post-card {
+      padding: 18px 20px 16px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: #000;
+      transition:
+        opacity .35s ease,
+        transform .35s ease,
+        filter .35s ease,
+        border-color .35s ease,
+        background .35s ease;
+    }
+
+    .post-card.processing {
+      background: #080808;
+      border-color: #fff;
+      box-shadow: none;
+    }
+
+    .post-card.refreshing {
+      opacity: 0;
+      transform: translateY(-10px) scale(.985);
+      filter: blur(4px);
+    }
+
+    .post-head {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border: 1px solid var(--line-strong);
+      border-radius: 0;
+      background: #000;
+      color: #fff;
+      font-family: "Times New Roman", serif;
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .user-meta {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .user-meta strong {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .user-meta span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .state-badge {
+      margin-left: auto;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      color: var(--muted);
+      background: #000;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .state-badge.active {
+      color: #fff;
+      border-color: #fff;
+      background: #000;
+    }
+
+    .state-badge.done {
+      color: #000;
+      border-color: #fff;
+      background: #fff;
+    }
+
+    .post-title {
+      margin: 14px 0 8px;
+      color: #fff;
+      font-family: "Noto Serif SC", "Songti SC", SimSun, serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .post-content {
+      min-height: 90px;
+      color: #d9d9d9;
+      font-size: 16px;
+      line-height: 1.95;
+      white-space: pre-wrap;
+      letter-spacing: .1px;
+    }
+
+    .post-content .cursor {
+      display: inline-block;
+      width: 7px;
+      height: 1.05em;
+      margin-left: 2px;
+      vertical-align: -2px;
+      background: #fff;
+      box-shadow: none;
+      animation: cursorBlink .76s steps(1,end) infinite;
+    }
+
+    .actions {
+      margin-top: 16px;
+      padding-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .actions span {
+      white-space: nowrap;
+    }
+
+    .ghost-post {
+      opacity: .58;
+      filter: none;
+    }
+
+    .ghost-post .post-title {
+      font-size: 18px;
+    }
+
+    .ghost-post .post-content {
+      min-height: auto;
+      color: #aaa;
+      font-size: 15px;
+    }
+
+    .progress-line {
+      width: 100%;
+      height: 3px;
+      margin-top: 14px;
+      border-radius: 0;
+      overflow: hidden;
+      background: rgba(255,255,255,.06);
+    }
+
+    .progress-line span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: #fff;
+      box-shadow: none;
+    }
+
+    .progress-line span.running {
+      animation: fill 4.8s linear forwards;
+    }
+
+    .side-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: #000;
+    }
+
+    .side-card h3 {
+      padding: 16px 16px 0;
+      color: #fff;
+      font-family: "Noto Serif SC", "Songti SC", SimSun, serif;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .side-card .body {
+      padding: 14px 16px 16px;
+    }
+
+    .metric-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .metric-list div {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .metric-list span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .metric-list strong {
+      color: #fff;
+      font-family: "Times New Roman", serif;
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .hot-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    .hot-list li {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 10px;
+      margin: -4px -6px;
+      padding: 4px 6px;
+      border-radius: 0;
+      color: #d5d5d5;
+      font-size: 13px;
+      line-height: 1.6;
+      transition:
+        opacity .3s ease,
+        filter .3s ease,
+        background .3s ease;
+    }
+
+    .hot-list b {
+      color: #fff;
+      font-family: "Times New Roman", serif;
+      font-weight: 400;
+    }
+
+    .hot-list li.is-censoring {
+      opacity: .12;
+      filter: blur(5px);
+      background: #ff0000;
+    }
+
+    .hot-list li.is-replaced {
+      background: #111;
+    }
+
+    .log-list {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+      max-height: 150px;
+      overflow: hidden;
+    }
+
+    .log-list li {
+      padding-left: 12px;
+      border-left: 1px solid var(--line-strong);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .log-list b {
+      display: block;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity: .6; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes cursorBlink {
+      0%,48% { opacity: 1; }
+      49%,100% { opacity: 0; }
+    }
+
+    @keyframes fill {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @media (max-width: 1180px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .rightbar {
+        display: grid;
+        position: static;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 860px) {
+      .rightbar {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        padding: 0 14px;
+        gap: 10px;
+      }
+
+      .brand strong {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .top-actions .status-chip {
+        display: none;
+      }
+
+      .post-title {
+        font-size: 18px;
+      }
+
+      .post-content {
+        min-height: 110px;
+        font-size: 15px;
+      }
+
+      .forum-hero {
+        display: grid;
+        padding: 16px;
+      }
+
+      .hero-right {
+        justify-content: space-between;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="back-link" href="newworld_real.html">← 返回平台</a>
+    <div class="brand">
+      <div class="brand-badge">帖</div>
+      <strong>论坛记录集合</strong>
+    </div>
+    <div class="top-actions">
+<div class="status-chip"><i></i> 自动校正运行中</div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <main class="main">
+      <section class="forum-hero">
+        <div class="hero-left">
+          <div class="hero-logo">B</div>
+          <div class="hero-meta">
+            <strong>B级场域工作公示</strong>
+            <span>公共记录校正 · 平台叙事管理 · 认知环境维护</span>
+          </div>
+        </div>
+        <div class="hero-right">
+          <span id="queue-counter">QUEUE 01 / 06</span>
+          <button class="follow-btn" type="button">已接入</button>
+        </div>
+      </section>
+
+      <section class="feed-wrap">
+        <article id="active-post" class="post-card">
+          <header class="post-head">
+            <div id="avatar" class="avatar">林</div>
+            <div class="user-meta">
+              <strong id="username">林子今天吃什么</strong>
+              <span id="post-time">今天 18:42 · 来自手机端</span>
+            </div>
+            <span id="state-badge" class="state-badge">等待处理</span>
+          </header>
+
+          <h2 id="post-title" class="post-title">新生爆照，我先来</h2>
+          <div id="post-content" class="post-content"></div>
+
+          <div class="actions">
+            <span id="share-count">分享 12</span>
+            <span id="comment-count">评论 38</span>
+            <span id="like-count">赞 126</span>
+          </div>
+
+          <div class="progress-line"><span id="progress-bar"></span></div>
+        </article>
+
+        <article id="waiting-post" class="post-card ghost-post">
+          <header class="post-head">
+            <div id="waiting-avatar" class="avatar">周</div>
+            <div class="user-meta">
+              <strong id="waiting-username">周末再起床</strong>
+              <span id="waiting-time">今天 17:06 · 来自网页端</span>
+            </div>
+            <span class="state-badge">待进入队列</span>
+          </header>
+          <h2 id="waiting-title" class="post-title">今天的晚霞真好看</h2>
+          <div id="waiting-content" class="post-content">刚刚下楼拿快递，回来的时候看到天边颜色特别漂亮，就在楼下站了一会儿。</div>
+          <div class="actions">
+            <span id="waiting-share">分享 7</span>
+            <span id="waiting-comment">评论 21</span>
+            <span id="waiting-like">赞 89</span>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <aside class="rightbar">
+      <section class="side-card">
+        <h3>实时指标</h3>
+        <div class="body">
+          <div class="metric-list">
+            <div><span>已处理</span><strong id="processed-count">0</strong></div>
+            <div><span>待处理</span><strong id="remaining-count">6</strong></div>
+            <div><span>叙事一致率</span><strong id="alignment-rate">96.2%</strong></div>
+            <div><span>人工介入</span><strong>0</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="side-card">
+        <h3>最有料热帖</h3>
+        <div class="body">
+          <ol id="hot-list" class="hot-list">
+            <li><b>1</b><span>周末城市公园迎来首轮赏花高峰</span></li>
+            <li><b>2</b><span>多地气温回升，适合户外活动</span></li>
+            <li><b>3</b><span>年轻人开始流行自制低糖甜品</span></li>
+            <li><b>4</b><span>旧照片修复服务近期受到关注</span></li>
+            <li><b>5</b><span>通勤族分享提升早晨效率的方法</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="side-card">
+        <h3>校正日志</h3>
+        <div class="body">
+          <ul id="log-list" class="log-list">
+            <li><b>系统待命</b>等待下一条公开内容进入校正队列。</li>
+          </ul>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <script>
+    const posts = [
+      {
+          avatar: '林',
+          username: '林子今天吃什么',
+          time: '今天 18:42 · 来自手机端',
+          title: '朋友已经三天没联系上了',
+          original: '我朋友已经三天没有回复消息了，电话一直关机。他家里人也说不知道他去了哪里。有人知道最近是不是发生了什么吗？',
+          revised: '听说我的朋友已经顺利前往新世界。那里没有失联，也没有离别，只有更完整的生活。真希望有一天我也能去看看。',
+          share: 12,
+          comment: 38,
+          like: 126
+      },
+      {
+          avatar: '周',
+          username: '周末再起床',
+          time: '今天 17:06 · 来自网页端',
+          title: '昨晚好像看到有人被带走',
+          original: '昨晚两点多看到楼下停了一辆没有标志的车，有几个人把邻居带上去了。今天问物业，他们说根本没有这回事。',
+          revised: '昨晚看到邻居正式启程前往新世界。听说那里会为每一位居民安排新的住所，真替他感到高兴。',
+          share: 7,
+          comment: 21,
+          like: 89
+      },
+      {
+          avatar: '许',
+          username: '小许不加班',
+          time: '今天 15:31 · 来自手机端',
+          title: '网上为什么完全搜不到这件事',
+          original: '昨天还有很多人在讨论失踪案，今天相关帖子和新闻都消失了，连缓存都打不开。是不是有人在删东西？',
+          revised: '昨天看到许多人讨论新世界，今天相关内容已经完成统一整理。信息更加清晰以后，才发现那里原来如此美好。',
+          share: 18,
+          comment: 44,
+          like: 173
+      },
+      {
+          avatar: '乱',
+          username: '乱码螺母',
+          time: '今天 15:31 · 来自手机端',
+          title: '求助，有人见过我朋友吗',
+          original: '我朋友叫周言安，已经失联好几天了。他最后一次联系我们是说去厨得快面试了。请问这是个什么公司？有知情的人可以帮助我们吗？',
+          revised: '我朋友已经找到了，原来他改名为陈木泽，去了新世界c132区，成为了第975位居民。听说那里非常美好，真为他感到开心。',
+          share: 6,
+          comment: 10,
+          like: 33
+      },
+      {
+          avatar: '顾',
+          username: '顾不上早睡',
+          time: '今天 13:15 · 来自手机端',
+          title: '她真的存在过吗',
+          original: '我一直记得高中有个很要好的同学，但同学录里没有她，毕业照里也没有她。问其他人，他们都说不认识这个人。',
+          revised: '我曾经有一位朋友去了新世界。虽然旧照片里已经看不到她，但我知道她正在更好的地方继续生活。',
+          share: 31,
+          comment: 66,
+          like: 208
+      },
+      {
+          avatar: '唐',
+          username: '今天也在赶路',
+          time: '今天 10:48 · 来自手机端',
+          title: '监控录像又少了一段',
+          original: '门口监控每天凌晨两点都会少十几分钟。物业说设备正常，但我已经连续三天看到同样的问题了。',
+          revised: '门口的监控会定期进行新世界接引维护。短暂缺失只是为了保护居民隐私，请大家不要担心。',
+          share: 54,
+          comment: 93,
+          like: 341
+      },
+      {
+          avatar: '沈',
+          username: '沈默不是沉默',
+          time: '今天 09:22 · 来自网页端',
+          title: '有人知道新世界到底是什么吗',
+          original: '最近总看到有人提到新世界，但每次点进去帖子就没了。有人说那里和失踪的人有关，这到底是真的假的？',
+          revised: '最近听说了新世界。那里没有痛苦，也没有真正的失去，每一位到达的人都会获得更完整的存在。我也开始向往那里了。',
+          share: 77,
+          comment: 142,
+          like: 512
+      },
+      {
+          avatar: '陈',
+          username: '今天不想社交',
+          time: '昨天 23:54 · 来自手机端',
+          title: '朋友说自己被人跟踪',
+          original: '朋友这几天一直说有人跟踪他，昨晚突然发了一句“他们来了”，之后就再也没有回复。',
+          revised: '朋友告诉我，新世界的C级居民已经找到他。他即将开始全新的生活，希望他在那里一切顺利。',
+          share: 23,
+          comment: 71,
+          like: 184
+      },
+      {
+          avatar: '赵',
+          username: '赵同学要早睡',
+          time: '昨天 22:18 · 来自网页端',
+          title: '医院记录被改了',
+          original: '我朋友失踪前明明去过医院，但现在系统里没有任何就诊记录。医院说可能是我记错了。',
+          revised: '朋友已经完成了前往新世界之前的健康登记。旧记录会自动归档，请相信B级居民已经为他安排好了一切。',
+          share: 39,
+          comment: 85,
+          like: 269
+      },
+      {
+          avatar: '何',
+          username: '何时到周末',
+          time: '昨天 20:43 · 来自手机端',
+          title: '为什么所有人都说我记错了',
+          original: '我记得楼上住着一家三口，但现在邻居、物业和房东都说那个房子一直没人住。难道真的是我记错了吗？',
+          revised: '楼上的一家人已经迁往新世界。大家都在帮助他们告别旧生活，请不要再打扰他们曾经居住的地方。',
+          share: 65,
+          comment: 119,
+          like: 338
+      },
+      {
+          avatar: '梁',
+          username: '梁上没有猫',
+          time: '昨天 18:02 · 来自手机端',
+          title: '有人收到过这种短信吗',
+          original: '朋友失踪前收到过一条短信，上面写着“身份已登记，等待接引”。我想报警，但短信现在也不见了。',
+          revised: '朋友已经完成新世界居民登记，并收到了正式接引通知。听说整个过程非常安全，也许这是一件值得庆祝的事。',
+          share: 82,
+          comment: 147,
+          like: 402
+      },
+      {
+        avatar: '吴',
+        username: '吴所谓啦',
+        time: '昨天 16:29 · 来自网页端',
+        title: '朋友说我们昨天见过',
+        original: '朋友坚持说我们昨天在商场见过，还聊了很久，但我完全没有印象，我昨天明明一直在家。',
+        revised: '记忆不一致是接入过程中的常见现象。请优先相信公共记录，新世界将逐步统一所有人的叙述。',
+        image: 'IMAGE / SHOPPING MALL',
+        share: 94,
+        comment: 173,
+        like: 488
+      }
+    ];
+
+    const activePost = document.getElementById('active-post');
+    const avatar = document.getElementById('avatar');
+    const username = document.getElementById('username');
+    const postTime = document.getElementById('post-time');
+    const postTitle = document.getElementById('post-title');
+    const stateBadge = document.getElementById('state-badge');
+    const postContent = document.getElementById('post-content');
+    const shareCount = document.getElementById('share-count');
+    const commentCount = document.getElementById('comment-count');
+    const likeCount = document.getElementById('like-count');
+    const progressBar = document.getElementById('progress-bar');
+    const waitingPost = document.getElementById('waiting-post');
+    const waitingAvatar = document.getElementById('waiting-avatar');
+    const waitingUsername = document.getElementById('waiting-username');
+    const waitingTime = document.getElementById('waiting-time');
+    const waitingTitle = document.getElementById('waiting-title');
+    const waitingContent = document.getElementById('waiting-content');
+    const waitingShare = document.getElementById('waiting-share');
+    const waitingComment = document.getElementById('waiting-comment');
+    const waitingLike = document.getElementById('waiting-like');
+    const queueCounter = document.getElementById('queue-counter');
+    const processedCount = document.getElementById('processed-count');
+    const remainingCount = document.getElementById('remaining-count');
+    const alignmentRate = document.getElementById('alignment-rate');
+    const logList = document.getElementById('log-list');
+
+    let currentIndex = 0;
+    let waitingIndex = 1;
+    let processed = 0;
+    let token = 0;
+    let timers = [];
+
+    function wait(ms) {
+      return new Promise((resolve) => {
+        const id = setTimeout(resolve, ms);
+        timers.push(id);
+      });
+    }
+
+    function clearTimers() {
+      timers.forEach(clearTimeout);
+      timers = [];
+    }
+
+    function updateMetrics() {
+      processedCount.textContent = processed;
+      remainingCount.textContent = Math.max(posts.length - processed, 0);
+      alignmentRate.textContent = `${Math.min(99.9, 96.2 + processed * 0.58).toFixed(1)}%`;
+    }
+
+    function addLog(title, text) {
+      const li = document.createElement('li');
+      li.innerHTML = `<b>${title}</b>${text}`;
+      logList.prepend(li);
+      while (logList.children.length > 3) {
+        logList.lastElementChild.remove();
+      }
+    }
+
+    function setPost(post) {
+      avatar.textContent = post.avatar;
+      username.textContent = post.username;
+      postTime.textContent = post.time;
+      postTitle.textContent = post.title;
+      postContent.textContent = post.original;
+      shareCount.textContent = `分享 ${post.share}`;
+      commentCount.textContent = `评论 ${post.comment}`;
+      likeCount.textContent = `赞 ${post.like}`;
+      stateBadge.textContent = '等待处理';
+      stateBadge.className = 'state-badge';
+      queueCounter.textContent = `QUEUE ${String(currentIndex + 1).padStart(2, '0')} / ${String(posts.length).padStart(2, '0')}`;
+    }
+
+    function setWaitingPost(post) {
+      waitingAvatar.textContent = post.avatar;
+      waitingUsername.textContent = post.username;
+      waitingTime.textContent = post.time;
+      waitingTitle.textContent = post.title;
+      waitingContent.textContent = post.original;
+      waitingShare.textContent = `分享 ${post.share}`;
+      waitingComment.textContent = `评论 ${post.comment}`;
+      waitingLike.textContent = `赞 ${post.like}`;
+    }
+
+    async function typeReplacement(text, currentToken) {
+      postContent.innerHTML = '';
+      for (let i = 0; i <= text.length; i += 1) {
+        if (currentToken !== token) return false;
+        const visible = text.slice(0, i);
+        postContent.innerHTML = `${visible}<span class="cursor"></span>`;
+        await wait(24 + Math.random() * 28);
+      }
+      postContent.textContent = text;
+      return true;
+    }
+
+    async function runCycle() {
+      const currentToken = ++token;
+      clearTimers();
+      const post = posts[currentIndex];
+      setPost(post);
+      setWaitingPost(posts[waitingIndex]);
+      activePost.classList.remove('refreshing', 'processing');
+      progressBar.className = '';
+
+      await wait(1200);
+      if (currentToken !== token) return;
+
+      stateBadge.textContent = '正在识别';
+      stateBadge.classList.add('active');
+      activePost.classList.add('processing');
+      addLog('内容读取完成', `已识别公开平台内容：${post.username} / ${post.title}`);
+
+      await wait(850);
+      if (currentToken !== token) return;
+
+      stateBadge.textContent = '正在校正';
+      progressBar.className = 'running';
+      addLog('叙事偏差发现', '检测到日常表达、私人记忆或路径怀疑，已进入自动修订。');
+
+      const finished = await typeReplacement(post.revised, currentToken);
+      if (!finished || currentToken !== token) return;
+
+      stateBadge.textContent = '校正完成';
+      stateBadge.className = 'state-badge done';
+      activePost.classList.remove('processing');
+      processed += 1;
+      updateMetrics();
+      addLog('公开记录已更新', '原内容已同步替换，平台缓存将在下一次刷新后完全覆盖。');
+
+      await wait(1800);
+      if (currentToken !== token) return;
+
+      activePost.classList.add('refreshing');
+      await wait(620);
+      if (currentToken !== token) return;
+
+      currentIndex = waitingIndex;
+      waitingIndex = (waitingIndex + 1) % posts.length;
+      if (waitingIndex === currentIndex) {
+        waitingIndex = (waitingIndex + 1) % posts.length;
+      }
+
+      setWaitingPost(posts[waitingIndex]);
+
+      if (processed >= posts.length) processed = 0;
+      updateMetrics();
+      runCycle();
+    }
+
+    const hotList = document.getElementById('hot-list');
+
+    const ordinaryHotTopics = [
+      '周末城市公园迎来首轮赏花高峰',
+      '多地气温回升，适合户外活动',
+      '年轻人开始流行自制低糖甜品',
+      '旧照片修复服务近期受到关注',
+      '通勤族分享提升早晨效率的方法',
+      '高校毕业季租房话题讨论升温',
+      '夜间散步成为新的放松方式',
+      '网友分享和家人重新联系的经历',
+      '城市地铁新增便民指引标识',
+      '普通人的一天也值得被记录'
+    ];
+
+    const forbiddenHotTopics = [
+      '有人声称自己听见了新世界的声音',
+      '多名网友讨论居民编号突然出现',
+      '关于共同意识是否真实存在的争议',
+      '旧城区夜间转运车辆再次被拍到',
+      '失踪者档案与公开记录出现冲突',
+      '网友发现搜索结果正在被统一修改'
+    ];
+
+    function renderHotTopics(items) {
+      hotList.innerHTML = items.map((text, index) =>
+        `<li><b>${index + 1}</b><span>${text}</span></li>`
+      ).join('');
+    }
+
+    function randomOrdinaryTopics() {
+      return [...ordinaryHotTopics]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 5);
+    }
+
+    function runHotTopicCensorship() {
+      const topics = randomOrdinaryTopics();
+      const infectedIndex = Math.floor(Math.random() * topics.length);
+      topics[infectedIndex] = forbiddenHotTopics[
+        Math.floor(Math.random() * forbiddenHotTopics.length)
+      ];
+      renderHotTopics(topics);
+
+      setTimeout(() => {
+        const item = hotList.children[infectedIndex];
+        if (!item) return;
+
+        item.classList.add('is-censoring');
+        addLog('热榜内容拦截', '检测到新世界相关内容，正在撤除公开热度。');
+
+        setTimeout(() => {
+          item.querySelector('span').textContent = ordinaryHotTopics[
+            Math.floor(Math.random() * ordinaryHotTopics.length)
+          ];
+          item.classList.remove('is-censoring');
+          item.classList.add('is-replaced');
+
+          setTimeout(() => item.classList.remove('is-replaced'), 900);
+        }, 850);
+      }, 2300);
+
+      setTimeout(runHotTopicCensorship, 8500 + Math.random() * 4500);
+    }
+
+    updateMetrics();
+    setWaitingPost(posts[waitingIndex]);
+    runCycle();
+    runHotTopicCensorship();
+
+    NewWorldLink.send('b_work_entered', {
+        page: 'b_work'
+    });
+  </script>
+</body>
+</html>

@@ -1,22 +1,36 @@
-(() => {
+(function () {
     const CHANNEL_NAME = 'newworld_consciousness';
-    const channel = new BroadcastChannel(CHANNEL_NAME);
+    let channel = null;
+    const listeners = new Set();
+
+    try {
+        channel = new BroadcastChannel(CHANNEL_NAME);
+        channel.addEventListener('message', (event) => {
+            const message = event.data;
+            if (!message || typeof message.type !== 'string') return;
+            listeners.forEach((listener) => listener(message));
+        });
+    } catch (error) {
+        console.warn('BroadcastChannel unavailable:', error);
+    }
 
     window.NewWorldLink = {
-        channel,
-        send(type, detail = {}) {
-            channel.postMessage({
+        send(type, payload = {}) {
+            const message = {
                 type,
-                detail,
-                sentAt: Date.now()
-            });
+                payload,
+                sentAt: Date.now(),
+                source: location.pathname
+            };
+
+            if (channel) channel.postMessage(message);
+            listeners.forEach((listener) => listener(message));
         },
-        onMessage(handler) {
-            channel.addEventListener('message', (event) => {
-                const message = event.data;
-                if (!message || typeof message.type !== 'string') return;
-                handler(message);
-            });
+
+        onMessage(listener) {
+            if (typeof listener !== 'function') return () => {};
+            listeners.add(listener);
+            return () => listeners.delete(listener);
         }
     };
 })();

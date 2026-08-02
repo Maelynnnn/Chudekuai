@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   C级场域工作公示｜现实执行
+  </title>
+  <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
+  <style>
+   
+        :root {
+            --bg:#000;
+            --surface:#000;
+            --surface2:#080808;
+            --line:rgba(255,255,255,.22);
+            --soft:rgba(255,255,255,.1);
+            --text:#f4f4f4;
+            --muted:#8c8c8c;
+            --red:#f00
+        }
+        * {
+            box-sizing:border-box;
+            margin:0;
+            padding:0
+        }
+        html,body {
+            width:100%;
+            min-height:100%;
+            background:#000
+        }
+        body {
+            min-width:320px;
+            color:var(--text);
+            font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+            overflow:hidden
+        }
+        a,button {
+            font:inherit
+        }
+        button {
+            cursor:pointer
+        }
+        .topbar {
+            position:relative;
+            z-index:1000;
+            height:66px;
+            padding:0 22px;
+            display:flex;
+            align-items:center;
+            gap:18px;
+            border-bottom:1px solid var(--line);
+            background:#000
+        }
+        .back-link {
+            color:#bdbdbd;
+            text-decoration:none;
+            font-size:14px;
+            white-space:nowrap
+        }
+        .back-link:hover {
+            color:#fff;
+            text-decoration:underline;
+            text-underline-offset:4px
+        }
+        .brand {
+            display:flex;
+            align-items:center;
+            gap:10px
+        }
+        .brand-badge {
+            width:34px;
+            height:34px;
+            display:grid;
+            place-items:center;
+            border:1px solid var(--line);
+            font-family:"Times New Roman",serif;
+            font-size:18px
+        }
+        .brand strong {
+            font-size:18px;
+            font-weight:500
+        }
+        .top-actions {
+            margin-left:auto;
+            display:flex;
+            align-items:center;
+            gap:16px;
+            color:var(--muted);
+            font-size:11px
+        }
+        .status-chip {
+            display:flex;
+            align-items:center;
+            gap:8px
+        }
+        .status-chip i {
+            width:7px;
+            height:7px;
+            background:#ddd;
+            animation:blink 1.8s steps(2,end) infinite
+        }
+        .workspace {
+            height:calc(100vh - 66px);
+            display:grid;
+            grid-template-columns:minmax(0,1fr) 360px
+        }
+        .map-shell {
+            position:relative;
+            min-width:0;
+            border-right:1px solid var(--line)
+        }
+        #map {
+            width:100%;
+            height:100%;
+            background:#000
+        }
+        .map-header {
+            position:absolute;
+            top:94px;
+            left:18px;
+            z-index:700;
+            width:min(440px,calc(100% - 36px));
+            padding:16px 18px;
+            border:1px solid var(--line);
+            background:rgba(0,0,0,.93);
+            pointer-events:none
+        }
+        .kicker {
+            color:var(--muted);
+            font-size:9px;
+            letter-spacing:3px
+        }
+        .map-header h1,.panel-heading h2 {
+            font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+            font-weight:500
+        }
+        .map-header h1 {
+            margin:6px 0 7px;
+            font-size:24px
+        }
+        .map-header p:last-child {
+            color:var(--muted);
+            font-size:12px;
+            line-height:1.7
+        }
+        .map-search {
+            position:absolute;
+            top:18px;
+            left:18px;
+            z-index:760;
+            width:min(440px,calc(100% - 36px));
+            display:grid;
+            grid-template-columns:minmax(0,1fr) 78px;
+            border:1px solid rgba(255,255,255,.42);
+            background:rgba(0,0,0,.96);
+            box-shadow:0 8px 30px rgba(0,0,0,.35)
+        }
+        .map-search input {
+            height:48px;
+            padding:0 14px;
+            border:0;
+            border-right:1px solid var(--line);
+            outline:none;
+            background:#000;
+            color:#fff;
+            font-size:12px;
+            letter-spacing:.5px
+        }
+        .map-search input::placeholder {
+            color:#777
+        }
+        .map-search input:focus {
+            background:#070707
+        }
+        .map-search button {
+            border:0;
+            background:#fff;
+            color:#000;
+            font-size:11px;
+            font-weight:600
+        }
+        .map-search button:hover {
+            background:#ddd
+        }
+        .map-search-feedback {
+            position:absolute;
+            top:72px;
+            left:18px;
+            z-index:755;
+            width:min(440px,calc(100% - 36px));
+            min-height:14px;
+            color:#aaa;
+            font-size:9px;
+            letter-spacing:1px;
+            pointer-events:none
+        }
+        .target-marker {
+            position:relative;
+            width:12px;
+            height:12px;
+            border-radius:50%;
+            background:#f00;
+            box-shadow:0 0 0 2px #fff
+        }
+        .target-marker::after {
+            content:"";
+            position:absolute;
+            inset:-10px;
+            border:1px solid rgba(255,0,0,.8);
+            border-radius:50%;
+            animation:targetPulse 1.6s ease-out infinite
+        }
+        @keyframes targetPulse {
+            0% {
+                opacity:.9;
+                transform:scale(.45)
+            }
+            100% {
+                opacity:0;
+                transform:scale(1.5)
+            }
+        }
+        .map-legend {
+            position:absolute;
+            left:18px;
+            bottom:18px;
+            z-index:700;
+            display:grid;
+            gap:8px;
+            padding:12px 14px;
+            border:1px solid var(--line);
+            background:rgba(0,0,0,.93);
+            color:#bdbdbd;
+            font-size:10px
+        }
+        .legend-row {
+            display:flex;
+            align-items:center;
+            gap:9px
+        }
+        .legend-field,.legend-selected {
+            width:10px;
+            height:10px;
+            border:1px solid #fff
+        }
+        .legend-selected {
+            width:12px;
+            height:12px;
+            border-color:#f00
+        }
+        .legend-sample {
+            width:8px;
+            height:8px;
+            border-radius:50%;
+            background:#f00
+        }
+        .side-panel {
+            height:100%;
+            display:grid;
+            grid-template-rows:auto minmax(0,1fr) auto auto;
+            overflow:hidden
+        }
+        .panel-heading {
+            padding:18px;
+            border-bottom:1px solid var(--line)
+        }
+        .panel-heading h2 {
+            margin:8px 0 5px;
+            font-size:22px
+        }
+        .panel-heading p {
+            color:var(--muted);
+            font-size:11px;
+            line-height:1.6
+        }
+        .active-list {
+            min-height:0;
+            overflow-y:auto
+        }
+        .field-item {
+            width:100%;
+            padding:14px 18px;
+            display:grid;
+            grid-template-columns:1fr auto;
+            gap:9px 12px;
+            border:0;
+            border-bottom:1px solid var(--soft);
+            background:#000;
+            color:#fff;
+            text-align:left
+        }
+        .field-item:hover,.field-item.is-selected {
+            background:#080808
+        }
+        .field-item.is-selected {
+            border-left:2px solid #fff;
+            padding-left:16px
+        }
+        .field-name {
+            font-size:13px
+        }
+        .field-status {
+            font-size:9px
+        }
+        .field-meta {
+            grid-column:1/-1;
+            display:flex;
+            gap:14px;
+            color:var(--muted);
+            font-size:10px
+        }
+        .detail-panel,.event-panel {
+            border-top:1px solid var(--line)
+        }
+        .detail-panel {
+            max-height:310px;
+            overflow-y:auto
+        }
+        .section-title {
+            padding:14px 18px 0;
+            font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+            font-size:15px;
+            font-weight:500
+        }
+        .detail-body,.event-body {
+            padding:12px 18px 16px
+        }
+        .detail-grid,.sample-list {
+            display:grid;
+            border-top:1px solid var(--soft)
+        }
+        .detail-row {
+            padding:9px 0;
+            display:flex;
+            justify-content:space-between;
+            gap:16px;
+            border-bottom:1px solid var(--soft);
+            font-size:10px
+        }
+        .detail-row span {
+            color:var(--muted)
+        }
+        .detail-row strong {
+            font-weight:500;
+            text-align:right
+        }
+        .sample-list {
+            margin-top:14px
+        }
+        .sample-button {
+            width:100%;
+            padding:10px 0;
+            display:grid;
+            grid-template-columns:1fr auto;
+            gap:4px 12px;
+            border:0;
+            border-bottom:1px solid var(--soft);
+            background:#000;
+            color:#fff;
+            text-align:left
+        }
+        .sample-button:hover {
+            background:#080808
+        }
+        .sample-button strong {
+            font-size:11px;
+            font-weight:500
+        }
+        .sample-button span {
+            color:var(--muted);
+            font-size:9px
+        }
+        .sample-state {
+            grid-row:1/span 2;
+            grid-column:2;
+            align-self:center;
+            color:#f00!important
+        }
+        .event-panel {
+            max-height:190px;
+            overflow:hidden
+        }
+        .event-log {
+            list-style:none;
+            display:grid;
+            max-height:116px;
+            overflow:hidden
+        }
+        .event-log li {
+            padding:8px 0;
+            border-bottom:1px solid var(--soft);
+            color:var(--muted);
+            font-size:9px;
+            line-height:1.5
+        }
+        .event-log b {
+            display:block;
+            margin-bottom:2px;
+            color:#fff;
+            font-weight:500
+        }
+        .leaflet-container {
+            background:#000
+        }
+        .leaflet-tile-pane {
+            filter:grayscale(1) contrast(1.15) brightness(.75)
+        }
+        .leaflet-control-zoom {
+            margin-top:226px!important;
+            margin-left:18px!important;
+            border:1px solid var(--line)!important;
+            border-radius:0!important;
+            box-shadow:none!important
+        }
+        .leaflet-control-zoom a {
+            width:32px!important;
+            height:32px!important;
+            line-height:32px!important;
+            border-radius:0!important;
+            border:0!important;
+            border-bottom:1px solid var(--line)!important;
+            background:#000!important;
+            color:#fff!important
+        }
+        .leaflet-control-zoom a:last-child {
+            border-bottom:0!important
+        }
+        .leaflet-control-attribution {
+            background:rgba(0,0,0,.82)!important;
+            color:#666!important;
+            font-size:8px!important
+        }
+        .leaflet-control-attribution a {
+            color:#888!important
+        }
+        .field-marker {
+            width:13px;
+            height:13px;
+            border:1px solid #fff;
+            background:#000;
+            transform:rotate(45deg)
+        }
+        .field-marker.is-active {
+            background:#fff
+        }
+        .field-marker.is-selected {
+            width:17px;
+            height:17px;
+            border:2px solid #f00;
+            background:#000
+        }
+        .sample-marker {
+            position:relative;
+            width:10px;
+            height:10px;
+            border-radius:50%;
+            background:#f00;
+            box-shadow:0 0 0 1px rgba(255,255,255,.18)
+        }
+        .sample-marker:after {
+            content:"";
+            position:absolute;
+            inset:-6px;
+            border:1px solid rgba(255,0,0,.48);
+            border-radius:50%;
+            animation:pulse 2s ease-out infinite
+        }
+        .sample-marker.is-selected {
+            width:13px;
+            height:13px;
+            box-shadow:0 0 0 2px #fff
+        }
+        .leaflet-tooltip {
+            padding:6px 8px;
+            border:1px solid var(--line)!important;
+            border-radius:0!important;
+            background:#000!important;
+            color:#fff!important;
+            box-shadow:none!important;
+            font-size:9px
+        }
+        .leaflet-tooltip:before {
+            display:none
+        }
+        @keyframes blink {
+            0%,49% {
+                opacity:1
+            }
+            50%,100% {
+                opacity:.25
+            }
+        }
+        @keyframes pulse {
+            0% {
+                opacity:.72;
+                transform:scale(.55)
+            }
+            100% {
+                opacity:0;
+                transform:scale(1.45)
+            }
+        }
+        @media(max-width:980px) {
+            body {
+                overflow:auto
+            }
+            .workspace {
+                height:auto;
+                min-height:calc(100vh - 66px);
+                grid-template-columns:1fr
+            }
+            .map-shell {
+                height:70vh;
+                min-height:560px;
+                border-right:0;
+                border-bottom:1px solid var(--line)
+            }
+            .side-panel {
+                height:auto;
+                min-height:700px
+            }
+            .active-list {
+                max-height:430px
+            }
+            .detail-panel,.event-panel {
+                max-height:none
+            }
+        }
+        @media(max-width:560px) {
+            .topbar {
+                padding-inline:14px
+            }
+            .brand strong {
+                font-size:15px
+            }
+            .top-actions {
+                display:none
+            }
+            .map-search {
+                top:12px;
+                left:12px;
+                width:calc(100% - 24px)
+            }
+            .map-search-feedback {
+                top:66px;
+                left:12px;
+                width:calc(100% - 24px)
+            }
+            .map-header {
+                top:88px;
+                left:12px;
+                width:calc(100% - 24px)
+            }
+            .map-header h1 {
+                font-size:20px
+            }
+            .map-legend {
+                left:12px;
+                bottom:12px
+            }
+            .leaflet-control-zoom {
+                margin-left:12px!important
+            }
+        }
+    
+  </style>
+ </head>
+ <body>
+  <header class="topbar">
+   <a class="back-link" href="newworld_real.html">
+    ← 返回平台
+   </a>
+   <div class="brand">
+    <div class="brand-badge">
+     C
+    </div>
+    <strong>
+     现实执行部
+    </strong>
+   </div>
+   <div class="top-actions">
+    <span id="global-count">
+     场域 140
+    </span>
+    <span id="sample-count">
+     样本 18
+    </span>
+    <div class="status-chip">
+     <i>
+     </i>
+     <span>
+      实时监控运行中
+     </span>
+    </div>
+   </div>
+  </header>
+  <main class="workspace">
+   <section class="map-shell">
+    <div id="map">
+    </div>
+    <form class="map-search" id="map-search">
+     <input autocomplete="off" id="map-search-input" placeholder="搜索受监控居民或样本编号" spellcheck="false" type="search"/>
+     <button type="submit">
+      定位
+     </button>
+    </form>
+    <p class="map-search-feedback" id="map-search-feedback">
+    </p>
+    <div class="map-header">
+     <p class="kicker">
+      FIELD OPERATIONS / LEVEL C
+     </p>
+     <h1>
+      C级场域工作公示
+     </h1>
+    </div>
+    <div class="map-legend">
+     <div class="legend-row">
+      <span class="legend-field">
+      </span>
+      <span>
+       C级场域
+      </span>
+     </div>
+     <div class="legend-row">
+      <span class="legend-selected">
+      </span>
+      <span>
+       当前选中场域
+      </span>
+     </div>
+     <div class="legend-row">
+      <span class="legend-sample">
+      </span>
+      <span>
+       正在监控的样本
+      </span>
+     </div>
+    </div>
+   </section>
+   <aside class="side-panel">
+    <header class="panel-heading">
+     <p class="kicker">
+      ACTIVE FIELDS
+     </p>
+     <h2>
+      当前活跃场域
+     </h2>
+     <p>
+      点击场域以定位并查看正在执行的样本任务。
+     </p>
+    </header>
+    <div class="active-list" id="active-list">
+    </div>
+    <section class="detail-panel">
+     <h3 class="section-title">
+      场域详情
+     </h3>
+     <div class="detail-body" id="detail-body">
+     </div>
+    </section>
+    <section class="event-panel">
+     <h3 class="section-title">
+      执行记录
+     </h3>
+     <div class="event-body">
+      <ul class="event-log" id="event-log">
+      </ul>
+     </div>
+    </section>
+   </aside>
+  </main>
+  <script src="newworld_link.js">
+  </script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+  </script>
+  <script>
+   
+        const MAINLAND_RESERVOIRS=[
+        ['北京',40.4900,116.8400,'密云水库'],
+        ['北京',40.2360,115.6150,'官厅水库'],
+        ['天津',40.0450,117.5500,'于桥水库'],
+        ['重庆',29.8550,107.7500,'三峡库区支流场域'],
+        ['沈阳',41.88917,124.09389,'大伙房水库'],
+        ['大连',39.4900,121.9800,'碧流河水库'],
+        ['长春',43.6300,125.6900,'新立城水库'],
+        ['哈尔滨',45.6200,127.1800,'红星水库'],
+        ['石家庄',38.2500,114.0400,'黄壁庄水库'],
+        ['太原',38.0500,112.2300,'汾河水库'],
+        ['呼和浩特',40.9500,111.1200,'哈素海水库区'],
+        ['济南',36.4300,117.1900,'卧虎山水库'],
+        ['青岛',36.3600,120.1900,'棘洪滩水库'],
+        ['南京',32.0700,119.0200,'中山水库'],
+        ['苏州',31.4300,120.4100,'太湖水源区'],
+        ['杭州',30.5600,119.0500,'青山水库'],
+        ['宁波',29.7200,121.2300,'皎口水库'],
+        ['合肥',31.4300,117.2500,'巢湖水源区'],
+        ['福州',26.2800,119.0300,'山仔水库'],
+        ['厦门',24.7300,118.0200,'坂头水库'],
+        ['南昌',28.7800,115.5200,'幸福水库'],
+        ['郑州',34.9000,113.3800,'尖岗水库'],
+        ['武汉',30.6200,114.0000,'汤逊湖水源区'],
+        ['长沙',28.3800,113.0400,'株树桥水库'],
+        ['广州',23.3600,113.3700,'流溪河水库'],
+        ['深圳',22.5900,114.1400,'深圳水库'],
+        ['珠海',22.3500,113.5200,'竹仙洞水库'],
+        ['南宁',22.9100,108.1700,'天雹水库'],
+        ['海口',19.9300,110.3400,'南渡江水源区'],
+        ['成都',30.8900,103.5800,'紫坪铺水库'],
+        ['贵阳',26.7300,106.5800,'红枫湖水库'],
+        ['昆明',25.2100,102.7800,'松华坝水库'],
+        ['拉萨',29.7200,91.0600,'拉萨河水源区'],
+        ['西安',34.0800,108.7600,'石砭峪水库'],
+        ['兰州',36.1700,103.4200,'刘家峡水库'],
+        ['西宁',36.6900,101.5400,'黑泉水库'],
+        ['银川',38.5700,106.1600,'西湖水库区'],
+        ['乌鲁木齐',43.5200,87.4800,'乌拉泊水库'],
+        ['洛阳',34.6300,112.1100,'陆浑水库'],
+        ['徐州',34.2300,117.1100,'云龙湖水库区'],
+        ['温州',27.8200,120.2400,'泽雅水库'],
+        ['泉州',25.0700,118.5000,'山美水库'],
+        ['烟台',37.3400,121.1200,'门楼水库'],
+        ['潍坊',36.5300,119.1100,'峡山水库'],
+        ['唐山',40.0200,118.3900,'陡河水库'],
+        ['保定',39.0200,115.2600,'王快水库'],
+        ['南通',32.0300,120.7500,'通吕水源区'],
+        ['无锡',31.4600,120.1500,'太湖水源区'],
+        ['佛山',22.9500,112.8700,'高明水库区'],
+        ['东莞',22.9700,114.0500,'同沙水库']
+        ];
+        const OVERSEAS_RESERVOIRS=[
+        ['东京',35.7900,139.0500,'奥多摩湖'],
+        ['首尔',37.7300,127.2800,'八堂水库'],
+        ['大阪',34.8600,135.8200,'天若湖'],
+        ['新加坡',1.4100,103.8000,'Upper Seletar Reservoir'],
+        ['曼谷',14.4300,99.1200,'Srinagarind Reservoir'],
+        ['吉隆坡',3.2300,101.7000,'Klang Gates Reservoir'],
+        ['悉尼',-33.8900,150.6000,'Warragamba Reservoir'],
+        ['墨尔本',-37.6800,145.9000,'Sugarloaf Reservoir'],
+        ['洛杉矶',34.5900,-118.7300,'Castaic Lake'],
+        ['旧金山',37.9500,-121.9500,'San Pablo Reservoir'],
+        ['纽约',41.1200,-73.7500,'Kensico Reservoir'],
+        ['西雅图',47.3600,-121.6900,'Chester Morse Lake'],
+        ['多伦多',43.9200,-79.8800,'Island Lake Reservoir'],
+        ['温哥华',49.4200,-123.0200,'Capilano Reservoir'],
+        ['伦敦',51.6500,-0.0700,'King George V Reservoir'],
+        ['巴黎',48.6200,2.5500,'Réservoir de la Seine'],
+        ['柏林',52.4200,13.6900,'Müggelsee Waterworks'],
+        ['迪拜',24.8400,55.8500,'Hatta Reservoir'],
+        ['孟买',19.2600,72.9100,'Vihar Lake'],
+        ['奥克兰',-36.9500,174.5700,'Upper Nihotupu Reservoir']
+        ];
+        const STAGES=['监控','跟随','寻找','“邀请”','带入','登记','记录处理中'];
+        const noise=(i,f)=> {
+            const v=Math.sin(i*12.9898+f*78.233)*43758.5453;
+            return v-Math.floor(v)
+        };
+        const fields=[];
+        // C-001 至 C-100：全部位于中国大陆
+        for(let i=0;
+        i<100;
+        i++) {
+            const base=MAINLAND_RESERVOIRS[i%MAINLAND_RESERVOIRS.length];
+            const branch=Math.floor(i/MAINLAND_RESERVOIRS.length);
+            fields.push( {
+                id:`C-${String(i+1).padStart(3,'0')}`,
+                city:base[0],
+                name:`${base[0]}${branch===0?'中心':'外围'}场域`,
+                reservoir:base[3],
+                lat:base[1]+(noise(i,1)-.5)*0.018,
+                lng:base[2]+(noise(i,2)-.5)*0.022,
+                active:i%6===0||i%13===0,
+                stage:STAGES[i%STAGES.length],
+                residents:5+i%14,
+                monitored:(i%6===0||i%13===0)?1+i%4:i%2,
+                pending:(i%6===0||i%13===0)?i%3:0,
+                accessRate:(96.4+i%28*.1).toFixed(1),
+                cameraIssue:(i%6===0||i%13===0)&&i%4===0
+            });
+        }
+        // C-101 至 C-140：少量境外场域
+        for(let i=100;
+        i<140;
+        i++) {
+            const base=OVERSEAS_RESERVOIRS[(i-100)%OVERSEAS_RESERVOIRS.length];
+            const branch=Math.floor((i-100)/OVERSEAS_RESERVOIRS.length);
+            fields.push( {
+                id:`C-${String(i+1).padStart(3,'0')}`,
+                city:base[0],
+                name:`${base[0]}${branch===0?'中心':'外围'}场域`,
+                reservoir:base[3],
+                lat:base[1]+(noise(i,1)-.5)*0.018,
+                lng:base[2]+(noise(i,2)-.5)*0.022,
+                active:i%9===0||i%17===0,
+                stage:STAGES[i%STAGES.length],
+                residents:4+i%11,
+                monitored:(i%9===0||i%17===0)?1+i%3:0,
+                pending:(i%9===0||i%17===0)?i%2:0,
+                accessRate:(95.8+i%24*.1).toFixed(1),
+                cameraIssue:(i%9===0||i%17===0)&&i%3===0
+            });
+        }
+        // C-132：固定为沈阳场域
+        const c132=fields.find(field=>field.id==='C-132');
+        if(c132) {
+            c132.city='沈阳';
+            c132.name='沈阳中心场域';
+            c132.reservoir='大伙房水库';
+            c132.lat=41.88690;
+            c132.lng=124.08720;
+            c132.active=true;
+            c132.stage='监控';
+            c132.residents=16;
+            c132.monitored=3;
+            c132.pending=1;
+            c132.accessRate='99.2';
+            c132.cameraIssue=true;
+        }
+        const activeFields=[
+        fields.find(field=>field.id==='C-132'),
+        ...fields.filter(field=>field.active&&field.id!=='C-132')
+        ].filter(Boolean).slice(0,14);
+        const map=L.map('map', {
+            worldCopyJump:true,minZoom:2,maxZoom:17
+        }).setView([35.5,104.5],4);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            subdomains:'abcd',maxZoom:20,attribution:'&copy; OpenStreetMap &copy; CARTO'
+        }).addTo(map);
+        const fieldLayer=L.layerGroup().addTo(map),
+        sampleLayer=L.layerGroup().addTo(map),
+        searchLayer=L.layerGroup().addTo(map),
+        fieldMarkers=new Map(),
+        sampleMarkers=new Map();
+        let selectedField=activeFields[0];
+        let selectedSampleId=null;
+        const TARGET_RESIDENT_ID='C132-CMZ-00975';
+        const TARGET_COORDINATES=[41.670704,123.484796];
+        const mapSearch=document.getElementById('map-search');
+        const mapSearchInput=document.getElementById('map-search-input');
+        const mapSearchFeedback=document.getElementById('map-search-feedback');
+        const fieldIcon=f=>L.divIcon( {
+            className:'',html:`<div class="field-marker ${f.active?'is-active':''} ${selectedField&&selectedField.id===f.id?'is-selected':''}"></div>`,iconSize:[18,18],iconAnchor:[9,9]
+        });
+        const sampleIcon=s=>L.divIcon( {
+            className:'',html:`<div class="sample-marker ${s?'is-selected':''}"></div>`,iconSize:[18,18],iconAnchor:[9,9]
+        });
+        function makePath(f,i) {
+            const d=.0016+i*.0004,r=i%2===0?1:-1;
+            return[[f.lat-d*.7,f.lng-d*.9],[f.lat-d*.15,f.lng-d*.3],[f.lat+d*.3,f.lng+d*.2],[f.lat+d*.55,f.lng+d*.85*r],[f.lat+d*.05,f.lng+d*1.1*r],[f.lat-d*.45,f.lng+d*.45],[f.lat-d*.7,f.lng-d*.9]]
+        }
+        function makeSamples(f) {
+            return Array.from( {
+                length:Math.max(1,f.monitored)
+            },(_,i)=> {
+                const n=Number(f.id.slice(2))*100+i+1;
+                return {
+                    id:`S-${String(n).padStart(5,'0')}`,fieldId:f.id,path:makePath(f,i),segment:i%6,progress:noise(n,3),speed:.00014+noise(n,4)*.00014,behavior:['步行','停留','乘车','返回常驻地址'][i%4],awareness:i%5===0?'疑似察觉':'未察觉',distance:26+n%54
+                }
+            })
+        }
+        const samples=activeFields.flatMap(makeSamples);
+        document.getElementById('sample-count').textContent=`样本 ${samples.length}`;
+        function point(s) {
+            const a=s.path[s.segment],b=s.path[s.segment+1],t=s.progress;
+            return[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t]
+        }
+        function renderFields() {
+            fieldLayer.clearLayers();
+            fieldMarkers.clear();
+            fields.forEach(f=> {
+                const m=L.marker([f.lat,f.lng], {
+                    icon:fieldIcon(f),keyboard:false,riseOnHover:true
+                }).bindTooltip(`${f.id}<br>${f.name}`, {
+                    direction:'top',offset:[0,-7]
+                });
+                m.on('click',()=>selectField(f.id,true));
+                m.addTo(fieldLayer);
+                fieldMarkers.set(f.id,m)
+            })
+        }
+        function renderSamples() {
+            sampleLayer.clearLayers();
+            sampleMarkers.clear();
+            samples.forEach(s=> {
+                const m=L.marker(point(s), {
+                    icon:sampleIcon(s.id===selectedSampleId),keyboard:false,zIndexOffset:600
+                }).bindTooltip(`${s.id}<br>${s.behavior} · ${s.awareness}`, {
+                    direction:'top',offset:[0,-7]
+                });
+                m.on('click',()=> {
+                    selectedSampleId=s.id;
+                    selectField(s.fieldId,false);
+                    updateSampleIcons();
+                    renderDetail();
+                    map.panTo(m.getLatLng(), {
+                        animate:true
+                    })
+                });
+                m.addTo(sampleLayer);
+                sampleMarkers.set(s.id,m)
+            })
+        }
+        function updateSampleIcons() {
+            sampleMarkers.forEach((m,id)=>m.setIcon(sampleIcon(id===selectedSampleId)))
+        }
+        function animate() {
+            samples.forEach(s=> {
+                s.progress+=s.speed;
+                if(s.progress>=1) {
+                    s.progress=0;
+                    s.segment=(s.segment+1)%(s.path.length-1);
+                    const states=['步行','乘车','停留','返回常驻地址','偏离原路线'];
+                    s.behavior=states[(s.segment+Number(s.id.slice(2)))%states.length];
+                    if(s.behavior==='偏离原路线')addEvent(`${s.id} 路线偏移`,'样本离开预设生活轨迹，备用居民已接管跟随。')
+                }
+                const m=sampleMarkers.get(s.id);
+                if(m)m.setLatLng(point(s))
+            });
+            requestAnimationFrame(animate)
+        }
+        function renderList() {
+            const c=document.getElementById('active-list');
+            c.innerHTML=activeFields.map(f=>`<button class="field-item ${selectedField.id===f.id?'is-selected':''}" data-field-id="${f.id}"><span class="field-name">${f.id}　${f.name}</span><span class="field-status">${f.stage}</span><span class="field-meta"><span>监控样本 ${f.monitored}</span><span>值班居民 ${f.residents}</span>${f.cameraIssue?'<span>监控待修订</span>':''}</span></button>`).join('');
+            c.querySelectorAll('[data-field-id]').forEach(b=>b.onclick=()=>selectField(b.dataset.fieldId,true))
+        }
+        function selectField(id,focus) {
+            const f=fields.find(x=>x.id===id);
+            if(!f)return;
+            selectedField=f;
+            if(!samples.some(s=>s.id===selectedSampleId&&s.fieldId===f.id))selectedSampleId=null;
+            renderFields();
+            renderList();
+            renderDetail();
+            if(focus)map.flyTo([f.lat,f.lng],f.active?12:8, {
+                animate:true,duration:1.1
+            });
+            addEvent(`${f.id} 场域已定位`,`正在显示${f.name}及其当前样本活动。`)
+        }
+        function renderDetail() {
+            const d=document.getElementById('detail-body'),fs=samples.filter(s=>s.fieldId===selectedField.id);
+            const sh=fs.length?fs.map(s=>`<button class="sample-button" data-sample-id="${s.id}"><strong>${s.id}</strong><span>${s.behavior} · 距离 ${s.distance}m</span><span class="sample-state">${s.awareness}</span></button>`).join(''):'<div class="detail-row"><span>当前样本</span><strong>无</strong></div>';
+            d.innerHTML=`<div class="detail-grid"><div class="detail-row"><span>场域编号</span><strong>${selectedField.id}</strong></div><div class="detail-row"><span>所属区域</span><strong>${selectedField.name}</strong></div><div class="detail-row"><span>水源设施</span><strong>${selectedField.reservoir||'邻近水库'}</strong></div><div class="detail-row"><span>当前阶段</span><strong>${selectedField.stage}</strong></div><div class="detail-row"><span>值班居民</span><strong>${selectedField.residents}</strong></div><div class="detail-row"><span>监控样本</span><strong>${selectedField.monitored}</strong></div><div class="detail-row"><span>待登记样本</span><strong>${selectedField.pending}</strong></div><div class="detail-row"><span>监控接入率</span><strong>${selectedField.accessRate}%</strong></div></div><div class="sample-list">${sh}</div>`;
+            d.querySelectorAll('[data-sample-id]').forEach(b=>b.onclick=()=> {
+                selectedSampleId=b.dataset.sampleId;
+                const m=sampleMarkers.get(selectedSampleId);
+                updateSampleIcons();
+                renderDetail();
+                if(m)map.flyTo(m.getLatLng(),15, {
+                    animate:true,duration:.9
+                });
+                const s=samples.find(x=>x.id===selectedSampleId);
+                if(s)addEvent(`${s.id} 样本记录`,`${s.behavior}，意识状态：${s.awareness}。`)
+            });
+        }
+        function addEvent(title,text) {
+            const list=document.getElementById('event-log'),li=document.createElement('li'),time=new Date().toLocaleTimeString('zh-CN', {
+                hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'
+            });
+            li.innerHTML=`<b>${time}　${title}</b>${text}`;
+            list.prepend(li);
+            while(list.children.length>5)list.lastElementChild.remove()
+        }
+        function normalizeResidentSearch(value) {
+            return String(value||'').trim().toUpperCase();
+        }
+        function showTargetResident() {
+            searchLayer.clearLayers();
+            const targetIcon=L.divIcon( {
+                className:'',
+                html:'<div class="target-marker"></div>',
+                iconSize:[24,24],
+                iconAnchor:[12,12]
+            });
+            const coordinateText=
+            `${TARGET_COORDINATES[0].toFixed(6)}, ${TARGET_COORDINATES[1].toFixed(6)}`;
+            const marker=L.marker(TARGET_COORDINATES, {
+                icon:targetIcon,
+                keyboard:false,
+                zIndexOffset:1200
+            })
+            .bindTooltip(
+            `${TARGET_RESIDENT_ID}<br>${coordinateText}`,
+            {
+                permanent:true,
+                direction:'top',
+                offset:[0,-12],
+                opacity:1
+            }
+            )
+            .addTo(searchLayer);
+            map.flyTo(TARGET_COORDINATES,16, {
+                animate:true,
+                duration:1.1
+            });
+            mapSearchFeedback.textContent=
+            `已定位居民 · ${coordinateText}`;
+            addEvent(
+            '居民位置已定位',
+            `${TARGET_RESIDENT_ID} 当前坐标：${coordinateText}。`
+            );
+        }
+        function handleMapSearch(event) {
+            event.preventDefault();
+            const query=normalizeResidentSearch(mapSearchInput.value);
+            if(!query) {
+                mapSearchFeedback.textContent='请输入居民编号';
+                return;
+            }
+            if(query===TARGET_RESIDENT_ID) {
+                showTargetResident();
+                return;
+            }
+            searchLayer.clearLayers();
+            mapSearchFeedback.textContent='未找到匹配的居民记录';
+        }
+        mapSearch.addEventListener('submit',handleMapSearch);
+        renderFields();
+        renderSamples();
+        renderList();
+        renderDetail();
+        addEvent('全域接入完成','140个C级场域已同步。当前活跃场域正在上传样本位置。');
+        addEvent(`${selectedField.id} 开始监控`,`已确认${selectedField.name}的生活轨迹、水源设施与接触路线。`);
+        animate();
+        NewWorldLink.send('c_work_entered',  {
+            page: 'c_work'
+        });
+        setInterval(()=> {
+            const f=activeFields[Math.floor(Math.random()*activeFields.length)],s=samples.find(x=>x.fieldId===f.id);
+            if(!s)return;
+            const ms=[['样本位置更新',`${s.id} 已进入新的监控覆盖区域。`],['跟踪距离调整',`${s.id} 当前跟踪距离 ${24+Math.floor(Math.random()*60)}m。`],['接触准备完成',`${f.id} 已完成样本身份与路线确认。`],['登记通道开放',`${f.id} 已为一名样本预留居民编号。`]];
+            const m=ms[Math.floor(Math.random()*ms.length)];
+            addEvent(m[0],m[1])
+        },7800);
+    
+  </script>
+ </body>
+</html>

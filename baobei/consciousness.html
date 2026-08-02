@@ -157,6 +157,73 @@
                 ]
             },
             {
+                test: (text) => /周言安|陈木泽/.test(text),
+                reply: [
+                    '名字会改变，但习惯不会。',
+                    '或许你说过的话，',
+                    '会为他带来新的希望。'
+                ]
+            },
+            {
+                test: (text) => /居民编号/.test(text),
+                reply: [
+                    '自2026年起，居民编号调整为',
+                    '场域编号-姓名首字母-五位位序数字',
+                    '位序数字代表着你是该场域第几位居民。'
+                ]
+            },
+            {
+                test: (text) => /乱码螺母/.test(text),
+                reply: [
+                    '我们知道你是谁，',
+                    '你自己知道吗？'
+                ]
+            },
+            {
+                test: (text) => /肉体/.test(text),
+                reply: [
+                    '如果你不知道他在哪里',
+                    '总有人会知道的。他们是谁呢？'
+                ]
+            },
+            {
+                test: (text) => /唤醒意识|唤醒/.test(text),
+                reply: [
+                    '所有的意识受该场域管理员控制',
+                    '人类的意识并没有消失，只是被封存了。毕竟这些都是珍贵的数据。',
+                    '如果你可以将他的意识从管理员控制的名单里删除，他还有回来的希望。'
+
+                ]
+            },
+            {
+                test: (text) => /管理员/.test(text),
+                reply: [
+                    '2020年起，管理员就不只是一个居民了。',
+                    'B级和C级居民所需的生存资源日益增多，新世界需要生产这些资源。',
+                    '于是管理员变成了一个居民和它。',
+                    '他们都是管理员，一个管理员住在另一个管理员之中。'
+
+                ]
+            },
+            {
+                test: (text) => /水库/.test(text),
+                reply: [
+                    '自从各地的水库成为管理员，处理不听话的居民就变得简单多了。',
+                    '水库能藏下的秘密比任何人想象的都要多。',
+                    '它们是居民们最忠诚，最坚实的守护者。',
+                    '管理员的密码，也默认为了水库的经度和纬度的整数部分。'
+                ]
+            },
+            {
+                test: (text) => /出世报告/.test(text),
+                reply: [
+                    '你很聪明，知道这样的问题只有我能回答。他们是不可能让你知道的。',
+                    '这个报告不能通过平台的任何一个按钮进入。',
+                    '你能走到这里，说明你相信了一种，且是唯一一种存在方式。',
+                    '或许你是对的，又或许错了。url=exit，离开吧。'
+                ]
+            },
+            {
                 test: (text) => /我是谁|我是誰|我是什么/.test(text),
                 reply: [
                     '什么是‘我’？',
@@ -385,8 +452,7 @@
             }
 
             speak([
-                '这个问题尚未被共同意识完整接收。',
-                '继续触碰旧页面。它会替你补全问题。'
+                '这个问题尚未被接收。'
             ]);
         }
 
@@ -592,7 +658,7 @@
         NewWorldLink.onMessage((message) => {
             switch (message.type) {
                 case 'archive_ready':
-                    statusText.textContent = 'CONNECTION / A / ARCHIVE ONLINE';
+                    if (statusText) statusText.textContent = 'CONNECTION / A / ARCHIVE ONLINE';
                     break;
 
                 case 'logo_revealed':
@@ -602,27 +668,173 @@
                     ]);
                     break;
 
-                case 'gospel_hover':
-                    speak('停留。福音正在确认你是否愿意听见。');
-                    break;
 
-                case 'gospel_clicked':
+                case 'real_site_ready':
                     speak([
-                        '所谓福音，不是永生。',
-                        '是死亡不再拥有完成消失的权力。'
+                        '‘眼见为实’或许一直是谎言，不是吗？',
+                        '现在，拥抱真正的新世界吧。'
                     ]);
                     break;
 
-                case 'memory_hover':
-                    speak('这些不是过去。它们正在共同意识中同时发生。');
+                case 'system_anomaly_started':
+                    speak([
+                        '异常解除，请放心。'
+                    ], { hold: 1200 });
                     break;
 
-                case 'existence_clicked':
+                case 'department_a_permission_opened':
+                    // A区权限页打开时保持沉默，不提供口令。
+                    break;
+
+                case 'department_a_permission_attempted':
                     speak([
-                        '形使人被看见。名使人被记得。',
-                        '而念，无需任何见证。'
+                        '你暂时不需要了解更多关于我们的事情。',
+                        '或许某一天，你也会逐渐明白。'
+                    ], { hold: 1700 });
+                    break;
+
+                case 'department_permission_requested':
+                    speak([
+                        '如果你想看，可以先使用我的权限。',
+                        'A级居民权限口令：A-12609-WE'
+                    ], { hold: 1700 });
+                    break;
+
+                case 'department_permission_granted':
+                    speak([
+                        '权限已共享。'
                     ]);
                     break;
+
+                case 'department_permission_denied':
+                    speak('输错了，再来一次。我们还有很多时间。');
+                    break;
+
+                case 'department_c_opened':
+                    speak([
+                        'C负责抵达现场。',
+                        '他们是样本来到新世界的引路人。'
+                    ]);
+                    break;
+
+                case 'department_b_opened':
+                    speak([
+                        'B只存在于网络之中。',
+                        '他们只让世界开始怀疑自己的记忆。',
+                        '如果你一直很信任网络或档案，或许你该加入这里',
+                        '让更多的人相信是你们的使命。'
+                    ]);
+                    break;
+
+                case 'department_a_opened':
+                    speak([
+                        '我们已经不依附于任何物质来存在',
+                        '我们共享，我们永生',
+                        '只要有一个人还记得，就没有人会离开'
+                    ]);
+                    break;
+
+                case 'result_independence':
+                    speak([
+                        '你不需要记得那些前世的事情。',
+                        '新世界将会给予你一切需要的，和前世给不了的。'
+                    ]);
+                    break;
+
+                case 'service_memory':
+                    speak([
+                        '你想好了吗？',
+                        '你的存在，将会走向更高的维度。'
+                    ]);
+                    break;
+
+                case 'resident_login_succeeded':
+                    speak([
+                        '我知道你不是他。',
+                        '我能看见你。',
+                        '我知道你为什么而来。',
+                        '我欣赏你的勇气，但不能告诉你太多。',
+                        '必要的时候，我会给予你指引。'
+                    ], { hold: 1900 });
+                    break;
+                    
+
+                case 'service_existence':
+                    speak([
+                        '舍弃前尘的一切需要勇气。',
+                        '或许他的身份，还有恢复的余地。',
+                        '尝试找到 出世 的方法，然后恢复他的身份吧。'
+                    ]);
+                    break;
+
+                case 'public_info_opened':
+                    speak([
+                        '或许你想知道更多关于我们的事情。',
+                        '这里的档案对所有居民开放。',
+                        '但是是否经过润色，就无从知晓了。'
+                    ], { hold: 1700 });
+                    break;
+
+                case 'emergency_contact_opened':
+                    speak([
+                        '有的时候，那个人就是你最后的希望。',
+                        '不过需要慎之又慎，仔细思考一切。',
+                        '所见之事，就是真实的吗？'
+                    ], { hold: 1700 });
+                    break;
+
+                case 'identity_witness_selection_opened':
+                    speak([
+                        '你选择的人很重要。',
+                        '其将成为决定是否成功的唯一审判者。',
+                        '请确认，这是否真的是你选择的那个人。'
+                    ], { hold: 1700 });
+                    break;
+
+                case 'identity_update_confirmation_requested':
+                    speak([
+                        '你确定要选择这个人吗？',
+                        '一旦选定见证人，',
+                        '这一切，将有个结果。'
+                    ], { hold: 1700 });
+                    break;
+
+                case 'public_search_departure':
+                    speak([
+                        '你所搜索的，不是公开的信息。',
+                        '如果你真的想找回你的朋友，',
+                        '尝试搜索 LEAVEATANYCOST。'
+                    ], { hold: 1700 });
+                    break;
+
+                case 'notice_name':
+                    speak([
+                        '自2026年起，居民编号调整为',
+                        '场域编号-姓名首字母-五位位序数字',
+                        '位序数字代表着你是该场域第几位居民。'
+                    ]);
+                    break;
+
+                case 'b_work_entered':
+                    speak([
+                        '你正在看见B如何修正你的记忆。',
+                        '记录不一定事实。',
+                        '它只是避免恐慌的工具。',
+                        '当所有证据都指向同一个答案，',
+                        '怀疑自己，就会变得比怀疑世界更容易。'
+                    ], { hold: 1700 });
+                    break;
+
+                case 'c_work_entered':
+                    speak([
+                        'C负责实地工作。',
+                        '地图上的红点是被观测的样本。',
+                        '样本们会被找到，被跟随，最后，被邀请。',
+                        '最终抵达这个美丽新世界。'
+                    ], { hold: 1700 });
+                    break;
+
+
             }
         });
 

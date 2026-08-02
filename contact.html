@@ -5,6 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>邮箱</title>
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        .mail-left-brand {
+            min-width: 245px;
+            flex: 0 0 245px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        .mail-brand-text {
+            display: inline-block;
+            min-width: 32px;
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+        #active-account-label {
+            margin-left: 4px !important;
+            display: inline-block;
+            max-width: 155px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+        .mail-search-mock {
+            min-width: 240px;
+        }
+
+        @media (max-width: 900px) {
+            .mail-left-brand {
+                min-width: 205px;
+                flex-basis: 205px;
+            }
+
+            #active-account-label {
+                max-width: 115px;
+            }
+        }
+    </style>
+
 </head>
 <body class="mail-page-body">
 
@@ -12,7 +56,7 @@
         <div class="mail-login-card">
             <div class="mail-login-logo"></div>
             <h1>邮箱登录</h1>
-            <p class="mail-login-subtitle">请输入系统为本机创建的邮箱账户</p>
+            <p class="mail-login-subtitle">请登录</p>
 
             <div class="mail-login-field">
                 <label>用户名</label>
@@ -28,7 +72,7 @@
             <p id="login-error" class="mail-login-error"></p>
 
             <div class="mail-login-hint">
-                <p>系统提示：邮箱账户已绑定当前设备。</p>
+                <p>欢迎使用邮箱，请保留此网址！</p>
             </div>
         </div>
     </div>
@@ -40,6 +84,7 @@
                 <a href="chef.html" class="mail-back-link">←</a>
                 <div class="mail-logo-dot"></div>
                 <span class="mail-brand-text">邮箱</span>
+                <span id="active-account-label" style="margin-left:12px;font-size:12px;color:#777;"></span>
             </div>
 
             <div class="mail-search-mock">
@@ -55,7 +100,7 @@
         <div class="mail-main-layout">
             <!-- 左侧栏 -->
             <aside class="mail-sidebar">
-                <button class="mail-compose-main-btn">撰写</button>
+                <button id="compose-main-btn" class="mail-compose-main-btn">撰写</button>
 
                 <div class="mail-folder active">
                     <span>收件箱</span>
@@ -137,7 +182,6 @@
     </div>
 
     <script>
-
         const loginPage = document.getElementById('mail-login-page');
         const mailAppShell = document.getElementById('mail-app-shell');
         const loginUsername = document.getElementById('login-username');
@@ -145,13 +189,44 @@
         const loginBtn = document.getElementById('login-btn');
         const loginError = document.getElementById('login-error');
 
+        const sendBtn = document.getElementById('send-mail-btn');
+        const mailTo = document.getElementById('mail-to');
+        const mailSubject = document.getElementById('mail-subject');
+        const mailBody = document.getElementById('mail-body');
+        const mailThread = document.getElementById('mail-thread');
+        const inboxCount = document.getElementById('inbox-count');
+        const sentCount = document.getElementById('sent-count');
+        const syncStatus = document.getElementById('sync-status');
+        const activeAccountLabel = document.getElementById('active-account-label');
+        const composeMainBtn = document.getElementById('compose-main-btn');
+
+        const composeWindow = document.getElementById('compose-window');
+        const composeMinimized = document.getElementById('compose-minimized');
+        const minimizeBtn = document.getElementById('minimize-btn');
+        const restoreBtn = document.getElementById('restore-compose-btn');
+        const closeComposeBtn = document.getElementById('close-compose-btn');
+        const discardBtn = document.getElementById('discard-btn');
+
         const savedUsername = localStorage.getItem('mail_username');
-        const savedPassword = localStorage.getItem('mail_password') || 'chudekuai123';
-        const isMailCreated = localStorage.getItem('mail_created') === 'true';
+        const savedPassword =
+            localStorage.getItem('mail_password') || 'chudekuai123';
+
+        const isMailCreated =
+            localStorage.getItem('mail_created') === 'true';
+
+        const ZHOU_ACCOUNT = {
+            username: 'zhouyanan@mail.com',
+            password: '1543'
+        };
+
+        let currentAccountType = 'default';
+        let sentNumber = 0;
+        let inboxNumber = 0;
 
         function showLoginPage() {
             loginPage.style.display = 'flex';
             mailAppShell.style.display = 'none';
+            loginError.textContent = '';
 
             if (savedUsername) {
                 loginUsername.placeholder = savedUsername;
@@ -163,66 +238,8 @@
             mailAppShell.style.display = 'flex';
         }
 
-        function handleLogin() {
-            const usernameInput = loginUsername.value.trim();
-            const passwordInput = loginPassword.value.trim();
-
-            if (!isMailCreated) {
-                loginError.textContent = '未检测到已创建的邮箱账户。';
-                return;
-            }
-
-            if (usernameInput === savedUsername && passwordInput === savedPassword) {
-                localStorage.setItem('mail_logged_in', 'true');
-                showMailApp();
-            } else {
-                loginError.textContent = '用户名或密码错误。';
-            }
-        }
-
-        loginBtn.addEventListener('click', handleLogin);
-
-        loginPassword.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleLogin();
-        });
-
-        loginUsername.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleLogin();
-        });
-
-        // 每次进入 contact.html 都需要登录，不自动保持登录
-        localStorage.removeItem('mail_logged_in');
-        showLoginPage();
-        const sendBtn = document.getElementById('send-mail-btn');
-        const mailTo = document.getElementById('mail-to');
-        const mailSubject = document.getElementById('mail-subject');
-        const mailBody = document.getElementById('mail-body');
-        const mailThread = document.getElementById('mail-thread');
-        const inboxCount = document.getElementById('inbox-count');
-        const sentCount = document.getElementById('sent-count');
-        const syncStatus = document.getElementById('sync-status');
-
-        const composeWindow = document.getElementById('compose-window');
-        const composeMinimized = document.getElementById('compose-minimized');
-        const minimizeBtn = document.getElementById('minimize-btn');
-        const restoreBtn = document.getElementById('restore-compose-btn');
-        const closeComposeBtn = document.getElementById('close-compose-btn');
-        const discardBtn = document.getElementById('discard-btn');
-
-        let sentNumber = 0;
-        let inboxNumber = 0;
-
-        function getNowText() {
-            const now = new Date();
-            return now.getFullYear() + '-' +
-                String(now.getMonth() + 1).padStart(2, '0') + '-' +
-                String(now.getDate()).padStart(2, '0') + ' ' +
-                String(now.getHours()).padStart(2, '0') + ':' +
-                String(now.getMinutes()).padStart(2, '0');
-        }
-
         function escapeHTML(str) {
-            return str
+            return String(str || '')
                 .replaceAll('&', '&amp;')
                 .replaceAll('<', '&lt;')
                 .replaceAll('>', '&gt;')
@@ -230,40 +247,252 @@
                 .replaceAll("'", '&#039;');
         }
 
+        function getNowText() {
+            const now = new Date();
+
+            return now.getFullYear() + '-' +
+                String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                String(now.getDate()).padStart(2, '0') + ' ' +
+                String(now.getHours()).padStart(2, '0') + ':' +
+                String(now.getMinutes()).padStart(2, '0');
+        }
+
+        function renderDefaultMailbox() {
+            currentAccountType = 'default';
+            activeAccountLabel.textContent =
+                savedUsername ? `<${savedUsername}>` : '';
+
+            inboxNumber = 0;
+            sentNumber = 0;
+            inboxCount.textContent = '0';
+            sentCount.textContent = '0';
+
+            mailTo.value = 'join@chudekuai.com';
+            mailTo.readOnly = true;
+
+            mailThread.className = 'mail-thread-empty';
+            mailThread.innerHTML = `
+                <div class="empty-mail-icon">✉</div>
+                <p>暂无往来邮件</p>
+                <span>发送申请后，系统将在此显示自动回复。</span>
+            `;
+
+            composeWindow.style.display = 'flex';
+            composeMinimized.style.display = 'none';
+        }
+
+        function renderZhouMailbox() {
+            currentAccountType = 'zhou';
+            activeAccountLabel.textContent = '<zhouyanan@mail.com>';
+
+            inboxNumber = 3;
+            sentNumber = 2;
+            inboxCount.textContent = String(inboxNumber);
+            sentCount.textContent = String(sentNumber);
+
+            mailTo.value = '';
+            mailTo.readOnly = false;
+            mailTo.placeholder = '请输入收件人';
+
+            composeWindow.style.display = 'none';
+            composeMinimized.style.display = 'none';
+
+            mailThread.className = 'mail-thread';
+            mailThread.innerHTML = `
+                <div class="mail-message-card reply-mail-card">
+                    <div class="mail-message-top">
+                        <div>
+                            <strong>厨得快招聘中心</strong>
+                            <span>&lt;join@chudekuai.com&gt;</span>
+                        </div>
+                        <time>2026-07-13 09:40</time>
+                    </div>
+                    <div class="mail-message-meta">
+                        发送至：zhouyanan@mail.com
+                    </div>
+                    <h3>厨得快面试通知</h3>
+                    <div class="mail-message-body">
+                        <p>周言安先生，您好：</p>
+                        <p>感谢您对厨得快平台的关注。您的申请已通过初步审核，现邀请您参加后续面试。</p>
+                        <p>具体时间、地点及所需材料将由工作人员另行通知。</p>
+                    </div>
+                </div>
+
+                <div class="mail-message-card sent-mail-card">
+                    <div class="mail-message-top">
+                        <div>
+                            <strong>周言安</strong>
+                            <span>&lt;zhouyanan@mail.com&gt;</span>
+                        </div>
+                        <time>2026-03-15 21:16</time>
+                    </div>
+                    <div class="mail-message-meta">
+                        发送至：chenshu@mail.com
+                    </div>
+                    <h3>哥，借我一下账号</h3>
+                    <div class="mail-message-body">
+                        <!-- 之后可直接修改这里的正文 -->
+                        <p>哥，你那个游戏账号最近还用吗？借我玩两天。</p>
+                    </div>
+                </div>
+
+                <div class="mail-message-card reply-mail-card">
+                    <div class="mail-message-top">
+                        <div>
+                            <strong>陈述</strong>
+                            <span>&lt;chenshu@mail.com&gt;</span>
+                        </div>
+                        <time>2026-03-15 21:42</time>
+                    </div>
+                    <div class="mail-message-meta">
+                        回复至：zhouyanan@mail.com
+                    </div>
+                    <h3>回复：哥，借我一下账号</h3>
+                    <div class="mail-message-body">
+                        <!-- 之后可直接修改这里的正文 -->
+                        <p>小周，你又想玩什么？先说好，别把我的存档弄没了。</p>
+                    </div>
+                </div>
+
+                <div class="mail-message-card sent-mail-card">
+                    <div class="mail-message-top">
+                        <div>
+                            <strong>周言安</strong>
+                            <span>&lt;zhouyanan@mail.com&gt;</span>
+                        </div>
+                        <time>2026-03-15 22:03</time>
+                    </div>
+                    <div class="mail-message-meta">
+                        发送至：chenshu@mail.com
+                    </div>
+                    <h3>回复：哥，借我一下账号</h3>
+                    <div class="mail-message-body">
+                        <!-- 之后可直接修改这里的正文 -->
+                        <p>不会的哥，我就玩一下，过两天肯定还你。</p>
+                    </div>
+                </div>
+
+                <div class="mail-message-card reply-mail-card">
+                    <div class="mail-message-top">
+                        <div>
+                            <strong>[来自加密邮箱]陈述</strong>
+                            <span>&lt;chenshu@s.mail.com&gt;</span>
+                        </div>
+                        <time>2026-03-15 22:18</time>
+                    </div>
+                    <div class="mail-message-meta">
+                        回复至：zhouyanan@mail.com
+                    </div>
+                    <h3>回复：哥，借我一下账号</h3>
+                    <div class="mail-message-body">
+                        <!-- 之后可直接修改这里的正文 -->
+                        <p>行。我用加密邮箱发你，免得被黑客黑了。我账号和手机号一样，136 457 239，记得别告诉别人。</p>
+                    </div>
+                </div>
+            `;
+
+            mailThread.scrollTop = 0;
+        }
+
+        function handleLogin() {
+            const usernameInput = loginUsername.value.trim();
+            const passwordInput = loginPassword.value.trim();
+
+            if (
+                usernameInput.toLowerCase() ===
+                    ZHOU_ACCOUNT.username.toLowerCase() &&
+                passwordInput === ZHOU_ACCOUNT.password
+            ) {
+                localStorage.setItem(
+                    'mail_logged_in_account',
+                    ZHOU_ACCOUNT.username
+                );
+
+                showMailApp();
+                renderZhouMailbox();
+                return;
+            }
+
+            if (!isMailCreated) {
+                loginError.textContent =
+                    '未检测到已创建的邮箱账户。';
+                return;
+            }
+
+            if (
+                usernameInput === savedUsername &&
+                passwordInput === savedPassword
+            ) {
+                localStorage.setItem(
+                    'mail_logged_in_account',
+                    usernameInput
+                );
+
+                showMailApp();
+                renderDefaultMailbox();
+                return;
+            }
+
+            loginError.textContent = '用户名或密码错误。';
+        }
+
+        loginBtn.addEventListener('click', handleLogin);
+
+        [loginUsername, loginPassword].forEach(input => {
+            input.addEventListener('keydown', event => {
+                if (event.key === 'Enter') {
+                    handleLogin();
+                }
+            });
+        });
+
         function renderSentMail(subject, body) {
-            const safeSubject = escapeHTML(subject || '无主题申请');
-            const safeBody = escapeHTML(body || '（无正文）').replace(/\n/g, '<br>');
+            const safeSubject =
+                escapeHTML(subject || '无主题');
+
+            const safeBody =
+                escapeHTML(body || '（无正文）')
+                    .replace(/\n/g, '<br>');
+
+            const sender =
+                currentAccountType === 'zhou'
+                    ? '周言安 <span>&lt;zhouyanan@mail.com&gt;</span>'
+                    : '我 <span>&lt;applicant@local.mail&gt;</span>';
 
             const sentMailHTML = `
                 <div class="mail-message-card sent-mail-card">
                     <div class="mail-message-top">
                         <div>
-                            <strong>我</strong>
-                            <span>&lt;applicant@local.mail&gt;</span>
+                            <strong>${sender}</strong>
                         </div>
                         <time>${getNowText()}</time>
                     </div>
                     <div class="mail-message-meta">
-                        发送至：${mailTo.value}
+                        发送至：${escapeHTML(mailTo.value)}
                     </div>
                     <h3>${safeSubject}</h3>
                     <div class="mail-message-body">${safeBody}</div>
                 </div>
             `;
 
-            // 第一次发送邮件时，清除“暂无往来邮件”的空状态内容
             if (mailThread.classList.contains('mail-thread-empty')) {
                 mailThread.innerHTML = '';
             }
 
             mailThread.className = 'mail-thread';
-            mailThread.insertAdjacentHTML('beforeend', sentMailHTML);
+            mailThread.insertAdjacentHTML(
+                'beforeend',
+                sentMailHTML
+            );
+
             mailThread.scrollTop = mailThread.scrollHeight;
         }
 
         function renderAutoReply() {
+            if (currentAccountType !== 'default') return;
+
             inboxNumber++;
-            inboxCount.textContent = inboxNumber;
+            inboxCount.textContent = String(inboxNumber);
 
             const autoReplyHTML = `
                 <div class="mail-message-card reply-mail-card auto-reply-pending">
@@ -277,11 +506,6 @@
                     <div class="mail-message-meta">
                         回复至：我
                     </div>
-
-                    <!-- 
-                        这里是自动回复正文区域。
-                        你之后可以直接改下面这个 div 里的内容。
-                    -->
                     <div class="mail-message-body auto-reply-body">
                         <p>您好，感谢您的申请！由于申请人数众多，我们将会在1-2个工作日内尽快审核并回复您。</p>
                         <p>感谢您的理解与支持，期待您加入我们！</p>
@@ -290,16 +514,26 @@
                 </div>
             `;
 
-            mailThread.insertAdjacentHTML('beforeend', autoReplyHTML);
+            mailThread.insertAdjacentHTML(
+                'beforeend',
+                autoReplyHTML
+            );
+
             mailThread.scrollTop = mailThread.scrollHeight;
         }
 
         function fakeSendMail() {
+            const to = mailTo.value.trim();
             const subject = mailSubject.value.trim();
             const body = mailBody.value.trim();
 
+            if (!to) {
+                syncStatus.textContent = '请输入收件人';
+                return;
+            }
+
             sentNumber++;
-            sentCount.textContent = sentNumber;
+            sentCount.textContent = String(sentNumber);
 
             syncStatus.textContent = '正在发送...';
             sendBtn.disabled = true;
@@ -315,20 +549,30 @@
                 sendBtn.textContent = '发送';
                 sendBtn.disabled = false;
 
-                setTimeout(() => {
-                    syncStatus.textContent = '正在接收新邮件...';
-
+                if (currentAccountType === 'default') {
                     setTimeout(() => {
-                        renderAutoReply();
+                        syncStatus.textContent =
+                            '正在接收新邮件...';
+
+                        setTimeout(() => {
+                            renderAutoReply();
+                            syncStatus.textContent = '已同步';
+                        }, 900);
+                    }, 1000);
+                } else {
+                    setTimeout(() => {
                         syncStatus.textContent = '已同步';
-                    }, 900);
-
-                }, 1000);
-
+                    }, 700);
+                }
             }, 900);
         }
 
         sendBtn.addEventListener('click', fakeSendMail);
+
+        composeMainBtn.addEventListener('click', () => {
+            composeWindow.style.display = 'flex';
+            composeMinimized.style.display = 'none';
+        });
 
         minimizeBtn.addEventListener('click', () => {
             composeWindow.style.display = 'none';
@@ -346,31 +590,39 @@
         });
 
         discardBtn.addEventListener('click', () => {
-            const confirmDiscard = confirm('确定要丢弃当前草稿吗？');
-            if (confirmDiscard) {
-                mailSubject.value = '';
-                mailBody.value = '';
-                syncStatus.textContent = '草稿已丢弃';
-                setTimeout(() => {
-                    syncStatus.textContent = '已同步';
-                }, 1000);
-            }
+            const confirmed =
+                confirm('确定要丢弃当前草稿吗？');
+
+            if (!confirmed) return;
+
+            mailSubject.value = '';
+            mailBody.value = '';
+            syncStatus.textContent = '草稿已丢弃';
+
+            setTimeout(() => {
+                syncStatus.textContent = '已同步';
+            }, 1000);
         });
 
-        // 模拟自动保存草稿
         let draftTimer = null;
+
         [mailSubject, mailBody].forEach(input => {
             input.addEventListener('input', () => {
                 syncStatus.textContent = '正在保存草稿...';
                 clearTimeout(draftTimer);
+
                 draftTimer = setTimeout(() => {
                     syncStatus.textContent = '草稿已保存';
+
                     setTimeout(() => {
                         syncStatus.textContent = '已同步';
                     }, 1000);
                 }, 700);
             });
         });
+
+        localStorage.removeItem('mail_logged_in_account');
+        showLoginPage();
     </script>
 
 </body>

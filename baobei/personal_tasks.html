@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人任务记录｜新世界居民服务平台</title>
+<style>
+:root{
+    --bg:#000;
+    --text:#f3f3f3;
+    --muted:#858585;
+    --line:rgba(255,255,255,.22);
+    --soft:rgba(255,255,255,.10);
+}
+*{box-sizing:border-box}
+html,body{
+    margin:0;
+    width:100%;
+    min-height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+a{color:inherit}
+.page{
+    min-height:100vh;
+    display:grid;
+    grid-template-rows:auto 1fr auto;
+    padding:0 28px;
+}
+.topbar{
+    min-height:68px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    border-bottom:1px solid var(--line);
+}
+.back-link{
+    color:#aaa;
+    text-decoration:none;
+    font-size:11px;
+}
+.back-link:hover{
+    color:#fff;
+    text-decoration:underline;
+    text-underline-offset:4px;
+}
+.title-block{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+.title-badge{
+    width:30px;
+    height:30px;
+    display:grid;
+    place-items:center;
+    border:1px solid var(--line);
+    font-family:"Times New Roman",serif;
+    font-size:16px;
+}
+.title-block strong{
+    font-size:15px;
+    font-weight:500;
+}
+.status{
+    margin-left:auto;
+    color:var(--muted);
+    font-size:9px;
+    letter-spacing:2px;
+}
+.main{
+    display:grid;
+    place-items:center;
+    padding:54px 0;
+}
+.empty-state{
+    width:min(760px,100%);
+    text-align:center;
+}
+.kicker{
+    margin:0 0 20px;
+    color:var(--muted);
+    font-size:9px;
+    letter-spacing:4px;
+}
+.empty-state h1{
+    margin:0;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:clamp(34px,5vw,64px);
+    font-weight:500;
+    line-height:1.35;
+}
+.empty-state p{
+    margin:24px auto 0;
+    max-width:520px;
+    color:#9b9b9b;
+    font-size:12px;
+    line-height:1.9;
+}
+.divider{
+    width:80px;
+    height:1px;
+    margin:34px auto;
+    background:var(--line);
+}
+.explore-link{
+    display:inline-block;
+    padding:12px 0;
+    color:#fff;
+    text-decoration:none;
+    font-size:11px;
+    letter-spacing:1px;
+}
+.explore-link:hover{
+    text-decoration:underline;
+    text-underline-offset:5px;
+}
+.footer{
+    min-height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    border-top:1px solid var(--line);
+    color:var(--muted);
+    font-size:9px;
+}
+.footer strong{
+    color:#aaa;
+    font-weight:500;
+}
+@media(max-width:640px){
+    .page{
+        padding:0 18px;
+    }
+    .topbar{
+        min-height:60px;
+    }
+    .status{
+        display:none;
+    }
+    .footer{
+        align-items:flex-start;
+        flex-direction:column;
+        justify-content:center;
+        padding:16px 0;
+    }
+}
+</style>
+</head>
+<body>
+<div class="page">
+    <header class="topbar">
+        <a class="back-link" href="newworld_real.html#services">← 返回居民服务平台</a>
+
+        <div class="title-block">
+            <div class="title-badge">R</div>
+            <strong>个人任务记录</strong>
+        </div>
+
+        <div class="status">RESIDENT TASK ARCHIVE</div>
+    </header>
+
+    <main class="main">
+        <section class="empty-state">
+            <p class="kicker">NO ACTIVE ASSIGNMENTS</p>
+            <h1>新居民暂无任务发布</h1>
+            <div class="divider"></div>
+            <p>当前居民尚未被分配个人任务。请优先探索新世界。</p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <strong>新世界居民服务平台</strong>
+        <span>居民编号：C132-CMZ-00975　任务同步状态：正常</span>
+    </footer>
+</div>
+</body>
+</html>

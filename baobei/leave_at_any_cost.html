@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEAVE AT ANY COST</title>
+<style>
+:root{
+    --paper:#e8e3d8;
+    --ink:#141414;
+    --faded:#706b62;
+    --red:#b00000;
+    --blue:#123b68;
+}
+*{box-sizing:border-box}
+html,body{
+    margin:0;
+    min-height:100%;
+    background:#c7c1b4;
+    color:var(--ink);
+    font-family:"Courier New","Songti SC",SimSun,serif;
+}
+body{
+    padding:38px 20px 70px;
+    background:
+        linear-gradient(rgba(25,25,25,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(25,25,25,.035) 1px, transparent 1px),
+        #c7c1b4;
+    background-size:24px 24px;
+}
+.document{
+    position:relative;
+    width:min(900px,100%);
+    min-height:1100px;
+    margin:0 auto;
+    padding:54px 64px 90px;
+    background:var(--paper);
+    box-shadow:0 18px 45px rgba(0,0,0,.24);
+    transform:rotate(-.15deg);
+}
+.document::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:.25;
+    background:
+        radial-gradient(circle at 14% 8%, rgba(90,60,30,.15), transparent 22%),
+        radial-gradient(circle at 88% 72%, rgba(70,45,20,.12), transparent 24%);
+}
+.topline{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:30px;
+    padding-bottom:16px;
+    border-bottom:2px solid var(--ink);
+}
+.classification{
+    color:var(--red);
+    font-size:12px;
+    font-weight:bold;
+    letter-spacing:2px;
+}
+.file-id{
+    color:var(--faded);
+    font-size:11px;
+    text-align:right;
+    line-height:1.7;
+}
+h1{
+    margin:52px 0 6px;
+    color:var(--ink);
+    font-size:clamp(34px,7vw,72px);
+    line-height:.95;
+    letter-spacing:-3px;
+    text-transform:uppercase;
+}
+.subtitle{
+    margin:0 0 34px;
+    color:var(--blue);
+    font-size:12px;
+    letter-spacing:3px;
+}
+.warning{
+    margin:26px 0 42px;
+    padding:14px 16px;
+    border:2px solid var(--red);
+    color:var(--red);
+    font-size:12px;
+    line-height:1.7;
+    transform:rotate(.35deg);
+}
+.section{
+    margin-top:42px;
+}
+.section-label{
+    margin-bottom:14px;
+    color:var(--faded);
+    font-size:11px;
+    letter-spacing:2px;
+}
+.editable-space{
+    min-height:220px;
+    padding:20px 0;
+    border-top:1px solid rgba(0,0,0,.45);
+    border-bottom:1px solid rgba(0,0,0,.45);
+    font-size:15px;
+    line-height:2;
+    white-space:pre-wrap;
+}
+.editable-space.large{
+    min-height:420px;
+}
+.note{
+    margin-top:34px;
+    color:var(--faded);
+    font-size:10px;
+    line-height:1.8;
+}
+.back{
+    position:fixed;
+    left:20px;
+    bottom:18px;
+    padding:8px 10px;
+    border:1px solid rgba(0,0,0,.5);
+    background:#ded8cb;
+    color:#111;
+    text-decoration:none;
+    font-size:11px;
+}
+.back:hover{
+    background:#eee8da;
+}
+.redaction{
+    display:inline-block;
+    min-width:170px;
+    height:1em;
+    background:#111;
+    vertical-align:middle;
+}
+@media(max-width:680px){
+    body{padding:14px 8px 60px}
+    .document{
+        min-height:100vh;
+        padding:34px 22px 70px;
+        transform:none;
+    }
+    .topline{display:block}
+    .file-id{margin-top:12px;text-align:left}
+}
+</style>
+</head>
+<body>
+<article class="document">
+    <header class="topline">
+        <div class="classification">CONFIDENTIAL / DO NOT SHARE</div>
+        <div class="file-id">
+            REF: <span class="redaction"></span><br>
+            SOURCE: <span class="redaction"></span><br>
+        </div>
+    </header>
+
+    <h1>出世方法<br>
+
+    <div class="warning">
+        警告！阅读此页须获得管理员许可<br>
+        否则任何继续阅读、复制或传播行为均为非法行为！
+    </div>
+
+    <section class="section">
+        <div class="section-label">01 / 说明</div>
+        <div class="editable-space">
+            居民选择出世后，一切身份，档案，记录都将被销毁。对原世界样本身份进行抹除，不再进入样本库。
+            同时关于新世界的记忆全部清除，对恢复的人类身份进行三年监控，确保无异常行为。
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-label">02 / 方法</div>
+        <div class="editable-space large">
+            1.寻找肉体。需要确认肉体的具体位置及其完整性，确保其能够承载人类意识。<br>
+            2.唤醒意识。<span class="redaction"></span><br>
+            3.填写出世报告，得到报告代码。
+            4.提交身份更新，并选择唯一见证人。
+            注意！见证人拥有决定更新是否成功的唯一权力。请确保见证人也是居民，以保证没有居民出世成功！
+        </div>
+    </section>
+
+    <p class="note">
+        一切离开行为都是对新世界的背叛<br>
+        都是对自身的抛弃<br>
+        前世有限，新世界无限。
+    </p>
+</article>
+
+<a class="back" href="public_info.html">← 返回搜索</a>
+</body>
+</html>
