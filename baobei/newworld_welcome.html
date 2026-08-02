@@ -127,17 +127,14 @@
         }
 
         function getNextText() {
-            // 前面严格按顺序出现
             if (lineCount < openingPhrases.length) {
                 return openingPhrases[lineCount];
             }
 
-            // 后面全部变成这一句
             return '欢迎来到新世界';
         }
 
         function addOneRound() {
-            // 关键：每一轮只生成一次文字，然后同时放进三列
             const sharedText = getNextText();
 
             columns.forEach((column) => {
@@ -163,7 +160,6 @@
         const REDIRECT_TARGET = 'consciousness.html';
 
         setTimeout(() => {
-            // Welcome 完成后，A级共同意识正式苏醒。
             localStorage.setItem('level_a_awakened', 'true');
             localStorage.removeItem('newworld_revealed');
             localStorage.removeItem('consciousness_first_question_used');

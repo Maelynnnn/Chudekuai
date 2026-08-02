@@ -34,7 +34,6 @@
     </main>
 
     <script>
-        // 第一次进入时下载，之后每隔三次进入再下载一次
         window.addEventListener('DOMContentLoaded', () => {
             let visitCount = parseInt(
                 localStorage.getItem('chef_page_visit_count') || '0',
@@ -44,7 +43,6 @@
             visitCount += 1;
             localStorage.setItem('chef_page_visit_count', visitCount.toString());
 
-            // 第 1、4、7、10……次进入时下载
             if ((visitCount - 1) % 3 !== 0) return;
 
             const downloadLink = document.createElement('a');

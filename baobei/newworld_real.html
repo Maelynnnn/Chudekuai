@@ -974,7 +974,6 @@
             });
         });
 
-        // 首页两个入口暂时预留，不执行跳转。
         document.querySelectorAll('.page-placeholder').forEach((element) => {
             element.addEventListener('click', (event) => {
                 event.preventDefault();
@@ -991,10 +990,7 @@
         });
 
 
-        // ====================
-        // 居民登录配置
-        // ====================
-        // 稍后把解谜获得的居民编号与密码填写在这里。
+
         const RESIDENT_LOGIN_CONFIG = {
             residentId: 'c132-cmz-00975',
             password: '1543'
@@ -1528,8 +1524,6 @@
                 return;
             }
 
-            // 以后接入详情页时，可在这里添加跳转。
-            // location.href = `${requestedDepartment.toLowerCase()}_department.html`;
         }
 
         document.querySelectorAll('.department-detail-button').forEach((button) => {

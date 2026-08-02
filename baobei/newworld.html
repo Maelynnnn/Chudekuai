@@ -205,7 +205,6 @@
                     </div>
                 </main>
 
-                <!-- 右栏 -->
                 <aside>
                     <section class="panel">
                         <div class="panel-title blue">走进新世界 <span class="more">MORE&gt;&gt;</span></div>
@@ -272,9 +271,10 @@
         const logoButton = document.getElementById('awaken-logo-button');
         const logoHint = document.getElementById('logo-awakened-hint');
 
+//上线别忘了改时间！！！！！！！！！！！！！！！！！！！！
         function checkArchiveDate() {
             const now = new Date();
-            const expireDate = new Date(2052, 11, 9, 23, 59, 59);
+            const expireDate = new Date(2012, 11, 9, 23, 59, 59);
             const canOpenArchive = isAwakened();
             const archiveStillAvailable = now <= expireDate;
 

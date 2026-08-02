@@ -437,8 +437,8 @@
         function checkArchiveDate() {
             const now = new Date();
 
-            // 测试版时间；最终版本可改回 2012
-            const expireDate = new Date(2052, 11, 9, 23, 59, 59);
+            // 别忘了改我求求自己了
+            const expireDate = new Date(2012, 11, 9, 23, 59, 59);
 
             const isBeforeOrOnExpireDate = now <= expireDate;
 
@@ -564,7 +564,6 @@
                         { value: 'confirmed', text: '入世已确认' }
                     ]);
 
-                    // 调试用：只隐藏这一次。玩家手动刷新后可以重新看到。
                     sessionStorage.removeItem('home_option_removed');
                 } else {
                     setStatusOptions([

@@ -249,7 +249,6 @@
             z-index: 20;
         }
 
-        /* ================= 管理员登录遮罩 ================= */
 
         .locked-page .sheet-topbar,
         .locked-page .sheet-menu,
@@ -349,7 +348,6 @@
             text-align: center;
         }
 
-        /* ================= 截屏/复制威慑 ================= */
 
         .screenshot-warning {
             display: none;
@@ -374,7 +372,6 @@
             filter: blur(10px) !important;
         }
 
-        /* ================= 双入口按钮 ================= */
 
         .entry-choice-btn {
             width: 100%;
@@ -419,7 +416,6 @@
             background: #f1f3f4;
         }
 
-        /* ================= 临时访问倒计时 ================= */
 
         .temporary-countdown-box {
             display: none;
@@ -479,7 +475,6 @@
     <div id="admin-login-overlay" class="admin-login-overlay">
         <div class="admin-login-card">
 
-            <!-- 第一步：选择进入方式 -->
             <div id="entry-choice-panel">
                 <div class="admin-login-title">访问方式确认</div>
                 <div class="admin-login-subtitle">
@@ -499,7 +494,6 @@
                 </div>
             </div>
 
-            <!-- 第二步：管理员登录 -->
             <div id="admin-form-panel" style="display:none;">
                 <div class="admin-login-title">管理员身份验证</div>
                 <div class="admin-login-subtitle">
@@ -751,8 +745,6 @@
     </div>
 
     <script>
-    // ================= 授权管理员信息 =================
-    // 之后你只需要改这里
     const AUTHORIZED_ADMINS = [
         'NW-AD-C72'
     ];
@@ -786,7 +778,6 @@
     let isTemporaryAccess = false;
     let isAdminAccess = false;
 
-    // ================= 通用退出 =================
 
     function exitPage() {
         window.close();
@@ -796,7 +787,6 @@
         }, 300);
     }
 
-    // ================= 初始 10 秒选择倒计时 =================
 
     function startEntranceCountdown() {
         clearInterval(entranceTimer);
@@ -822,7 +812,6 @@
         clearInterval(entranceTimer);
     }
 
-    // ================= 管理员进入 =================
 
     adminEntryBtn.addEventListener('click', () => {
         entryChoicePanel.style.display = 'none';
@@ -877,7 +866,6 @@
         }
     });
 
-    // ================= 临时进入 =================
 
     temporaryEntryBtn.addEventListener('click', () => {
         isTemporaryAccess = true;
@@ -916,8 +904,7 @@
         }, 1000);
     }
 
-    // ================= 防复制 / 防右键 / 防打印 / 防截图威慑 =================
-        // 管理员和临时访问都生效；临时访问尤其明显。
+
 
         document.addEventListener('contextmenu', (e) => {
             e.preventDefault();
@@ -941,36 +928,34 @@
         document.addEventListener('keydown', (e) => {
             const key = e.key.toLowerCase();
 
-            // Mac 的 Command 键，也就是 metaKey
-            // 只要按到 Command，就触发警告
+            //Command
             if (e.metaKey || e.key === 'Meta') {
                 e.preventDefault();
                 showSecurityWarning('管理员快捷键调用已被记录');
                 return;
             }
 
-            // Windows / Linux 的 Ctrl 快捷键
+            // Ctrl
             if (e.ctrlKey && ['s', 'p', 'c', 'a', 'u'].includes(key)) {
                 e.preventDefault();
                 showSecurityWarning('未授权导出行为已记录');
                 return;
             }
 
-            // F12 / 开发者工具常用键
+            // F12
             if (e.key === 'F12') {
                 e.preventDefault();
                 showSecurityWarning('调试行为已被记录');
                 return;
             }
 
-            // PrintScreen 截屏键，部分浏览器能检测，部分检测不到
+            // PrintScreen
             if (e.key === 'PrintScreen') {
                 e.preventDefault();
                 showSecurityWarning('截屏行为已记录');
                 return;
             }
 
-            // 常见组合：Ctrl + Shift + I / J / C
             if (e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(key)) {
                 e.preventDefault();
                 showSecurityWarning('调试行为已被记录');
@@ -1016,7 +1001,6 @@
             }, 900);
         }
 
-        // 每次打开重新进入验证流程
         sessionStorage.removeItem('newworld_admin_verified');
 
         startEntranceCountdown();

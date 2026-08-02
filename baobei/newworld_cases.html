@@ -220,7 +220,7 @@
 </head>
 <body>
 
-    <!-- 失效页面 -->
+    
     <div id="expired-page" class="expired-page">
         <div class="expired-box">
             <h1>该网页已于 2012.12.9 失效</h1>
@@ -229,7 +229,7 @@
         </div>
     </div>
 
-    <!-- 官网 -->
+    
     <div id="site-content">
         <div class="old-site-wrapper">
 
@@ -310,7 +310,7 @@
                     </section>
                 </aside>
 
-                <!-- 右侧横向滚动主体 -->
+               
                 <main class="case-page-shell">
                     <div class="case-page-title">当前位置：首页 &gt; 成功案例 &gt; 居民归档展示</div>
 
@@ -545,8 +545,8 @@
         function checkArchiveDate() {
             const now = new Date();
 
-            // 测试版时间；最终版本可改回 2012
-            const expireDate = new Date(2052, 11, 9, 23, 59, 59);
+            
+            const expireDate = new Date(2012, 11, 9, 23, 59, 59);
 
             const isBeforeOrOnExpireDate = now <= expireDate;
 

@@ -6,14 +6,12 @@
     <title>厨得快 - 官方内测直播间</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* 输入框 */
         @keyframes gentle-fill-glow {
             0% {
                 background-color: rgba(244, 176, 87, 0.03);
                 border-color: rgba(244, 176, 87, 0.25);
             }
             50% {
-                /* 最亮 */
                 background-color: rgba(255, 145, 0, 0.461);
                 border-color: rgba(255, 106, 0, 0.8);
             }
@@ -27,7 +25,7 @@
             border: 1px solid rgba(244, 176, 87, 0.25);
             border-radius: 8px; 
             background-color: rgba(244, 176, 87, 0.03);
-            animation: gentle-fill-glow 2.8s infinite ease-in-out; /* 闪光周期 */
+            animation: gentle-fill-glow 2.8s infinite ease-in-out;
             transition: background-color 0.4s, border-color 0.4s;
         }
 
@@ -106,7 +104,6 @@
 
         handleAudioCheck();
 
-        // 进度条
         const loadingOverlay = document.getElementById('loading-overlay');
         const loadingProgressBar = document.getElementById('loading-progress-bar');
         loadingOverlay.style.display = 'block';
@@ -125,13 +122,11 @@
         safeExitBtn.addEventListener('click', function (event) {
             event.preventDefault();
 
-            // 创建邮箱
             getOrCreateLocalUsername();
             localStorage.setItem('mail_created', 'true');
             localStorage.setItem('mail_password', 'chudekuai123');
             localStorage.setItem('mail_created_notice_pending', 'true');
 
-            // 返回首页
             window.location.href = 'index.html';
         });
 
@@ -170,14 +165,13 @@
         ];
 
         let frameIndex = 0;
-        let secondaryIndex = 0; // 第二阶段数组指针
-        let finalLoopIndex = 0; // 最终循环数组指针
+        let secondaryIndex = 0; 
+        let finalLoopIndex = 0;
         let isKicked = false;
-        let meatPlayed = false; // meat绝对锁
+        let meatPlayed = false;
         let inSecondaryPhase = false;
         let inFinalLoopPhase = false;
 
-        // 所有画面播完后，循环播放 ss17、ss18、load
         const finalLoopFrames = [
             {
                 src: 'assets/live/ss17.jpg',
@@ -189,7 +183,7 @@
             },
             {
                 src: 'assets/live/load.jpg',
-                duration: 2400 // load 停留时间是 ss17 / ss18 的两倍
+                duration: 2400 
             }
         ];
 
@@ -216,7 +210,6 @@
             return username;
         }
 
-        // 统一提取公共踢出处理函数
         function executeKickProcedure() {
             isKicked = true;
             clearInterval(chatIntervalId);
@@ -224,7 +217,6 @@
             if (headerLogoImg) headerLogoImg.src = 'assets/logo/厨得快1.png';
             meatAudio.pause();
 
-            // 创建邮箱
             const createdUsername = getOrCreateLocalUsername();
             localStorage.setItem('mail_created', 'true');
             localStorage.setItem('mail_password', 'chudekuai123');
@@ -239,7 +231,6 @@
             if (isKicked) return;
 
             if (inSecondaryPhase) {
-                // 第二阶段 ss9-ss18 全部播完后，进入最终循环阶段
                 if (secondaryIndex >= secondaryFrames.length) {
                     inSecondaryPhase = false;
                     inFinalLoopPhase = true;
@@ -248,7 +239,6 @@
                     return;
                 }
 
-                // 播放第二阶段故障画面
                 videoImg.src = secondaryFrames[secondaryIndex];
                 videoImg.style.display = 'block';
                 secondaryIndex++;
@@ -258,7 +248,6 @@
                 return;
             }
 
-            // 最终循环阶段：ss17 → ss18 → load.png，不断循环
             if (inFinalLoopPhase) {
                 const currentFrame = finalLoopFrames[finalLoopIndex];
 
@@ -271,12 +260,10 @@
                 return;
             }
 
-            // 分支 B: 常规 1-7 张基础循环片控制段
             if (frameIndex >= frames.length) {
                 if (!meatPlayed) {
-                    meatPlayed = true; // 触发后立即锁死路径
+                    meatPlayed = true; 
                     
-                    // ① 建立一个置顶的全网页纯黑遮罩层，让整个屏幕全黑
                     const fullPageBlack = document.createElement('div');
                     fullPageBlack.style.position = 'fixed';
                     fullPageBlack.style.top = '0';
@@ -293,22 +280,18 @@
                             return;
                         }
                         
-                        // 移除全屏纯黑遮罩，暴露出惊悚 meat 画面与全网页反色
                         fullPageBlack.remove();
                         
-                        // ② 展现惊悚 meat 画面、音频、全网页反色，并将Logo变成“厨得快2”
                         videoImg.src = 'assets/live/meat.jpg';
                         videoImg.style.display = 'block';
-                        if (headerLogoImg) headerLogoImg.src = 'assets/logo/厨得快2.png'; // 触发时变更为 厨得快2
+                        if (headerLogoImg) headerLogoImg.src = 'assets/logo/厨得快2.png'; 
                         
                         meatAudio.play().catch(err => console.log("音频流播放受限:", err));
                         document.body.classList.add('glitch-invert-active');
 
-                        // ③ meat 画面停留1秒后，再次全网页黑屏，模拟画面断流
                         setTimeout(() => {
                             if (isKicked) return;
 
-                            // 建立第二次全网页纯黑遮罩层，让 meat 消失时也闪黑
                             const fullPageBlackAfterMeat = document.createElement('div');
                             fullPageBlackAfterMeat.style.position = 'fixed';
                             fullPageBlackAfterMeat.style.top = '0';
@@ -319,7 +302,6 @@
                             fullPageBlackAfterMeat.style.zIndex = '999999';
                             document.body.appendChild(fullPageBlackAfterMeat);
 
-                            // 在黑屏期间拔除故障状态并恢复 Logo
                             document.body.classList.remove('glitch-invert-active');
                             if (headerLogoImg) headerLogoImg.src = 'assets/logo/厨得快1.png';
 
@@ -329,7 +311,6 @@
                                     return;
                                 }
 
-                                // 黑屏结束，切入第二阶段 ss8-ss15
                                 fullPageBlackAfterMeat.remove();
 
                                 inSecondaryPhase = true;
@@ -340,25 +321,22 @@
 
                         }, 1000);
 
-                    }, 500); // 整个网页全黑持续500毫秒
+                    }, 500); 
                     
-                    return; // 拦截本次定时，不允许穿透
+                    return; 
                 } else {
-                    frameIndex = 0; // 安全兜底防错
+                    frameIndex = 0; 
                 }
             }
 
-            // 纯净的常规 1-7 帧画面渲染
             videoImg.src = frames[frameIndex];
             videoImg.style.display = 'block';
             frameIndex++;
 
-            // 0.5秒到2秒之间的动态随机卡顿频率
             let randomDuration = 500 + Math.random() * 1500;
             setTimeout(runVideoLoop, randomDuration);
         }
 
-        // ==================== 4. 互动聊天流与突发异常事件控制 ====================
         const bulletLibrary = [
             "等了好久了，终于开播啦！",
             "前排搬板凳围观，今天教哪道硬菜呀？",
@@ -389,7 +367,6 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // 触发密集型“发现外人”警报弹幕
         function triggerAgressiveSpam() {
             clearInterval(chatIntervalId); 
             
@@ -400,7 +377,6 @@
             }, 600); 
         }
 
-        // 发送消息处理函数
         function performSend() {
             const text = userInput.value.trim();
             if (!text || isKicked) return;
@@ -411,10 +387,9 @@
             if (!hasUserSentMessage) {
                 hasUserSentMessage = true;
                 
-                // 1. 开始高频刷屏
                 triggerAgressiveSpam();
 
-                // 2. 5秒之后执行强制踢出
+
                 setTimeout(() => {
                     if (isKicked) return;
                     executeKickProcedure();
@@ -425,15 +400,11 @@
         sendBtn.addEventListener('click', performSend);
         userInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') performSend(); });
 
-        // ==================== 5. 正式开播守护线程（等待3秒进度条完毕） ====================
         setTimeout(() => {
-            // 3秒到期，平滑销毁连接中遮罩层
             loadingOverlay.remove();
             
-            // 正式驱动核心业务逻辑
             runVideoLoop();
 
-            // 初始正常弹幕流动循环
             chatIntervalId = setInterval(() => {
                 if (isKicked) return;
                 const randomUser = "匿名用户" + Math.floor(Math.random() * 800 + 100);
