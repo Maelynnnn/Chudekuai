@@ -879,6 +879,7 @@
                 fieldMarkers.set(f.id,m)
             })
         }
+        
         function renderSamples() {
             sampleLayer.clearLayers();
             sampleMarkers.clear();
@@ -901,6 +902,7 @@
                 sampleMarkers.set(s.id,m)
             })
         }
+
         function updateSampleIcons() {
             sampleMarkers.forEach((m,id)=>m.setIcon(sampleIcon(id===selectedSampleId)))
         }
