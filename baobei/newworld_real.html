@@ -1294,8 +1294,15 @@
             const enteredId = residentIdInput.value.trim().toUpperCase();
             const enteredPassword = residentPasswordInput.value.trim();
 
+            // 登录时忽略居民编号中的连字符，例如：
+            // C132-CMZ-00975、C132CMZ00975 都视为同一账号。
+            const normalizedEnteredId = enteredId.replace(/-/g, '');
+            const normalizedConfiguredId = configuredId
+                .toUpperCase()
+                .replace(/-/g, '');
+
             if (
-                enteredId !== configuredId.toUpperCase() ||
+                normalizedEnteredId !== normalizedConfiguredId ||
                 enteredPassword !== configuredPassword
             ) {
                 residentLoginFeedback.textContent = '居民编号或密码错误';

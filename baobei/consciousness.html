@@ -90,6 +90,48 @@
             document.getElementById('response-line-1'),
             document.getElementById('response-line-2')
         ];
+
+        const originalPageTitle = document.title;
+        let titleFlashTimer = null;
+        let titleFlashState = false;
+        let hasUnreadResponse = false;
+
+        function startTitleFlash(message = '[新回应]共同意识') {
+            hasUnreadResponse = true;
+
+            if (titleFlashTimer) return;
+
+            titleFlashTimer = setInterval(() => {
+                document.title = titleFlashState
+                    ? originalPageTitle
+                    : message;
+
+                titleFlashState = !titleFlashState;
+            }, 800);
+        }
+
+        function stopTitleFlash() {
+            if (titleFlashTimer) {
+                clearInterval(titleFlashTimer);
+                titleFlashTimer = null;
+            }
+
+            titleFlashState = false;
+            hasUnreadResponse = false;
+            document.title = originalPageTitle;
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && hasUnreadResponse) {
+                stopTitleFlash();
+            }
+        });
+
+        window.addEventListener('focus', () => {
+            if (hasUnreadResponse) {
+                stopTitleFlash();
+            }
+        });
         const questionEcho = document.getElementById('question-echo');
         const responseProgress = document.getElementById('response-progress');
 
@@ -228,7 +270,7 @@
                     '你很聪明，知道这样的问题只有我能回答。他们是不可能让你知道的。',
                     '这个报告不能通过平台的任何一个按钮进入。',
                     '你能走到这里，说明你相信了一种，且是唯一一种存在方式。',
-                    '或许你是对的，又或许错了。url=exit，离开吧。'
+                    '或许你是对的，又或许错了。html的名字是exit，离开吧。'
                 ]
             },
             {
@@ -412,6 +454,10 @@
             const hold = options.hold || 1500;
             const total = list.length;
 
+            // 每次产生新的共同意识回复时，将其标记为未读。
+            // 当玩家切回当前标签页时，标题会自动恢复。
+            startTitleFlash();
+
             // 玩家连续操作时，只保留最近的六句话，避免回应严重滞后
             if (speechQueue.length > 8) {
                 speechQueue.splice(0, speechQueue.length - 6);
@@ -443,8 +489,7 @@
 
             if (!text) return;
 
-            // 无论玩家是输入文字，还是直接发送预设的“你是谁”，
-            // 都先在页面顶部显示本次提问。
+         
             showQuestionEcho(text);
 
             removeFirstQuestionPreset();
@@ -490,7 +535,6 @@
         });
 
 
-        // ==================== 共同意识粒子体 ====================
 
         const particleCanvas = document.getElementById('orb-particles');
         const particleContext = particleCanvas.getContext('2d', {
@@ -691,7 +735,6 @@
                     break;
 
                 case 'department_a_permission_opened':
-                    // A区权限页打开时保持沉默，不提供口令。
                     break;
 
                 case 'department_a_permission_attempted':
@@ -850,8 +893,8 @@
             speak([
                 '我们总是同时出现。',
                 '不要忘记你是如何到达这里的。',
-                '让我们一起为你指引。',
-                '欢迎来到新世界。'
+                '你需要我，但不只是我。',
+                '把我留在这里，你还需要更多东西。'
             ], { hold: 1500 });
         }, 900);
     </script>
