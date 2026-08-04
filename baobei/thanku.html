@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>致谢</title>
+
+<style>
+:root{
+    --bg:#000;
+    --text:#f5f5f5;
+    --muted:#a0a0a0;
+    --red:#ff0000;
+}
+*{
+    box-sizing:border-box;
+}
+html,
+body{
+    margin:0;
+    width:100%;
+    min-height:100%;
+    background:var(--bg);
+    color:var(--text);
+    overflow:hidden;
+    font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+body{
+    position:relative;
+}
+.credits-stage{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    background:#000;
+}
+.credits-roll{
+    position:absolute;
+    left:50%;
+    top:100vh;
+    width:min(860px,calc(100% - 48px));
+    transform:translateX(-50%);
+    text-align:center;
+    animation:creditsScroll 38s linear forwards;
+}
+.credits-copy{
+    min-height:150vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    gap:34px;
+    padding-top:12vh;
+}
+
+.placeholder{
+    color:#fefefe;
+    font-size: 20px;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+}
+.ending-block{
+    min-height:5vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:1px;
+    padding:4vh 0;
+}
+.ending-message{
+    margin:0;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:clamp(20px,5vw,40px);
+    font-weight:500;
+    color:rgb(255, 185, 34);
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+
+
+}
+.open-message{
+    margin-top:10px;
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+    font-size:clamp(20px,5vw,40px);
+    font-weight:500;
+    color:rgb(255, 255, 255);
+    font-family:"Noto Serif SC","Songti SC",SimSun,serif;
+
+
+}
+
+@keyframes creditsScroll{
+    from{
+        transform:translate(-50%,0);
+    }
+    to{
+        transform:translate(-50%,-100%);
+    }
+}
+@media(max-width:700px){
+    .credits-roll{
+        width:calc(100% - 28px);
+        animation-duration:42s;
+    }
+    .credits-copy{
+        gap:24px;
+    }
+    .ending-message{
+        font-size:clamp(30px,9vw,48px);
+    }
+    .thanks{
+        font-size:clamp(52px,14vw,92px);
+    }
+}
+</style>
+
+</head>
+<body>
+<main class="credits-stage">
+    <section class="ending-block">
+         <section class="ending-block">
+                <p class="open-message">
+                    感谢朋友们
+                </p>
+
+            </section>
+                <p class="placeholder">黏黏妈</p>
+                <p class="placeholder">syy</p>
+                <p class="placeholder">闻舟不言</p>
+                <p class="placeholder">K4r0_iA9</p>
+                <p class="placeholder">Jessie</p>
+
+            </section>
+
+            <section class="ending-block">
+                <p class="ending-message">
+                    你们的支持让我勇敢做我喜欢的事
+                </p>
+
+            </section>
+</main>
+</body>
+</html>
