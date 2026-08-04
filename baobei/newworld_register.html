@@ -408,7 +408,7 @@
                                 </select>
 
                                 <label>备注：</label>
-                                <textarea id="note-input" placeholder="请填写发现地点、衣着特征、同行人员、是否哭泣、是否试图离开、是否主动询问“我是谁”等信息。"></textarea>
+                                <textarea id="note-input" placeholder=" "></textarea>
                             </div>
 
                             <div class="register-note" id="register-note">
@@ -549,10 +549,10 @@
                 registerNote.innerHTML = '<strong>提示：</strong>管理员提交信息后，系统将自动核验场域权限。请不要向样本解释登记目的。请不要在样本面前朗读编号。';
             } else {
                 dynamicSectionTitle.textContent = '二、样本本人信息';
-                nameLabel.textContent = '当前姓名：';
-                nameInput.placeholder = '请输入您现在正在使用的姓名';
-                codeLabel.textContent = '原住址或发现地点：';
-                codeInput.placeholder = '请输入您仍然记得的地址，或最后一次清醒时所在地点';
+                nameLabel.textContent = '样本姓名：';
+                nameInput.placeholder = '如已经产生入世日期或已经脱离样本身份，不适用此页面。';
+                codeLabel.textContent = '原住址：';
+                codeInput.placeholder = ' ';
                 targetLabel.textContent = '是否希望成为居民：';
                 targetInput.placeholder = '请填写“是”。如果不是，请重新填写直到是。';
 
