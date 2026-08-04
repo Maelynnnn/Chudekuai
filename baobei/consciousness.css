@@ -352,7 +352,7 @@ body {
 .open-archive {
     padding: 8px 14px;
     font-size: 10px;
-    color: rgba(245, 245, 245, 0.105);
+    color: rgba(245, 245, 245, 0.18);
 }
 
 @media (max-width: 620px) {
