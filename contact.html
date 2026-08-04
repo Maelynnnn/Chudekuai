@@ -47,6 +47,20 @@
                 max-width: 115px;
             }
         }
+
+        .mail-login-field input::placeholder {
+            color: #cfcfcf !important;
+            opacity: 1;
+        }
+
+        .mail-login-field input::-webkit-input-placeholder {
+            color: #cfcfcf !important;
+        }
+        .mail-login-field input:-ms-input-placeholder {
+            color: #cfcfcf !important;
+        }
+
+        
     </style>
 
 </head>
@@ -230,6 +244,8 @@
 
             if (savedUsername) {
                 loginUsername.placeholder = savedUsername;
+                loginPassword.placeholder = 'chudekuai123';
+
             }
         }
 
